@@ -1,4 +1,4 @@
-package de.othr.sw.mos.artistAgency.entities;
+package de.othr.sw.mos.artistAgency.entity;
 
 import javax.persistence.Embeddable;
 

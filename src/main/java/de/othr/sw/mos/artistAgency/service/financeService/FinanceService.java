@@ -1,4 +1,4 @@
-package de.othr.sw.mos.artistAgency.services.financeService;
+package de.othr.sw.mos.artistAgency.service.financeService;
 
 public class FinanceService implements FinanceServiceIF {
 }
