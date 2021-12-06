@@ -1,4 +1,4 @@
-package de.othr.sw.mos.artistAgency.service.userService;
+package de.othr.sw.mos.artistAgency.exception;
 
 public class UserNotFoundException extends Exception {
 

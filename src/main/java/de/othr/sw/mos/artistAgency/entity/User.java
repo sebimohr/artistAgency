@@ -1,5 +1,6 @@
 package de.othr.sw.mos.artistAgency.entity;
 
+import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,11 +16,11 @@ import java.util.Collection;
 public class User implements UserDetails {
     // login information
     @Id
-    @Setter
+    @Setter @Getter
     private String email;
-    @Setter
+    @Setter @Getter
     private String password;
-
+/*
     // additional information
     private String artistName;
     private String phoneNumber;
@@ -28,8 +29,9 @@ public class User implements UserDetails {
     private URL webLink;
 //    private List<URL> socialLink;
     @Embedded
+//    Address must be written in database
     private Address address;
-    private ArtType artType;
+    private ArtType artType;*/
 
     public User() {
         // TODO: implement constructor

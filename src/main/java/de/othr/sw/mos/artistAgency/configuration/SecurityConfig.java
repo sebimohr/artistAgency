@@ -37,7 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // TODO: Registration of accessible sites without being logged in
     // TODO: --> imagefolder muss auch eingebunden werden!!
     private static final String[] ALLOW_ACCESS_WITHOUT_AUTHENTICATION = {
-        "/", "/login", "/register"
+        "/", "/login", "/registerUser"
     };
 
     @Override
