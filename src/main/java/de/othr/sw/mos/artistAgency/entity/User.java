@@ -5,11 +5,8 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.math.BigDecimal;
-import java.net.URL;
 import java.util.Collection;
 
 @Entity
@@ -17,7 +14,7 @@ public class User implements UserDetails {
     // login information
     @Id
     @Setter @Getter
-    private String email;
+    private String username;
     @Setter @Getter
     private String password;
 /*
@@ -49,7 +46,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return username;
     }
 
     @Override

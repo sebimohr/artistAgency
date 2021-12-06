@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface UserRepository extends CrudRepository<User, String> {
     // findByEMAIL --> automatische Query für email
-    Optional<User> findByEmail(String email);
+    Optional<User> findByUsername(String email);
 }

@@ -9,12 +9,13 @@
 
 <body>
 <div class="jumbotron">
+    <h1>Registration</h1>
     <form th:action="@{/registerUser}" th:method="post" th:object=${user}>
         <p th:text=${errorMessage}></p>
         <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" class="form-control" id="email" name="email"
-                   placeholder="email" th:field="*{email}" required/>
+            <label for="username">Username:</label>
+            <input type="text" class="form-control" id="username" name="username"
+                   placeholder="userName" th:field="*{username}" required/>
         </div>
         <div class="form-group">
             <label for="password">Passwort:</label>

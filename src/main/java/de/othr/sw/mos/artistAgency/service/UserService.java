@@ -35,12 +35,12 @@ public class UserService implements UserServiceIF {
     @Override
     @Transactional
     public User registerUser(User user) throws UserServiceException {
-        var foundUserOptional = userRepo.findByEmail(user.getUsername());
+        var foundUserOptional = userRepo.findByUsername(user.getUsername());
 
         if(foundUserOptional.isEmpty()) {
             var newUser = new User();
 
-            newUser.setEmail(user.getUsername());
+            newUser.setUsername(user.getUsername());
             newUser.setPassword(passwordEncoder.encode(user.getPassword()));
             // newUser.set...(...) --> for more input fields
 
@@ -49,17 +49,17 @@ public class UserService implements UserServiceIF {
             return savedUser;
         }
 
-        throw new UserServiceException("User mit Email {email} schon vorhanden");
+        throw new UserServiceException("User mit Email {username} schon vorhanden");
     }
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        var foundUser = userRepo.findByEmail(email).orElseThrow(() -> {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        var foundUser = userRepo.findByUsername(username).orElseThrow(() -> {
             // TODO: implement own exception
-            throw new UsernameNotFoundException("User with email address: " + email + "not found");
+            throw new UsernameNotFoundException("User with username address: " + username + "not found");
         });
 
-        return null;
+        return foundUser;
     }
 }

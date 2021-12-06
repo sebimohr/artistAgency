@@ -9,11 +9,12 @@
 
 <body>
 <div class="jumbotron">
+    <h1>Login</h1>
     <form th:action="@{/login}" th:method="post">
         <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="text" class="form-control" id="email" name="email"
-                   placeholder="email">
+            <label for="username">Email:</label>
+            <input type="text" class="form-control" id="username" name="username"
+                   placeholder="username">
             <small id="usernamelogin-help" class="form-text text-muted">Bitte geben Sie Ihre Kundennummer
                 ein</small>
         </div>
