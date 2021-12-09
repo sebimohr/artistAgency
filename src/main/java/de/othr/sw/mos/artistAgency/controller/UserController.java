@@ -23,7 +23,7 @@ public class UserController {
 
         model.addAttribute("user", newUser);
 
-        return "registerUser";
+        return "userManagement/registerUser";
     }
 
     @RequestMapping(value="/registerUser", method = RequestMethod.POST)
@@ -33,14 +33,14 @@ public class UserController {
         }
         catch (UserServiceException e) {
             model.addAttribute("errorMessage", e.getMessage());
-            return "registerUser";
+            return "userManagement/registerUser";
         }
         model.addAttribute("success", "successfull registration");
-        return "login";
+        return "userManagement/login";
     }
 
     @RequestMapping(value = "/login")
     public String login() {
-        return "login";
+        return "userManagement/login";
     }
 }
