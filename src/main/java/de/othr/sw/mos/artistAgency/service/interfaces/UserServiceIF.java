@@ -1,4 +1,4 @@
-package de.othr.sw.mos.artistAgency.service.userService;
+package de.othr.sw.mos.artistAgency.service.interfaces;
 
 import de.othr.sw.mos.artistAgency.entity.ArtistDto;
 import de.othr.sw.mos.artistAgency.entity.User;

@@ -11,34 +11,34 @@
     <div th:fragment = "navigationBar" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
         <nav class="navbar sticky-top navbar-expand-sm navbar-dark bg-dark">
             <div class="d-flex justify-content-center container-fluid">
-                <a class="navbar-brand" href="#">ArtistAgency</a>
+                <a class="navbar-brand">ArtistAgency</a>
                 <ul class="navbar-nav mx-2">
                     <li class="nav-item mx-1">
-                        <a class="nav-link" href="#">Home</a>
+                        <a class="nav-link" href="/home">Home</a>
                     </li>
                     <li class="nav-item mx-1">
-                        <a class="nav-link" href="#">Artists</a>
+                        <a class="nav-link" href="/artist/list">Artists</a>
                     </li>
                     <li class="nav-item mx-1">
-                        <a class="nav-link" href="#">Events</a>
+                        <a class="nav-link" href="/event/list">Events</a>
                     </li>
                     <li class="nav-item dropdown mx-2">
                         <a class="nav-link dropdown-toggle" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="/templates/img/userIcon.png" width="20">
+                            <img th:src="@{/img/userIconDarkMode.png}" alt="UserIcon" width="20"/>
                         </a>
 
                         <!-- for visitors only -->
                         <ul class="dropdown-menu" aria-labelledby="userDropdown" sec:authorize="isAnonymous()">
-                            <li><a class="dropdown-item" href="/login">Login</a></li>
-                            <li><a class="dropdown-item" href="/registerUser">Registrieren</a></li>
+                            <li><a class="dropdown-item" href="/user/login">Login</a></li>
+                            <li><a class="dropdown-item" href="/user/register">Registrieren</a></li>
                         </ul>
 
                         <!-- for logged-in users only -->
                         <ul class="dropdown-menu" aria-labelledby="userDropdown" sec:authorize="isAuthenticated()">
-                            <li><a class="dropdown-item" href="/">Mein Profil</a></li>
-                            <li><a class="dropdown-item" href="/">Event planen</a></li>
-                            <li><a class="dropdown-item" href="/">Meine Daten bearbeiten</a></li>
-                            <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                            <li><a class="dropdown-item" href="/user/myProfile">Mein Profil</a></li>
+                            <li><a class="dropdown-item" href="/event/book">Event planen</a></li>
+                            <li><a class="dropdown-item" href="/user/myProfile/edit">Meine Daten bearbeiten</a></li>
+                            <li><a class="dropdown-item" href="/user/logout">Logout</a></li>
                         </ul>
 
                         <!-- for admin only -->

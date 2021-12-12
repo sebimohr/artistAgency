@@ -3,7 +3,7 @@ package de.othr.sw.mos.artistAgency.service;
 import de.othr.sw.mos.artistAgency.entity.*;
 import de.othr.sw.mos.artistAgency.exception.UserServiceException;
 import de.othr.sw.mos.artistAgency.repository.UserRepository;
-import de.othr.sw.mos.artistAgency.service.userService.UserServiceIF;
+import de.othr.sw.mos.artistAgency.service.interfaces.UserServiceIF;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;

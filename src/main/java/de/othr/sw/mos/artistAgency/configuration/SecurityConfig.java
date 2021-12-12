@@ -37,7 +37,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // TODO: Registration of accessible sites without being logged in
     // TODO: --> imagefolder muss auch eingebunden werden!!
     private static final String[] ALLOW_ACCESS_WITHOUT_AUTHENTICATION = {
-        "/", "/login", "/registerUser"
+            "/",
+            "/home",
+            "/artist/list",
+            "/event/list",
+            "/user/login",
+            "/user/register",
+            // img folder
+            "/img/**",
+            // "/css/**"
     };
 
     @Override
@@ -50,14 +58,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // TODO: successUrls...
         http.formLogin()
-            .loginPage("/login")
+            .loginPage("/user/login")
             .permitAll()
-            .defaultSuccessUrl("/login?success")
-            .failureUrl("/login?error")
+            .defaultSuccessUrl("/user/login?success")
+            .failureUrl("/user/login?error")
             .and()
             .logout()
-            .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-            .logoutSuccessUrl("/login?logout")
+            .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
+            .logoutSuccessUrl("/user/login?logout")
             .deleteCookies("remember-me")
             .permitAll()
             .and()
