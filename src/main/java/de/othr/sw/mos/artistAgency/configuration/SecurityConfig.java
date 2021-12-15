@@ -45,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/user/register",
             // img folder
             "/img/**",
-            // "/css/**"
+            "/style/**"
     };
 
     @Override
@@ -60,12 +60,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.formLogin()
             .loginPage("/user/login")
             .permitAll()
-            .defaultSuccessUrl("/user/login?success")
-            .failureUrl("/user/login?error")
+            .defaultSuccessUrl("/user/login?code=success")
+            .failureUrl("/user/login?code=error")
             .and()
             .logout()
             .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
-            .logoutSuccessUrl("/user/login?logout")
+            .logoutSuccessUrl("/user/login?code=logout")
             .deleteCookies("remember-me")
             .permitAll()
             .and()

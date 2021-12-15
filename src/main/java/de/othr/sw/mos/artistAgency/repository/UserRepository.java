@@ -6,6 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Optional;
 
 public interface UserRepository extends CrudRepository<User, String> {
-    // findByEMAIL --> automatic query for email
+    // findByUsername -> automatic query for username / primary key
     Optional<User> findByUsername(String email);
 }

@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import static de.othr.sw.mos.artistAgency.controller.SitePathDistribution.*;
 
 @Controller
 @RequestMapping(value = "/user")
 public class UserController {
-
     @Autowired
     private UserServiceIF userService;
 
@@ -25,7 +25,7 @@ public class UserController {
 
         model.addAttribute("user", newUser);
 
-        return "user/registerUser";
+        return registerUserSite;
     }
 
     @RequestMapping(value="/register", method = RequestMethod.POST)
@@ -35,32 +35,40 @@ public class UserController {
         }
         catch (UserServiceException e) {
             model.addAttribute("errorMessage", e.getMessage());
-            return "user/registerUser";
+            return registerUserSite;
         }
         model.addAttribute("success", "successfull registration");
-        return "user/login";
+        return loginSite;
     }
 
     @RequestMapping(value = "/login")
-    public String login(@RequestParam(required = false) String loginCode) {
+    public String login(@RequestParam(value = "code", required = false) String loginCode, Model model) {
         // TODO: handle login codes
-        /*if(loginCode == "success")
-            return "default/index";
-        else if (loginCode == "error")
-            return "user/login";
-        else if (loginCode == "logout")
-            return "default/index";
-        else*/
-            return "user/login";
+        if(loginCode != null) {
+            switch (loginCode) {
+                case "success":
+                    model.addAttribute("loginSuccess", "Erfolgreich eingelogged!");
+                    return indexSite;
+                case "logout":
+                    model.addAttribute("logoutSuccess", "Erfolgreich ausgelogged!");
+                    return indexSite;
+                case "error":
+                    model.addAttribute("errorMessage", "Benutzername oder Passwort sind falsch!");
+                    return loginSite;
+                default:
+                    return loginSite;
+            }
+        }
+        return loginSite;
     }
 
     @RequestMapping(value = "/myProfile", method = RequestMethod.GET)
     public String ShowMyProfile() {
-        return "user/myProfile";
+        return myProfileSite;
     }
 
     @RequestMapping(value = "/myProfile/edit", method = RequestMethod.GET)
     public String EditMyProfileSite() {
-        return "user/editMyProfile";
+        return editMyProfileSite;
     }
 }

@@ -7,28 +7,33 @@
 </head>
 
 <body>
-<div class="jumbotron">
     <div th:replace="common/navigationBar :: navigationBar"/>
+    <div class="jumbotron">
 
-    <h1>Login</h1>
+        <h1>Login</h1>
 
-    <form th:action="@{/user/login}" th:method="post">
-        <div class="form-group">
-            <label for="username">Email:</label>
-            <input type="text" class="form-control" id="username" name="username"
-                   placeholder="username">
-            <small id="usernamelogin-help" class="form-text text-muted">Bitte geben Sie ihren Nutzernamen ein.</small>
+        <form th:action="@{/user/login}" th:method="post">
+            <div class="form-group">
+                <label for="username">Email:</label>
+                <input type="text" class="form-control" id="username" name="username"
+                       placeholder="username">
+                <small id="usernamelogin-help" class="form-text text-muted">Bitte geben Sie ihren Nutzernamen ein.</small>
+            </div>
+            <div class="form-group">
+                <label for="password">Passwort:</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+            </div>
+            <button type="submit" class="btn btn-primary">Anmelden</button>
+        </form>
+
+        <div th:if="${!#strings.isEmpty(success)}">
+            <div class="alert alert-success" role="alert" th:text="${success}"/>
         </div>
-        <div class="form-group">
-            <label for="password">Passwort:</label>
-            <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+
+        <div th:if="${!#strings.isEmpty(errorMessage)}">
+            <div class="alert alert-danger" role="alert" th:text="${errorMessage}"/>
         </div>
-        <button type="submit" class="btn btn-primary">Anmelden</button>
-    </form>
 
-    <p th:text="${errorMessage}">1<p/>
-    <p th:text="${success}">2</p>
-
+    </div>
     <div th:replace="common/footer :: footerWithBoostrap"/>
-</div>
 </body>

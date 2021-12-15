@@ -49,7 +49,7 @@ public class UserService implements UserServiceIF {
             return savedUser;
         }
 
-        throw new UserServiceException("User mit Email {username} schon vorhanden");
+        throw new UserServiceException("User mit Email" + user.getUsername() + " schon vorhanden");
     }
 
     @Override
