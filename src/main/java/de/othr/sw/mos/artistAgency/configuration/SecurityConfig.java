@@ -39,6 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String[] ALLOW_ACCESS_WITHOUT_AUTHENTICATION = {
             "/",
             "/home",
+            "/error",
             "/artist/list",
             "/event/list",
             "/user/login",

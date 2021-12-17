@@ -3,9 +3,11 @@ package de.othr.sw.mos.artistAgency.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
+@Table(name = "Event")
 public class Event {
     @Id
     @Column(name = "event_id", nullable = false)

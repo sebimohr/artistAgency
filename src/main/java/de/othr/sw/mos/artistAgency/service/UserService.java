@@ -35,6 +35,10 @@ public class UserService implements UserServiceIF {
     @Override
     @Transactional
     public User registerUser(User user) throws UserServiceException {
+        /*if(user.getUsername() == null || user.getPassword() == null || user.getArtistName() == null) {
+            throw new UserServiceException("Nicht alle Felder ausgefüllt.");
+        }*/
+
         var foundUserOptional = userRepo.findByUsername(user.getUsername());
 
         if(foundUserOptional.isEmpty()) {
@@ -55,11 +59,9 @@ public class UserService implements UserServiceIF {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        var foundUser = userRepo.findByUsername(username).orElseThrow(() -> {
+        return userRepo.findByUsername(username).orElseThrow(() -> {
             // TODO: implement own exception
             throw new UsernameNotFoundException("User with username address: " + username + "not found");
         });
-
-        return foundUser;
     }
 }

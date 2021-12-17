@@ -11,20 +11,37 @@
 
     <div class="jumbotron">
         <h1>Registration</h1>
+
         <form th:action="@{/user/register}" th:method="post" th:object=${user}>
-            <p th:text=${errorMessage}></p>
-            <div class="form-group">
-                <label for="username">Username:</label>
-                <input type="text" class="form-control" id="username" name="username"
-                       placeholder="userName" th:field="*{username}" required/>
+            <div class="form-floating">
+<!-- TODO:               <input type="email" class="form-control" id="username" name="username" placeholder="ur-name@example.com" th:field="*{username}" required/>-->
+                <input type="text" class="form-control" id="username" name="username" placeholder="z.B. email@example.de" th:field="*{username}" required/>
+                <label for="username">Email</label>
             </div>
-            <div class="form-group">
-                <label for="password">Passwort:</label>
+
+            <div class="form-floating">
+<!--                TODO: minLength einstellen-->
                 <input type="password" class="form-control" id="password" name="password"
-                       placeholder="Password" th:field="*{password}" required>
+                       placeholder="Sicheres Passwort" minlength="1" th:field="*{password}" required>
+                <label for="password">Passwort</label>
             </div>
+
+            <div class="form-floating">
+                <input type="text" class="form-control" id="artistname" name="artistname"
+                       placeholder="Dein Künstlername" th:field="*{artistName}" required>
+                <label for="artistname">Künstlername</label>
+            </div>
+
             <button type="submit" class="btn btn-primary">Registrieren</button>
         </form>
+
+        <div th:if="${!#strings.isEmpty(success)}">
+            <div class="alert alert-success" role="alert" th:text="${success}"/>
+        </div>
+
+        <div th:if="${!#strings.isEmpty(errorMessage)}">
+            <div class="alert alert-danger" role="alert" th:text="${errorMessage}"/>
+        </div>
     </div>
 
     <div th:replace="common/footer :: footerWithBoostrap"/>

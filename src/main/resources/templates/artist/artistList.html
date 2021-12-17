@@ -11,6 +11,22 @@
     <div class="jumbotron">
         <h1>Artists</h1>
         <!--    TODO: Your code here -->
+        <table class="table table-dark table-hover">
+            <thead>
+                <th scope="col">placeholder</th>
+                <th scope="col">Künstlername</th>
+                <th scope="col">Beschreibung</th>
+                <th scope="col">Link</th>
+            </thead>
+            <tbody>
+                <tr th:each="artist : ${artists}">
+                    <th scope="row"><label th:text="${artist.getUsername()}"/></th>
+                    <td><label th:text="${artist.getArtistName()}"/></td>
+                    <td><label th:text="${artist.getDescription()}"/></td>
+                    <td><label th:text="${artist.getWeblink()}"/></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
     <div th:replace="common/footer :: footerWithBoostrap"/>

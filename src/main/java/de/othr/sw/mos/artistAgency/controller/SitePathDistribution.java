@@ -5,7 +5,7 @@ public final class SitePathDistribution {
     public static final String indexSite = "default/index";
 
     // error
-    public static final String error404Site = "default/error404";
+    public static final String errorSite = "default/error";
 
     // artist
     public static final String artistListSite = "artist/artistList";

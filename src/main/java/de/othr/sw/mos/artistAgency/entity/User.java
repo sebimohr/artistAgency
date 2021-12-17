@@ -5,11 +5,14 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.net.URL;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
+@Table(name = "Artist")
 public class User implements UserDetails {
     // login information
     @Id
@@ -17,26 +20,56 @@ public class User implements UserDetails {
     private String username;
     @Setter @Getter
     private String password;
-/*
-    // additional information
+
+    @Setter @Getter
     private String artistName;
+    @Setter @Getter
     private String phoneNumber;
+
+    @Getter
+    @Enumerated(EnumType.ORDINAL)
+    private AccountType accountType;
+
+    // additional information
+    @Setter @Getter
     private BigDecimal salaryPerEvent;
+    @Setter @Getter
     private String description;
+
+    // optional
+//    @Embedded
+//    private Address address;
+//    private ArtType artType;
+    @Setter @Getter
     private URL webLink;
 //    private List<URL> socialLink;
-    @Embedded
-//    Address must be written in database
-    private Address address;
-    private ArtType artType;*/
 
-    public User() {
-        // TODO: implement constructor
+    public User() { }
+
+    public User(String username, String password, String artistName) {
+        this.username = username;
+        this.password = password;
+        this.artistName = artistName;
     }
 
+    public User(String username,
+                String password,
+                String artistName,
+                BigDecimal salaryPerEvent,
+                String description,
+                URL webLink){
+        this.username = username;
+        this.password = password;
+        this.artistName = artistName;
+        this.salaryPerEvent = salaryPerEvent;
+        this.description = description;
+        this.webLink = webLink;
+    }
+
+    // UserDetails
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return List.of((GrantedAuthority) () -> User.this.accountType.name());
     }
 
     @Override

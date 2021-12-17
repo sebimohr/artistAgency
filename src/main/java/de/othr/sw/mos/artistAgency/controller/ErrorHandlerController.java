@@ -10,6 +10,6 @@ public class ErrorHandlerController implements ErrorController {
 
     @RequestMapping("/error")
     public String getErrorPath() {
-        return error404Site;
+        return errorSite;
     }
 }
