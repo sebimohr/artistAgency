@@ -26,10 +26,6 @@ public class User implements UserDetails {
     @Setter @Getter
     private String phoneNumber;
 
-    @Getter
-    @Enumerated(EnumType.ORDINAL)
-    private AccountType accountType;
-
     // additional information
     @Setter @Getter
     private BigDecimal salaryPerEvent;
@@ -69,7 +65,7 @@ public class User implements UserDetails {
     // UserDetails
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of((GrantedAuthority) () -> User.this.accountType.name());
+        return null;
     }
 
     @Override

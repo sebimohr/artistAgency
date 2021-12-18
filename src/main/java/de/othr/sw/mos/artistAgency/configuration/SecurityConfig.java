@@ -34,8 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return securityUtils.passwordEncoder();
     }
 
-    // TODO: Registration of accessible sites without being logged in
-    // TODO: --> imagefolder muss auch eingebunden werden!!
+    // accessible sites without being logged in
     private static final String[] ALLOW_ACCESS_WITHOUT_AUTHENTICATION = {
             "/",
             "/home",

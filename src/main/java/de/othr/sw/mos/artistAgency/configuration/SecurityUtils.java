@@ -9,6 +9,7 @@ import java.security.SecureRandom;
 
 @Configuration
 public class SecurityUtils {
+    // TODO: generate random salt for security
     private static String salt = "secret";
 
     @Bean

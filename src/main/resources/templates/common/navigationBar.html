@@ -43,13 +43,6 @@
                             <li><a class="dropdown-item" href="/user/myProfile/edit">Meine Daten bearbeiten</a></li>
                             <li><a class="dropdown-item" href="/user/logout">Logout</a></li>
                         </ul>
-
-                        <!-- for admin only -->
-                        <ul class="dropdown-menu" aria-labelledby="userDropdown" sec:authorize="hasAuthority('ADMIN')">
-                            <li><a class="dropdown-item" href="/">Manage Users</a></li>
-                            <li><a class="dropdown-item" href="/">Manage Events</a></li>
-                            <!-- TODO: what else?? -->
-                        </ul>
                     </li>
                 </ul>
             </div>
