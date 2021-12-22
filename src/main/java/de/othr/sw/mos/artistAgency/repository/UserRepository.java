@@ -1,11 +1,13 @@
 package de.othr.sw.mos.artistAgency.repository;
 
 import de.othr.sw.mos.artistAgency.entity.User;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-public interface UserRepository extends CrudRepository<User, String> {
+@Repository
+public interface UserRepository extends JpaRepository<User, String> {
     // findByUsername -> automatic query for username / primary key
-    Optional<User> findByUsername(String email);
+    Optional<User> findByUsername(String username);
 }

@@ -40,6 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/home",
             "/error",
             "/artist/list",
+            "/artist/details",
             "/event/list",
             "/user/login",
             "/user/register",

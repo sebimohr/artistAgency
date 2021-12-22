@@ -10,11 +10,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import static de.othr.sw.mos.artistAgency.controller.SitePathDistribution.*;
 
 @Controller
 @RequestMapping(value = "/user")
-public class UserController {
+public class UserController implements SitePathDistribution {
     @Autowired
     private UserServiceIF userService;
 
@@ -56,7 +55,7 @@ public class UserController {
                     model.addAttribute("errorMessage", "Benutzername oder Passwort sind falsch!");
                     return loginSite;
                 default:
-                    return loginSite;
+                    return errorSite;
             }
         }
         return loginSite;

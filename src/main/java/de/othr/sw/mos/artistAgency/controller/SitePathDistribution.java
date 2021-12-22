@@ -1,22 +1,23 @@
 package de.othr.sw.mos.artistAgency.controller;
 
-public final class SitePathDistribution {
+public interface SitePathDistribution {
     // default
-    public static final String indexSite = "default/index";
+    String indexSite = "default/index";
 
     // error
-    public static final String errorSite = "default/error";
+    String errorSite = "default/error";
 
     // artist
-    public static final String artistListSite = "artist/artistList";
+    String artistDetailsSite = "artist/artistDetails";
+    String artistListSite = "artist/artistList";
 
     // event
-    public static final String eventListSite = "event/eventList";
-    public static final String bookNewEventSite = "event/eventList";
+    String eventListSite = "event/eventList";
+    String bookNewEventSite = "event/eventList";
 
     // user
-    public static final String loginSite = "user/login";
-    public static final String registerUserSite = "user/registerUser";
-    public static final String myProfileSite = "user/myProfile";
-    public static final String editMyProfileSite = "user/editMyProfile";
+    String loginSite = "user/login";
+    String registerUserSite = "user/registerUser";
+    String myProfileSite = "user/myProfile";
+    String editMyProfileSite = "user/editMyProfile";
 }

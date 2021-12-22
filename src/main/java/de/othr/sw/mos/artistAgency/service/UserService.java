@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @Qualifier("userService")
@@ -46,6 +47,18 @@ public class UserService implements UserServiceIF {
 
             newUser.setUsername(user.getUsername());
             newUser.setPassword(passwordEncoder.encode(user.getPassword()));
+            newUser.setArtistName(user.getArtistName());
+
+            if(user.getPhoneNumber() != null)
+                newUser.setPhoneNumber(user.getPhoneNumber());
+            if(user.getSalaryPerEvent() != null)
+                newUser.setSalaryPerEvent(user.getSalaryPerEvent());
+            if(user.getDescription() != null)
+                newUser.setDescription(user.getDescription());
+            if(user.getArtType() != null)
+                newUser.setArtType(user.getArtType());
+            if(user.getWebLink() != null)
+                newUser.setWebLink(user.getWebLink());
             // newUser.set...(...) --> for more input fields
 
             var savedUser = userRepo.save(newUser);
@@ -57,10 +70,20 @@ public class UserService implements UserServiceIF {
     }
 
     @Override
+    public User getUserByUsername(String username) {
+        return userRepo.findByUsername(username).orElseThrow( () ->
+                new UsernameNotFoundException("User with username " + username + "doesn't exist"));
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return userRepo.findAll();
+    }
+
+    @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepo.findByUsername(username).orElseThrow(() -> {
-            // TODO: implement own exception
             throw new UsernameNotFoundException("User with username address: " + username + "not found");
         });
     }

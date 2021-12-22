@@ -9,16 +9,15 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.util.Collection;
-import java.util.List;
 
 @Entity
 @Table(name = "Artist")
 public class User implements UserDetails {
     // login information
     @Id
-    @Setter @Getter
+    @Setter
     private String username;
-    @Setter @Getter
+    @Setter
     private String password;
 
     @Setter @Getter
@@ -33,11 +32,12 @@ public class User implements UserDetails {
     private String description;
 
     // optional
-//    @Embedded
-//    private Address address;
-//    private ArtType artType;
+    @Setter @Getter
+    private ArtType artType;
     @Setter @Getter
     private URL webLink;
+//    @Embedded
+//    private Address address;
 //    private List<URL> socialLink;
 
     public User() { }
@@ -51,14 +51,18 @@ public class User implements UserDetails {
     public User(String username,
                 String password,
                 String artistName,
+                String phoneNumber,
                 BigDecimal salaryPerEvent,
                 String description,
+                ArtType artType,
                 URL webLink){
         this.username = username;
         this.password = password;
         this.artistName = artistName;
+        this.phoneNumber = phoneNumber;
         this.salaryPerEvent = salaryPerEvent;
         this.description = description;
+        this.artType = artType;
         this.webLink = webLink;
     }
 
