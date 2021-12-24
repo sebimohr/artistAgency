@@ -12,7 +12,6 @@ public interface UserServiceIF extends UserDetailsService {
 
     User getUserByUsername(String username);
 
-    // TODO: switch collection to list
     List<User> getAllUsers();
     
     ArtistDto getArtistInformation(Long artistId);

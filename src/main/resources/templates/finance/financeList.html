@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="common/head :: defaultHead"/>
+
+    <title>Finanzen</title>
+</head>
+<body>
+    <div th:replace="common/navigationBar :: navigationBar"/>
+
+    <div class="jumbotron">
+        <h1>Deine Finanzen</h1>
+        <table class="table table-responsive table-dark table-hover">
+            <thead>
+            <th scope="col">#</th>
+            <th scope="col">Username</th>
+            <th scope="col">Betrag</th>
+            <th scope="col">Datum</th>
+            </thead>
+            <tbody>
+            <tr th:each="log : ${financeLogList}">
+                <th scope="row"><label th:text="${log.getFinanceId()}"/></th>
+                <td><label th:text="${log.getUsername()}"/></td>
+                <td><label th:text="${log.getArtistPaidAmount()}"/></td>
+                <td><label th:text="${log.getArtistPaidDate()}"/></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:replace="common/footer :: footerWithBoostrap"/>
+</body>
+</html>

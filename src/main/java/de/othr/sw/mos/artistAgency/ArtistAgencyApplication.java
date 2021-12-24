@@ -1,8 +1,9 @@
 package de.othr.sw.mos.artistAgency;
 
 import de.othr.sw.mos.artistAgency.entity.ArtType;
+import de.othr.sw.mos.artistAgency.entity.FinanceLog;
 import de.othr.sw.mos.artistAgency.entity.User;
-import de.othr.sw.mos.artistAgency.exception.UserServiceException;
+import de.othr.sw.mos.artistAgency.service.interfaces.FinanceServiceIF;
 import de.othr.sw.mos.artistAgency.service.interfaces.UserServiceIF;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -12,8 +13,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
 
 @SpringBootApplication
 @RestController
@@ -21,6 +22,9 @@ public class ArtistAgencyApplication implements ApplicationRunner {
 
 	@Autowired
 	private UserServiceIF userService;
+
+	@Autowired
+	private FinanceServiceIF financeService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ArtistAgencyApplication.class, args);
@@ -30,13 +34,14 @@ public class ArtistAgencyApplication implements ApplicationRunner {
 	public void run(ApplicationArguments args) throws Exception {
 		// some users for testing
 		addUsersToH2DatabaseForTesting();
+		addFinanceLogToH2DatabaseForTesting();
 	}
 
 	private void addUsersToH2DatabaseForTesting() throws Exception {
 		try {
 			userService.getUserByUsername("ExampleUser1");
 		} catch (Exception ex) {
-			User user1 = new User();
+			var user1 = new User();
 
 			user1.setUsername("ExampleUser1");
 			user1.setPassword("password");
@@ -53,7 +58,7 @@ public class ArtistAgencyApplication implements ApplicationRunner {
 		try {
 			userService.getUserByUsername("ExampleUser2");
 		} catch (Exception ex) {
-			User user2 = new User(
+			var user2 = new User(
 					"ExampleUser2",
 					"password",
 					"ArtistName2",
@@ -68,7 +73,7 @@ public class ArtistAgencyApplication implements ApplicationRunner {
 		try {
 			userService.getUserByUsername("ExampleUser3");
 		} catch (Exception ex) {
-			User user3 = new User(
+			var user3 = new User(
 					"ExampleUser3",
 					"password",
 					"ArtistName3",
@@ -78,6 +83,21 @@ public class ArtistAgencyApplication implements ApplicationRunner {
 					ArtType.COMEDY,
 					new URL("http://localhost:8080/home"));
 			userService.registerUser(user3);
+		}
+	}
+
+	private void addFinanceLogToH2DatabaseForTesting() throws Exception {
+		try {
+			financeService.getFinanceLogById(1L);
+		} catch (Exception ex) {
+			var fl1 = new FinanceLog(
+					1L,
+					"ExampleUser1",
+					new Date(),
+					BigDecimal.valueOf(10.0)
+			);
+
+			financeService.registerFinanceLog(fl1);
 		}
 	}
 }

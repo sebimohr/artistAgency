@@ -18,8 +18,8 @@ import java.util.List;
 @Qualifier("userService")
 public class UserService implements UserServiceIF {
 
-    private BCryptPasswordEncoder passwordEncoder;
-    private UserRepository userRepo;
+    private final BCryptPasswordEncoder passwordEncoder;
+    private final UserRepository userRepo;
 
     @Autowired
     public UserService(BCryptPasswordEncoder passwordEncoder, UserRepository userRepo){
