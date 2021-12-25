@@ -14,9 +14,16 @@
         </div>
         <div class="card text-white bg-dark mb-3">
             <div class="card-body">
-                Error "404 - Page not found" occurred. Sorry for that :)
+                <h5>Error "404 - Page not found" occurred. Sorry for that :)</h5>
+
+                <a th:if="${!#strings.isEmpty(errorMessage)}" class="btn btn-dark" role="button" data-bs-toggle="collapse" href="#errorMessageContainer" aria-expanded="false" aria-controls="errorMessageContainer">
+                    Fehlermeldung anzeigen
+                </a>
+
+                <div class="collapse" id="errorMessageContainer" th:include="common/messageHandler :: errorMessage"/>
             </div>
         </div>
+
         <form th:action="@{/home}">
             <button type="submit" class="btn btn-dark">Go to homepage</button>
         </form>

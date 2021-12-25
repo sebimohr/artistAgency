@@ -1,8 +1,6 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<head>
-    <div th:replace="common/head :: defaultHead"/>
-
+<head th:include="common/head :: defaultHead">
     <title>Login</title>
 </head>
 
@@ -25,14 +23,7 @@
             <button type="submit" class="btn btn-info">Anmelden</button>
         </form>
 
-        <div th:if="${!#strings.isEmpty(success)}">
-            <div class="alert alert-success" role="alert" th:text="${success}"/>
-        </div>
-
-        <div th:if="${!#strings.isEmpty(errorMessage)}">
-            <div class="alert alert-danger" role="alert" th:text="${errorMessage}"/>
-        </div>
-
+        <div th:replace="common/messageHandler :: messageHandler"/>
     </div>
     <div th:replace="common/footer :: footerWithBoostrap"/>
 </body>

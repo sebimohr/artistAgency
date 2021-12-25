@@ -36,7 +36,7 @@ public class UserController implements SitePathDistribution {
             model.addAttribute("errorMessage", e.getMessage());
             return registerUserSite;
         }
-        model.addAttribute("success", "successfull registration");
+        model.addAttribute("success", "Erfolgreich registriert. Hallo " + user.getUsername() + ".");
         return loginSite;
     }
 
@@ -45,17 +45,22 @@ public class UserController implements SitePathDistribution {
         // TODO: handle login codes
         if(loginCode != null) {
             switch (loginCode) {
-                case "success":
-                    model.addAttribute("loginSuccess", "Erfolgreich eingelogged!");
+                case "success" -> {
+                    model.addAttribute("loginSuccess", "Erfolgreich angemeldet, willkommen zurück!");
+                    return myProfileSite;
+                }
+                case "logout" -> {
+                    model.addAttribute("logoutSuccess", "Erfolgreich abgemeldet, auf Wiedersehen!");
                     return indexSite;
-                case "logout":
-                    model.addAttribute("logoutSuccess", "Erfolgreich ausgelogged!");
-                    return indexSite;
-                case "error":
+                }
+                case "error" -> {
                     model.addAttribute("errorMessage", "Benutzername oder Passwort sind falsch!");
                     return loginSite;
-                default:
+                }
+                default -> {
+                    model.addAttribute("errorMessage", "Falscher loginCode, bitte wenden Sie sich an den Administrator!");
                     return errorSite;
+                }
             }
         }
         return loginSite;

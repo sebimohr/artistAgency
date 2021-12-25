@@ -99,5 +99,18 @@ public class ArtistAgencyApplication implements ApplicationRunner {
 
 			financeService.registerFinanceLog(fl1);
 		}
+
+		try {
+			financeService.getFinanceLogById(2L);
+		} catch (Exception ex) {
+			var fl1 = new FinanceLog(
+					2L,
+					"ExampleUser1",
+					new Date(),
+					BigDecimal.valueOf(100.0)
+			);
+
+			financeService.registerFinanceLog(fl1);
+		}
 	}
 }

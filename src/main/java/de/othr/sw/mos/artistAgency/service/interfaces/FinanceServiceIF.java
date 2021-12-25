@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public interface FinanceServiceIF {
     FinanceLog registerFinanceLog(FinanceLog financeLog) throws Exception;
 

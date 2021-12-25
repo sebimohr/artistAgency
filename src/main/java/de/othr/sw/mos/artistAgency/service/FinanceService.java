@@ -1,10 +1,10 @@
 package de.othr.sw.mos.artistAgency.service;
 
 import de.othr.sw.mos.artistAgency.entity.FinanceLog;
+import de.othr.sw.mos.artistAgency.exception.FinanceServiceException;
 import de.othr.sw.mos.artistAgency.repository.FinanceRepository;
 import de.othr.sw.mos.artistAgency.service.interfaces.FinanceServiceIF;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public class FinanceService implements FinanceServiceIF {
     }
 
     @Override
-    public FinanceLog registerFinanceLog(FinanceLog financeLog) throws Exception {
+    public FinanceLog registerFinanceLog(FinanceLog financeLog) throws FinanceServiceException {
         var foundFinanceLogOptional = financeRepo.findByFinanceId(financeLog.getFinanceId());
 
         if(foundFinanceLogOptional.isEmpty()) {
@@ -36,13 +36,13 @@ public class FinanceService implements FinanceServiceIF {
         }
 
         // TODO: throw own exception
-        throw new Exception("FinanceLog with ID already exists.");
+        throw new FinanceServiceException("FinanceLog with ID already exists.");
     }
 
     @Override
-    public FinanceLog getFinanceLogById(Long financeLogId) throws Exception {
+    public FinanceLog getFinanceLogById(Long financeLogId) throws FinanceServiceException {
         return financeRepo.findByFinanceId(financeLogId).orElseThrow( () ->
-                new Exception("FinanceLog with id " + financeLogId + " not found!"));
+                new FinanceServiceException("FinanceLog with id " + financeLogId + " not found!"));
     }
 
     @Override
