@@ -42,7 +42,7 @@ public class UserController implements SitePathDistribution {
         return loginSite;
     }
 
-    @RequestMapping(value = {"/login", "/"})
+    @RequestMapping(value = {"/login", "/", ""})
     public String login(@RequestParam(value = "code", required = false) String loginCode, Model model, Principal principal) {
         if(loginCode != null) {
             switch (loginCode) {
@@ -74,7 +74,6 @@ public class UserController implements SitePathDistribution {
                 case "defaultLogin" -> {
                     if(principal == null){
                         return "user/loginDefaultUserForDevelopment";
-                    }
                     }
                     model.addAttribute("errorMessage", "Du bist schon angemeldet Dumbo.");
                     return indexSite;

@@ -16,7 +16,7 @@ public class ArtistController implements SitePathDistribution {
     @Autowired
     private UserServiceIF userService;
 
-    @RequestMapping(value = {"/list", "/"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/list", "/", ""}, method = RequestMethod.GET)
     public String ShowArtistsList(Model model) {
         var artistList = userService.getAllUsers();
 

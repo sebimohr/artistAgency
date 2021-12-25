@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 @RequestMapping(value = "/event")
 public class EventController implements SitePathDistribution {
-    @RequestMapping(value = {"/list", "/"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/list", "/", ""}, method = RequestMethod.GET)
     public String ShowEventList() {
         return eventListSite;
     }
