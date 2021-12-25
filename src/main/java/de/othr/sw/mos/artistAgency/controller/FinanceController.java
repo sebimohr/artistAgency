@@ -17,7 +17,7 @@ public class FinanceController implements SitePathDistribution {
     @Autowired
     private FinanceServiceIF financeService;
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    @RequestMapping(value = {"/list", "/"}, method = RequestMethod.GET)
     public String ShowFinancesList(Model model) {
 
         // TODO: show list for current logged in user 

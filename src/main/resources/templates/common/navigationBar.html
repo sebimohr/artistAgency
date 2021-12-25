@@ -32,6 +32,7 @@
 
                         <!-- for visitors only -->
                         <ul class="dropdown-menu" aria-labelledby="userDropdown" sec:authorize="isAnonymous()">
+                            <li><a class="dropdown-item" href="/user/login?code=defaultLogin">Login Default User</a></li>
                             <li><a class="dropdown-item" href="/user/login">Login</a></li>
                             <li><a class="dropdown-item" href="/user/register">Registrieren</a></li>
                         </ul>

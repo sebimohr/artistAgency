@@ -39,7 +39,7 @@ public class ArtistAgencyApplication implements ApplicationRunner {
 
 	private void addUsersToH2DatabaseForTesting() throws Exception {
 		try {
-			userService.getUserByUsername("ExampleUser1");
+			userService.loadUserByUsername("ExampleUser1");
 		} catch (Exception ex) {
 			var user1 = new User();
 
@@ -56,7 +56,7 @@ public class ArtistAgencyApplication implements ApplicationRunner {
 		}
 
 		try {
-			userService.getUserByUsername("ExampleUser2");
+			userService.loadUserByUsername("ExampleUser2");
 		} catch (Exception ex) {
 			var user2 = new User(
 					"ExampleUser2",
@@ -71,7 +71,7 @@ public class ArtistAgencyApplication implements ApplicationRunner {
 		}
 
 		try {
-			userService.getUserByUsername("ExampleUser3");
+			userService.loadUserByUsername("ExampleUser3");
 		} catch (Exception ex) {
 			var user3 = new User(
 					"ExampleUser3",

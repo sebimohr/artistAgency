@@ -10,9 +10,10 @@ import java.util.List;
 public interface UserServiceIF extends UserDetailsService {
     User registerUser(User user) throws UserServiceException;
 
-    User getUserByUsername(String username);
-
     List<User> getAllUsers();
+
+    @Override
+    User loadUserByUsername(String username);
     
-    ArtistDto getArtistInformation(Long artistId);
+    ArtistDto getArtistInformation(String username);
 }

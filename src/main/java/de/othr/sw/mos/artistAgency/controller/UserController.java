@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
+
 @Controller
 @RequestMapping(value = "/user")
 public class UserController implements SitePathDistribution {
@@ -40,39 +42,64 @@ public class UserController implements SitePathDistribution {
         return loginSite;
     }
 
-    @RequestMapping(value = "/login")
-    public String login(@RequestParam(value = "code", required = false) String loginCode, Model model) {
-        // TODO: handle login codes
+    @RequestMapping(value = {"/login", "/"})
+    public String login(@RequestParam(value = "code", required = false) String loginCode, Model model, Principal principal) {
         if(loginCode != null) {
             switch (loginCode) {
                 case "success" -> {
-                    model.addAttribute("loginSuccess", "Erfolgreich angemeldet, willkommen zurück!");
-                    return myProfileSite;
-                }
-                case "logout" -> {
-                    model.addAttribute("logoutSuccess", "Erfolgreich abgemeldet, auf Wiedersehen!");
-                    return indexSite;
+                    if(principal != null) {
+                        var currentUser = getCurrentlyLoggedInUser(principal);
+                        model.addAttribute("loginSuccess", "Erfolgreich angemeldet, willkommen zurück " + currentUser.getArtistName() + "!");
+                        model.addAttribute("currentUser", currentUser);
+                        return myProfileSite;
+                    }
                 }
                 case "error" -> {
                     model.addAttribute("errorMessage", "Benutzername oder Passwort sind falsch!");
                     return loginSite;
                 }
+                case "logout" -> {
+                    if(principal != null) {
+                        model.addAttribute("errorMessage", "Nutzen Sie zum Logout bitte den zugehörigen Button!");
+                    } else {
+                        model.addAttribute("logoutSuccess", "Erfolgreich abgemeldet, auf Wiedersehen!");
+                    }
+                    return indexSite;
+                }
                 default -> {
-                    model.addAttribute("errorMessage", "Falscher loginCode, bitte wenden Sie sich an den Administrator!");
-                    return errorSite;
+                    model.addAttribute("errorMessage", "Falscher loginCode. Falls dieses Problem länger besteht, wenden Sie sich bitte an den Administrator.");
+                    return loginSite;
+                }
+                // TODO: ONLY FOR DEVELOPMENT, REMOVE BEFORE DEPLOYING
+                case "defaultLogin" -> {
+                    if(principal == null){
+                        return "user/loginDefaultUserForDevelopment";
+                    }
+                    }
+                    model.addAttribute("errorMessage", "Du bist schon angemeldet Dumbo.");
+                    return indexSite;
                 }
             }
+            model.addAttribute("errorMessage", "Keine Berechtigung zum aufrufen dieser Seite, bitte melden Sie sich zuerst an!");
         }
         return loginSite;
     }
 
     @RequestMapping(value = "/myProfile", method = RequestMethod.GET)
-    public String ShowMyProfile() {
+    public String ShowMyProfile(Principal principal, Model model) {
+        var currentUser = getCurrentlyLoggedInUser(principal);
+        model.addAttribute("user", currentUser);
         return myProfileSite;
     }
 
     @RequestMapping(value = "/myProfile/edit", method = RequestMethod.GET)
-    public String EditMyProfileSite() {
+    public String EditMyProfileSite(Principal principal, Model model) {
+        var currentUser = getCurrentlyLoggedInUser(principal);
+        model.addAttribute("currentUser", currentUser);
         return editMyProfileSite;
+    }
+
+    private User getCurrentlyLoggedInUser(Principal principal) {
+        return userService.loadUserByUsername(principal.getName());
     }
 }

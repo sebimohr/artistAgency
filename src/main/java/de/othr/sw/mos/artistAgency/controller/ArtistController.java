@@ -16,7 +16,7 @@ public class ArtistController implements SitePathDistribution {
     @Autowired
     private UserServiceIF userService;
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    @RequestMapping(value = {"/list", "/"}, method = RequestMethod.GET)
     public String ShowArtistsList(Model model) {
         var artistList = userService.getAllUsers();
 
@@ -30,7 +30,7 @@ public class ArtistController implements SitePathDistribution {
             throw new UserServiceException("Empty id detected");
         }
 
-        var detailedUser = userService.getUserByUsername(artistId);
+        var detailedUser = userService.loadUserByUsername(artistId);
 
         model.addAttribute(detailedUser);
 

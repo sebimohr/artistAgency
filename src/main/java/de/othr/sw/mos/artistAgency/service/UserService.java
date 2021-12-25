@@ -6,7 +6,6 @@ import de.othr.sw.mos.artistAgency.repository.UserRepository;
 import de.othr.sw.mos.artistAgency.service.interfaces.UserServiceIF;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,18 +27,8 @@ public class UserService implements UserServiceIF {
     }
 
     @Override
-    public ArtistDto getArtistInformation(Long artistId) {
-        // TODO: implement repo
-        return new ArtistDto();
-    }
-
-    @Override
     @Transactional
     public User registerUser(User user) throws UserServiceException {
-        /*if(user.getUsername() == null || user.getPassword() == null || user.getArtistName() == null) {
-            throw new UserServiceException("Nicht alle Felder ausgefüllt.");
-        }*/
-
         var foundUserOptional = userRepo.findByUsername(user.getUsername());
 
         if(foundUserOptional.isEmpty()) {
@@ -59,20 +48,11 @@ public class UserService implements UserServiceIF {
                 newUser.setArtType(user.getArtType());
             if(user.getWebLink() != null)
                 newUser.setWebLink(user.getWebLink());
-            // newUser.set...(...) --> for more input fields
 
-            var savedUser = userRepo.save(newUser);
-
-            return savedUser;
+            return userRepo.save(newUser);
         }
 
         throw new UserServiceException("User mit Email" + user.getUsername() + " schon vorhanden");
-    }
-
-    @Override
-    public User getUserByUsername(String username) {
-        return userRepo.findByUsername(username).orElseThrow( () ->
-                new UsernameNotFoundException("User with username " + username + "doesn't exist"));
     }
 
     @Override
@@ -82,9 +62,22 @@ public class UserService implements UserServiceIF {
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public User loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepo.findByUsername(username).orElseThrow(() -> {
-            throw new UsernameNotFoundException("User with username address: " + username + "not found");
+            throw new UsernameNotFoundException("User with username " + username + " not found");
         });
+    }
+
+    // method for external partners, returns artistDto with only relevant information
+    @Override
+    public ArtistDto getArtistInformation(String username) {
+        var artist = loadUserByUsername(username);
+
+        return new ArtistDto(
+                artist.getArtistName(),
+                artist.getDescription(),
+                artist.getWebLink(),
+                artist.getArtType().toString()
+        );
     }
 }

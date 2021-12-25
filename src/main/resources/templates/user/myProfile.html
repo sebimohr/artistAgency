@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-    <div th:replace="common/head :: defaultHead"/>
+<head th:include="common/head :: defaultHead">
 
     <title>Mein Profil</title>
 </head>
@@ -13,6 +12,9 @@
 
         <h1>Mein Profil</h1>
         <!--    TODO: Your code here -->
+        <div th:if="${!#strings.isEmpty(userName)}">
+            <div class="alert alert-success" role="alert" th:text="${userName}"/>
+        </div>
     </div>
 
     <div th:replace="common/footer :: footerWithBoostrap"/>
