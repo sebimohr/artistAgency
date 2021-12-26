@@ -30,7 +30,7 @@
                     <td><label th:text="${artist.getPhoneNumber()}"/></td>
                     <td><label th:text="${artist.getSalaryPerEvent()}"/></td>
                     <td><label th:text="${artist.getDescription()}"/></td>
-                    <td><label th:text="${artist.getArtType()}"/></td>
+                    <td><label th:text="${#strings.capitalize(artist.getArtType())}"/></td>
                     <td><a th:href="${artist.getWebLink()}" th:text="${artist.getWebLink()}"/></td>
                     <td><form th:action="@{/artist/details}" th:type="get">
                         <input type="hidden" th:value="${artist.getUserId()}" name="id">

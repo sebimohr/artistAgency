@@ -12,24 +12,55 @@
 
         <form th:action="@{/user/register}" th:method="post" th:object=${user}>
             <div class="form-floating">
-<!-- TODO:               <input type="email" class="form-control" id="username" name="username" placeholder="ur-name@example.com" th:field="*{username}" required/>-->
-                <input type="text" class="form-control" id="username" name="username" placeholder="z.B. email@example.de" th:field="*{username}" required/>
+<!--                TODO: email als type einstellen -->
+                <input type="text" class="form-control" id="username" name="username"
+                       th:field="*{username}" placeholder="email" required/>
                 <label for="username">Email</label>
             </div>
-
             <div class="form-floating">
-<!--                TODO: minLength einstellen-->
+<!--                TODO: minLength einstellen -->
                 <input type="password" class="form-control" id="password" name="password"
-                       placeholder="Sicheres Passwort" minlength="1" th:field="*{password}" required>
+                       th:field="*{password}" minlength="1" placeholder="password" required/>
                 <label for="password">Passwort</label>
             </div>
-
             <div class="form-floating">
-                <input type="text" class="form-control" id="artistname" name="artistname"
-                       placeholder="Dein Künstlername" th:field="*{artistName}" required>
-                <label for="artistname">Künstlername</label>
+                <input type="text" class="form-control" id="artistName" name="artistName"
+                       th:field="*{artistName}" placeholder="artistName" required/>
+                <label for="artistName">Künstlername</label>
             </div>
-
+            <div class="form-floating">
+                <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
+                       th:field="*{phoneNumber}" placeholder="phoneNumber" required/>
+                <label for="phoneNumber">Telefonnummer</label>
+            </div>
+            <div class="form-floating">
+                <input type="number" class="form-control" id="salaryPerEvent" name="salaryPerEvent"
+                       th:field="*{salaryPerEvent}" placeholder="0" max="300" min="0" required/>
+                <label for="salaryPerEvent">Gehalt pro Auftritt in EURO</label>
+            </div>
+            <div class="form-floating">
+                <textarea type="text" class="form-control" id="description" name="description"
+                       th:field="*{description}" placeholder="Beschreibung" required/>
+                <label for="description">Beschreibung</label>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label for="artType">Kunsttyp</label>
+                </div>
+                <div class="col-8">
+                    <select class="form-control" id="artType" name="artType"
+                            th:field="*{artType}">
+                        <option th:value="MUSIC" selected>Musik</option>
+                        <option th:value="COMEDY">Comedy</option>
+                        <option th:value="PARTY">Party</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-floating">
+                <input type="url" class="form-control" id="webLink" name="webLink"
+                       th:field="*{webLink}" placeholder="webLink.de" required/>
+                <label for="webLink">Link zur Webseite</label>
+            </div>
             <button type="submit" class="btn btn-info">Registrieren</button>
         </form>
 

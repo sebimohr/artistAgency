@@ -1,55 +1,34 @@
 package de.othr.sw.mos.artistAgency.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Table(name = "Event")
 public class Event {
     @Id
-    @Column(name = "event_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Getter
     private Long eventId;
 
+    @Setter @Getter
     private int venueId;
-    private Date date;
+    @Setter @Getter
+    private int artistId;
+    @Setter @Getter
+    private Date eventDate;
+    @Setter @Getter
     private String eventName;
 
-    public Event () {
-        // TODO: Implement constructor
-    }
+    public Event () { }
 
-    public void setEventId(Long eventId) {
-        this.eventId = eventId;
-    }
-
-    public void setVenueId(int venueId) {
+    public Event (int venueId, int artistId, Date eventDate, String eventName) {
         this.venueId = venueId;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public void setEventName(String eventName) {
+        this.artistId = artistId;
+        this.eventDate = eventDate;
         this.eventName = eventName;
-    }
-
-    public Long getEventId() {
-        return eventId;
-    }
-
-    public int getVenueId() {
-        return venueId;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public String getEventName() {
-        return eventName;
     }
 }

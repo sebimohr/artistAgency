@@ -49,8 +49,8 @@ public class ArtistAgencyApplication implements ApplicationRunner {
 			user1.setPhoneNumber("01736772512");
 			user1.setSalaryPerEvent(BigDecimal.valueOf(800.00));
 			user1.setDescription("Description Of ExampleUser 1");
-			user1.setArtType(ArtType.COMEDY);
-			user1.setWebLink(new URL("http://localhost:8080/home"));
+			user1.setArtType(ArtType.MUSIC);
+			user1.setWebLink(new URL("http://localhost:8080/artist/list"));
 
 			userService.registerUser(user1);
 		}
@@ -80,7 +80,7 @@ public class ArtistAgencyApplication implements ApplicationRunner {
 					"015123977364",
 					BigDecimal.valueOf(800.00),
 					"Description Of ExampleUser 3",
-					ArtType.COMEDY,
+					ArtType.PARTY,
 					new URL("http://localhost:8080/home"));
 			userService.registerUser(user3);
 		}
