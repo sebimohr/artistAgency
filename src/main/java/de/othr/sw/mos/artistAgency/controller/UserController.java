@@ -87,7 +87,8 @@ public class UserController implements SitePathDistribution {
     @RequestMapping(value = "/myProfile", method = RequestMethod.GET)
     public String ShowMyProfile(Principal principal, Model model) {
         var currentUser = getCurrentlyLoggedInUser(principal);
-        model.addAttribute("user", currentUser);
+        model.addAttribute("currentUser", currentUser);
+        // show information on my profile page and make it editable on edit page
         return myProfileSite;
     }
 

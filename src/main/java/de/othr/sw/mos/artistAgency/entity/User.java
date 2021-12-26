@@ -14,8 +14,12 @@ import java.util.Collection;
 @Table(name = "Artist")
 public class User implements UserDetails {
     // login information
+    // TODO: Sequence for ID, change ID as identifier in repository and all occurrences
     @Id
-    @Setter
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Getter
+    private Long userId;
+    @Setter @Column(unique = true)
     private String username;
     @Setter
     private String password;

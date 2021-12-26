@@ -14,6 +14,8 @@ public interface UserServiceIF extends UserDetailsService {
 
     @Override
     User loadUserByUsername(String username);
+
+    User getUserByUserId(Long Id);
     
-    ArtistDto getArtistInformation(String username);
+    ArtistDto getArtistInformation(Long artistId);
 }
