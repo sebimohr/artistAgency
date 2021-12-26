@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, String> {
     // findByUsername -> automatic query for username / primary key
     Optional<User> findByUsername(String username);
+
+    Optional<User> findByUserId(Long Id);
 }

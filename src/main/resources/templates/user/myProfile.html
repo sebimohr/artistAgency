@@ -12,8 +12,8 @@
 
         <h1>Mein Profil</h1>
         <!--    TODO: Your code here -->
-        <div th:if="${!#strings.isEmpty(userName)}">
-            <div class="alert alert-success" role="alert" th:text="${userName}"/>
+        <div th:if="${!#strings.isEmpty(currentUser.getUsername())}">
+            <div class="alert alert-success" role="alert" th:text="${currentUser.getUsername()}"/>
         </div>
     </div>
 

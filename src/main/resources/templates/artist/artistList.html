@@ -12,8 +12,8 @@
         <h1>Artists</h1>
         <table class="table table-responsive table-dark table-hover">
             <thead>
+                <th scope="col">#</th>
                 <th scope="col">Username</th>
-                <th scope="col">Password</th>
                 <th scope="col">Künstlername</th>
                 <th scope="col">Telefonnummer</th>
                 <th scope="col">Gehalt</th>
@@ -24,8 +24,8 @@
             </thead>
             <tbody>
                 <tr th:each="artist : ${artists}">
-                    <th scope="row"><a th:text="${artist.getUsername()}"/></th>
-                    <td><label th:text="${artist.getPassword()}"/></td>
+                    <th scope="row"><a th:text="${artist.getUserId()}"/></th>
+                    <td><label th:text="${artist.getUsername()}"/></td>
                     <td><label th:text="${artist.getArtistName()}"/></td>
                     <td><label th:text="${artist.getPhoneNumber()}"/></td>
                     <td><label th:text="${artist.getSalaryPerEvent()}"/></td>
@@ -33,7 +33,7 @@
                     <td><label th:text="${artist.getArtType()}"/></td>
                     <td><a th:href="${artist.getWebLink()}" th:text="${artist.getWebLink()}"/></td>
                     <td><form th:action="@{/artist/details}" th:type="get">
-                        <input type="hidden" th:value="${artist.getUsername()}" name="id">
+                        <input type="hidden" th:value="${artist.getUserId()}" name="id">
                         <button type="submit" class="btn btn-info">Details</button>
                     </form></td>
                 </tr>

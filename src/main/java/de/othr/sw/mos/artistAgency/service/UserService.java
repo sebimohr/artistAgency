@@ -64,14 +64,21 @@ public class UserService implements UserServiceIF {
     @Transactional
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepo.findByUsername(username).orElseThrow(() -> {
-            throw new UsernameNotFoundException("User with username " + username + " not found");
+            throw new UsernameNotFoundException("User with username " + username + " not found.");
+        });
+    }
+
+    @Override
+    public User getUserByUserId(Long Id) {
+        return userRepo.findByUserId(Id).orElseThrow(() -> {
+            throw new UsernameNotFoundException("User with ID " + Id + " not found.");
         });
     }
 
     // method for external partners, returns artistDto with only relevant information
     @Override
-    public ArtistDto getArtistInformation(String username) {
-        var artist = loadUserByUsername(username);
+    public ArtistDto getArtistInformation(Long artistId) {
+        var artist = getUserByUserId(artistId);
 
         return new ArtistDto(
                 artist.getArtistName(),

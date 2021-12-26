@@ -25,14 +25,14 @@ public class ArtistController implements SitePathDistribution {
     }
 
     @RequestMapping(value = "/details")
-    public String ShowArtistPage(@RequestParam(value = "id") String artistId, Model model) throws UserServiceException {
+    public String ShowArtistPage(@RequestParam(value = "id") Long artistId, Model model) throws UserServiceException {
         if(artistId == null) {
-            throw new UserServiceException("Empty id detected");
+            throw new UserServiceException("Empty id detected.");
         }
 
-        var detailedUser = userService.loadUserByUsername(artistId);
+        var detailedArtist = userService.getUserByUserId(artistId);
 
-        model.addAttribute(detailedUser);
+        model.addAttribute("artist", detailedArtist);
 
         return artistDetailsSite;
     }
