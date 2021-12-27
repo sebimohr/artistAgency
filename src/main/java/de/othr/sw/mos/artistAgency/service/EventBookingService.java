@@ -2,7 +2,9 @@ package de.othr.sw.mos.artistAgency.service;
 
 import de.othr.sw.mos.artistAgency.entity.Event;
 import de.othr.sw.mos.artistAgency.entity.Venue;
+import de.othr.sw.mos.artistAgency.exception.EventServiceException;
 import de.othr.sw.mos.artistAgency.repository.EventRepository;
+import de.othr.sw.mos.artistAgency.repository.VenueRepository;
 import de.othr.sw.mos.artistAgency.service.interfaces.EventBookingServiceIF;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,35 +15,71 @@ import java.util.List;
 public class EventBookingService implements EventBookingServiceIF {
 
     private final EventRepository eventRepo;
+    private final VenueRepository venueRepo;
 
     @Autowired
-    public EventBookingService(EventRepository eventRepo) {
+    public EventBookingService(EventRepository eventRepo, VenueRepository venueRepo) {
         this.eventRepo = eventRepo;
+        this.venueRepo = venueRepo;
     }
 
-
     @Override
-    public Event registerEvent(Event event) {
-        return null;
+    public Event registerEvent(Event event) throws EventServiceException {
+        var foundEventOptional = eventRepo.findByEventId(event.getEventId());
+
+        if(foundEventOptional.isEmpty()) {
+            var newEvent = new Event(
+                    event.getVenueId(),
+                    event.getArtistId(),
+                    event.getEventDate(),
+                    event.getEventName()
+            );
+
+            // TODO: RPC on ELM
+            createBooking(event, financeArtistAgencyId);
+
+            return eventRepo.save(newEvent);
+        }
+
+        throw new EventServiceException("Event with ID already exists.");
     }
 
     @Override
     public List<Venue> getAllVenuesFromEventLocationManager() {
-        return null;
+        // TODO: RPC on ELM
+        return venueRepo.findAll();
     }
 
     @Override
-    public Venue getSpecificVenueFromEventLocationManager(Long venueId) {
-        return null;
+    public Venue getSpecificVenueFromEventLocationManager(Long venueId) throws Exception {
+        // TODO: RPC on ELM
+        return venueRepo.findByVenueId(venueId).orElseThrow( () ->
+                new Exception("Venue with " + venueId + " not found"));
     }
 
     @Override
-    public Event createBooking(Event event) {
-        return null;
+    public List<Event> getAllEventsForSpecificArtist(Long artistId) {
+        return eventRepo.findAllByArtistId(artistId);
+    }
+
+    @Override
+    public List<Event> getAllEvents() {
+        return eventRepo.findAll();
+    }
+
+    @Override
+    public Event getEventByEventId(Long eventId) throws EventServiceException {
+        return eventRepo.findByEventId(eventId).orElseThrow( () ->
+                new EventServiceException("Event with Id " + eventId + " not found."));
+    }
+
+    // TODO: only for testing
+    private Event createBooking(Event event, Long financeArtistAgencyId) {
+        return event;
     }
 
     @Override
     public Venue registerVenueForTesting(Venue venue) {
-        return null;
+        return venueRepo.save(venue);
     }
 }

@@ -2,18 +2,24 @@ package de.othr.sw.mos.artistAgency.service.interfaces;
 
 import de.othr.sw.mos.artistAgency.entity.Event;
 import de.othr.sw.mos.artistAgency.entity.Venue;
+import de.othr.sw.mos.artistAgency.exception.EventServiceException;
 
 import java.util.List;
 
 public interface EventBookingServiceIF {
-    Event registerEvent(Event event);
+    Long financeArtistAgencyId = 1L;
+
+    Event registerEvent(Event event) throws EventServiceException;
 
     List<Venue> getAllVenuesFromEventLocationManager();
 
-    Venue getSpecificVenueFromEventLocationManager(Long venueId);
+    Venue getSpecificVenueFromEventLocationManager(Long venueId) throws Exception;
 
-    // TODO: replace with interface-method from ELM
-    Event createBooking(Event event /*TODO: Long financeArtistAgencyId*/);
+    List<Event> getAllEventsForSpecificArtist(Long artistId);
+
+    List<Event> getAllEvents();
+
+    Event getEventByEventId(Long eventId) throws EventServiceException;
 
     Venue registerVenueForTesting(Venue venue);
 }

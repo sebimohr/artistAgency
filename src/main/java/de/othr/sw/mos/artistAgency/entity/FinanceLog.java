@@ -3,10 +3,7 @@ package de.othr.sw.mos.artistAgency.entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -14,7 +11,7 @@ import java.util.Date;
 @Table(name = "FinanceLog")
 public class FinanceLog {
     @Id
-    @Column(name = "finance_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter
     private Long financeId;
 
@@ -40,12 +37,7 @@ public class FinanceLog {
 
     public FinanceLog() { }
 
-    public FinanceLog(Long financeId) {
-        this.financeId = financeId;
-    }
-
     public FinanceLog(
-            Long financeId,
             String username,
 //            Date moneyReceived,
 //            BigDecimal receivedAmount,
@@ -54,7 +46,6 @@ public class FinanceLog {
             Date artistPaidDate,
             BigDecimal artistPaidAmount
     ) {
-        this.financeId = financeId;
         this.username = username;
 //        this.moneyReceived = moneyReceived;
 //        this.receivedAmount = receivedAmount;
@@ -62,5 +53,10 @@ public class FinanceLog {
 //        this.venuePaidAmount = venuePaidAmount;
         this.artistPaidDate = artistPaidDate;
         this.artistPaidAmount = artistPaidAmount;
+    }
+
+    @Override
+    public String toString() {
+        return "ID: " + this.financeId + ", Name: " + this.username + ", Date: " + this.artistPaidDate + ", Amount: " + this.artistPaidAmount;
     }
 }

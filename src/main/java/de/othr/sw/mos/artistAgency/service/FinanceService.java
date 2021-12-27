@@ -24,7 +24,7 @@ public class FinanceService implements FinanceServiceIF {
         var foundFinanceLogOptional = financeRepo.findByFinanceId(financeLog.getFinanceId());
 
         if(foundFinanceLogOptional.isEmpty()) {
-            var newFinanceLog = new FinanceLog(financeLog.getFinanceId());
+            var newFinanceLog = new FinanceLog();
 
             newFinanceLog.setUsername(financeLog.getUsername());
             if(financeLog.getArtistPaidDate() != null)
@@ -35,7 +35,6 @@ public class FinanceService implements FinanceServiceIF {
             return financeRepo.save(newFinanceLog);
         }
 
-        // TODO: throw own exception
         throw new FinanceServiceException("FinanceLog with ID already exists.");
     }
 
@@ -48,5 +47,10 @@ public class FinanceService implements FinanceServiceIF {
     @Override
     public List<FinanceLog> getFinanceLogByUsername(String username) {
         return financeRepo.findAllByUsername(username);
+    }
+
+    @Override
+    public List<FinanceLog> getAllFinanceLogs() {
+        return financeRepo.findAll();
     }
 }

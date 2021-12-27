@@ -15,9 +15,9 @@ public class Event {
     private Long eventId;
 
     @Setter @Getter
-    private int venueId;
+    private Long venueId;
     @Setter @Getter
-    private int artistId;
+    private Long artistId;
     @Setter @Getter
     private Date eventDate;
     @Setter @Getter
@@ -25,7 +25,7 @@ public class Event {
 
     public Event () { }
 
-    public Event (int venueId, int artistId, Date eventDate, String eventName) {
+    public Event (Long venueId, Long artistId, Date eventDate, String eventName) {
         this.venueId = venueId;
         this.artistId = artistId;
         this.eventDate = eventDate;
