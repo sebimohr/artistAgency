@@ -9,7 +9,22 @@
 
     <div class="jumbotron">
         <h1>Events</h1>
-        <!--    TODO: Your code here -->
+        <table class="table table-responsive table-dark table-hover">
+            <thead>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Datum</th>
+                <th scope="col">Künstler</th>
+            </thead>
+            <tbody>
+                <tr th:each="event : ${events}">
+                    <th scope="row"><label th:text="${event.getEventId()}"/></th>
+                    <td><label th:text="${event.getEventName()}"/></td>
+                    <td><label th:text="${event.getEventDate()}"/></td>
+                    <td><label th:text="${event.getArtistId()}"/></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
     <div th:replace="common/footer :: footerWithBoostrap"/>

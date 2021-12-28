@@ -17,9 +17,9 @@
             <th scope="col">Datum</th>
             </thead>
             <tbody>
-            <tr th:each="log : ${financeLogList}">
+            <tr th:each="log : ${financeLogs}">
                 <th scope="row"><label th:text="${log.getFinanceId()}"/></th>
-                <td><label th:text="${log.getUsername()}"/></td>
+                <td><label th:text="${log.getUserId()}"/></td>
                 <td><label th:text="${log.getArtistPaidAmount()}"/></td>
                 <td><label th:text="${log.getArtistPaidDate()}"/></td>
             </tr>

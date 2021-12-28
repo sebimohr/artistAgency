@@ -34,20 +34,23 @@ public class ArtistAgencyApplication implements ApplicationRunner {
     }
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
-        // some users for testing
-        var users = addUsersToH2DatabaseForTesting();
-        var financeLogs = addFinanceLogToH2DatabaseForTesting();
-        var venues = addVenueToH2DatabaseForTesting();
-        var events = addEventToH2DatabaseForTesting();
+    public void run(ApplicationArguments args) {
+        try {
+            var users = addUsersToH2DatabaseForTesting();
+            var financeLogs = addFinanceLogToH2DatabaseForTesting(users);
+            var venues = addVenueToH2DatabaseForTesting();
+            var events = addEventToH2DatabaseForTesting(venues, users);
 
-        System.out.println(
-                "\nSize of Lists\n-------------------\n" +
-                "Users: \t\t\t " + users.size() + "\n" +
-                "FinanceLogs: \t" + financeLogs.size() + "\n" +
-                "Venues: \t\t" + venues.size() + "\n" +
-                "Events: \t\t" + events.size()
-        );
+            System.out.println(
+                    "\nSize of Lists\n-------------------\n" +
+                            "Users: \t\t\t " + users.size() + "\n" +
+                            "FinanceLogs: \t" + financeLogs.size() + "\n" +
+                            "Venues: \t\t" + venues.size() + "\n" +
+                            "Events: \t\t" + events.size()
+            );
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
     private List<User> addUsersToH2DatabaseForTesting() throws Exception {
@@ -101,10 +104,11 @@ public class ArtistAgencyApplication implements ApplicationRunner {
         return userService.getAllUsers();
     }
 
-    private List<FinanceLog> addFinanceLogToH2DatabaseForTesting() throws Exception {
+    private List<FinanceLog> addFinanceLogToH2DatabaseForTesting(List<User> users) throws Exception {
         for (var i = 1; i <= 10; i++) {
+            var artist = users.get(i % users.size());
             var financeLog = new FinanceLog(
-                    "ExampleUser" + ((i % 3) + 1),
+                    artist.getUserId(),
                     new Date(),
                     BigDecimal.valueOf((i * 100.0) % 450.0)
             );
@@ -124,7 +128,7 @@ public class ArtistAgencyApplication implements ApplicationRunner {
             };
 
             var venue = new Venue(
-                    "Venue" + i,
+                    "Venue " + i,
                     BigDecimal.valueOf((i * 100.0) % 450.0),
                     typeOfVenue
             );
@@ -135,17 +139,15 @@ public class ArtistAgencyApplication implements ApplicationRunner {
         return eventBookingService.getAllVenuesFromEventLocationManager();
     }
 
-    private List<Event> addEventToH2DatabaseForTesting() throws Exception {
-        var venueList = eventBookingService.getAllVenuesFromEventLocationManager();
-        var artistList = userService.getAllUsers();
+    private List<Event> addEventToH2DatabaseForTesting(List<Venue> venues, List<User> users) throws Exception {
         for (var i = 1; i <= 10; i++) {
-            var venue = venueList.get(i % venueList.size());
-            var artist = artistList.get(i % artistList.size());
+            var venue = venues.get(i % venues.size());
+            var artist = users.get(i % users.size());
             var event = new Event(
                     venue.getVenueId(),
                     artist.getUserId(),
                     new Date(),
-                    "Event" + i
+                    "Event " + i
             );
 
             eventBookingService.registerEvent(event);

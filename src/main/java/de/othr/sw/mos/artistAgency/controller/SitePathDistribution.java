@@ -10,17 +10,18 @@ public interface SitePathDistribution {
     // artist
     String artistDetailsSite = "artist/artistDetails";
     String artistListSite = "artist/artistList";
+    String myProfileSite = "artist/myProfile";
+    String editMyProfileSite = "artist/editMyProfile";
 
     // event
     String eventListSite = "event/eventList";
-    String bookNewEventSite = "event/eventList";
+    String bookNewEventSite = "event/bookNewEvent";
 
     // finance
     String financeList = "finance/financeList";
 
     // user
     String loginSite = "user/login";
+    String loginDefaultUserSite = "user/loginDefaultUserForDevelopment";
     String registerUserSite = "user/registerUser";
-    String myProfileSite = "user/myProfile";
-    String editMyProfileSite = "user/editMyProfile";
 }

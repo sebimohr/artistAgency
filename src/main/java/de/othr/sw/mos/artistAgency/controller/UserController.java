@@ -73,7 +73,7 @@ public class UserController implements SitePathDistribution {
                 // TODO: ONLY FOR DEVELOPMENT, REMOVE BEFORE DEPLOYING
                 case "defaultLogin" -> {
                     if(principal == null){
-                        return "user/loginDefaultUserForDevelopment";
+                        return loginDefaultUserSite;
                     }
                     model.addAttribute("errorMessage", "Du bist schon angemeldet Dumbo.");
                     return indexSite;
@@ -82,21 +82,6 @@ public class UserController implements SitePathDistribution {
             model.addAttribute("errorMessage", "Keine Berechtigung zum aufrufen dieser Seite, bitte melden Sie sich zuerst an!");
         }
         return loginSite;
-    }
-
-    @RequestMapping(value = "/myProfile", method = RequestMethod.GET)
-    public String ShowMyProfile(Principal principal, Model model) {
-        var currentUser = getCurrentlyLoggedInUser(principal);
-        model.addAttribute("currentUser", currentUser);
-        // show information on my profile page and make it editable on edit page
-        return myProfileSite;
-    }
-
-    @RequestMapping(value = "/myProfile/edit", method = RequestMethod.GET)
-    public String EditMyProfileSite(Principal principal, Model model) {
-        var currentUser = getCurrentlyLoggedInUser(principal);
-        model.addAttribute("currentUser", currentUser);
-        return editMyProfileSite;
     }
 
     private User getCurrentlyLoggedInUser(Principal principal) {

@@ -16,47 +16,29 @@ public class FinanceLog {
     private Long financeId;
 
     @Setter @Getter
-    private String username;
-//    @Setter @Getter
-//    private Date moneyReceived;
-//    @Setter @Getter
-//    private BigDecimal receivedAmount;
-//    @Setter @Getter
-//    private Date venuePaid;
-//    @Setter @Getter
-//    private BigDecimal venuePaidAmount;
+    private Long userId;
     @Setter @Getter
     private Date artistPaidDate;
     @Setter @Getter
     private BigDecimal artistPaidAmount;
     @Getter
     final Boolean done = (
-//            receivedAmount != null &&
-//            venuePaidAmount != null &&
             artistPaidAmount != null);
 
     public FinanceLog() { }
 
     public FinanceLog(
-            String username,
-//            Date moneyReceived,
-//            BigDecimal receivedAmount,
-//            Date venuePaid,
-//            BigDecimal venuePaidAmount,
+            Long username,
             Date artistPaidDate,
             BigDecimal artistPaidAmount
     ) {
-        this.username = username;
-//        this.moneyReceived = moneyReceived;
-//        this.receivedAmount = receivedAmount;
-//        this.venuePaid = venuePaid;
-//        this.venuePaidAmount = venuePaidAmount;
+        this.userId = username;
         this.artistPaidDate = artistPaidDate;
         this.artistPaidAmount = artistPaidAmount;
     }
 
     @Override
     public String toString() {
-        return "ID: " + this.financeId + ", Name: " + this.username + ", Date: " + this.artistPaidDate + ", Amount: " + this.artistPaidAmount;
+        return "ID: " + this.financeId + ", UserId: " + this.userId + ", Date: " + this.artistPaidDate + ", Amount: " + this.artistPaidAmount + ", Done: " + this.done.toString();
     }
 }

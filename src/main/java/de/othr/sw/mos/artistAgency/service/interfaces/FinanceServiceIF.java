@@ -4,7 +4,6 @@ import de.othr.sw.mos.artistAgency.entity.FinanceLog;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public interface FinanceServiceIF {
@@ -12,7 +11,7 @@ public interface FinanceServiceIF {
 
     FinanceLog getFinanceLogById(Long financeLogId) throws Exception;
 
-    List<FinanceLog> getFinanceLogByUsername(String username);
+    List<FinanceLog> getFinanceLogByUserId(Long userId);
 
     List<FinanceLog> getAllFinanceLogs();
 }
