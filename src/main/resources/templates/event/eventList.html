@@ -8,7 +8,14 @@
     <div th:replace="common/navigationBar :: navigationBar"/>
 
     <div class="jumbotron">
-        <h1>Events</h1>
+        <div class="row">
+            <div class="col-10">
+                <h1>Events</h1>
+            </div>
+            <div class="col-2 align-items-end" sec:authorize="isAuthenticated()">
+                <a th:href="@{/event/book}" type="submit" class="btn btn-dark">Event buchen</a>
+            </div>
+        </div>
         <table class="table table-responsive table-dark table-hover">
             <thead>
                 <th scope="col">#</th>

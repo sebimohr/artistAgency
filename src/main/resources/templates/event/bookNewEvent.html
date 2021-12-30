@@ -3,13 +3,55 @@
 <head th:include="common/head :: defaultHead">
 
     <title>Default</title>
+    <script>
+        $('.datepicker').datepicker({
+            inline: true
+        });
+    </script>
 </head>
 <body>
     <div th:replace="common/navigationBar :: navigationBar"/>
 
     <div class="jumbotron">
         <h1>Neues Event buchen</h1>
-        <!--    TODO: Your code here -->
+        <form th:action="@{/event/book}" th:method="get">
+            <h3>Venue suchen</h3>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label for="venueLocation">Ort</label>
+                    <select class="form-control" id="venueLocation" name="venueLocation">
+                        <option th:value="AUGSBURG">Augsburg</option>
+                        <option th:value="INGOLSTADT">Ingolstadt</option>
+                        <option th:value="MUNICH">München</option>
+                        <option th:value="NUREMBURG">Nürnberg</option>
+                        <option th:value="REGENSBURG">Regensburg</option>
+                    </select>
+                </div>
+                <div class="col-4">
+                    <label for="venueDate">Datum</label>
+                    <input type="date" class="form-control" id="venueDate" name="venueDate"
+                           value="2022-01-21" min="2022-01-21" max="2025-12-31">
+                </div>
+                <div class="col-4">
+                    <label for="venueCapacity">Kapazität</label>
+                    <select class="form-control" id="venueCapacity" name="venueCapacity">
+                        <option th:value=100>bis 100</option>
+                        <option th:value=500>100 - 500</option>
+                        <option th:value=1000>500 - 1000</option>
+                        <option th:value=5000>1000 - 5000</option>
+                        <option th:value=100000>über 5000</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-info col-12">Venues anzeigen</button>
+        </form>
+        <form th:action="@{/event/book}" th:method="post" th:object=${event}>
+            <div class="form-floating">
+                <input type="text" class="form-control" id="eventName" name="eventName"
+                       th:field="*{eventName}" placeholder="Eventname" th:value="${event.getEventName()}" required/>
+                <label for="eventName">Eventname</label>
+            </div>
+        </form>
     </div>
 
     <div th:replace="common/footer :: footerWithBoostrap"/>
