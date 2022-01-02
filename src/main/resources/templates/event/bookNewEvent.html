@@ -3,11 +3,7 @@
 <head th:include="common/head :: defaultHead">
 
     <title>Default</title>
-    <script>
-        $('.datepicker').datepicker({
-            inline: true
-        });
-    </script>
+
 </head>
 <body>
     <div th:replace="common/navigationBar :: navigationBar"/>
@@ -20,26 +16,26 @@
                 <div class="col-4">
                     <label for="venueLocation">Ort</label>
                     <select class="form-control" id="venueLocation" name="venueLocation">
-                        <option th:value="AUGSBURG">Augsburg</option>
-                        <option th:value="INGOLSTADT">Ingolstadt</option>
-                        <option th:value="MUNICH">München</option>
-                        <option th:value="NUREMBURG">Nürnberg</option>
-                        <option th:value="REGENSBURG">Regensburg</option>
+                        <option th:value="AUGSBURG" th:selected="${venueLocation=='AUGSBURG'}">Augsburg</option>
+                        <option th:value="INGOLSTADT" th:selected="${venueLocation=='INGOLSTADT'}">Ingolstadt</option>
+                        <option th:value="MUNICH" th:selected="${venueLocation=='MUNICH'}">München</option>
+                        <option th:value="NUREMBURG" th:selected="${venueLocation=='NUREMBURG'}">Nürnberg</option>
+                        <option th:value="REGENSBURG" th:selected="${venueLocation=='REGENSBURG'}">Regensburg</option>
                     </select>
                 </div>
                 <div class="col-4">
                     <label for="venueDate">Datum</label>
                     <input type="date" class="form-control" id="venueDate" name="venueDate"
-                           value="2022-01-21" min="2022-01-21" max="2025-12-31">
+                           th:value="${venueDate}" min="2022-01-21" max="2025-12-31">
                 </div>
                 <div class="col-4">
                     <label for="venueCapacity">Kapazität</label>
                     <select class="form-control" id="venueCapacity" name="venueCapacity">
-                        <option th:value=100>bis 100</option>
-                        <option th:value=500>100 - 500</option>
-                        <option th:value=1000>500 - 1000</option>
-                        <option th:value=5000>1000 - 5000</option>
-                        <option th:value=100000>über 5000</option>
+                        <option th:value=100 th:selected="${venueCapacity==100}">bis 100</option>
+                        <option th:value=500 th:selected="${venueCapacity==500}">100 - 500</option>
+                        <option th:value=1000 th:selected="${venueCapacity==1000}">500 - 1000</option>
+                        <option th:value=5000 th:selected="${venueCapacity==5000}">1000 - 5000</option>
+                        <option th:value=100000 th:selected="${venueCapacity==100000}">über 5000</option>
                     </select>
                 </div>
             </div>
@@ -50,6 +46,29 @@
                 <input type="text" class="form-control" id="eventName" name="eventName"
                        th:field="*{eventName}" placeholder="Eventname" th:value="${event.getEventName()}" required/>
                 <label for="eventName">Eventname</label>
+            </div>
+            <div th:if="${venues != null}">
+                <!--<div class="card-deck">
+                    <div class="card border-dark" th:each="venue : ${venues}">
+                        <div class="card-header" th:text="${venue.getArtType().toString()}"/>
+                        <div class="card-body text-dark">
+                            <h5 class="card-title" th:text="${venue.getVenueName()}"/>
+                            <p class="card-text" th:text="'Kosten: ' + ${venue.getCost()} + '€'"/>
+                        </div>
+                    </div>
+                </div>-->
+<!--                TODO: venue has to be selected for event item-->
+                <div class="list-group">
+                    <a href="#"
+                       class="list-group-item list-group-item-action flex-column align-items-start"
+                       th:each="venue : ${venues}">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1" th:text="${venue.getVenueName()}"/>
+                        </div>
+                        <p class="mb-1" th:text="${venue.getArtType().toString()}"/>
+                        <p class="mb-1" th:text="'Kosten: ' + ${venue.getCost()} + '€'"/>
+                    </a>
+                </div>
             </div>
         </form>
     </div>

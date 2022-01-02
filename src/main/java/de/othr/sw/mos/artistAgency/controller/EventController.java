@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 
 @Controller
 @RequestMapping(value = "/event")
@@ -48,14 +51,15 @@ public class EventController implements SitePathDistribution {
                                    @RequestParam(required = false) String venueLocation,
                                    @RequestParam(required = false) String venueDate,
                                    @RequestParam(required = false) Integer venueCapacity,
-                                   @RequestParam(required = false) String eventName
+                                   @ModelAttribute String eventName
     ) {
         var newEvent = new Event();
-        newEvent.setEventName("TestEventName For HTML");        // TODO: delete
 
         // TODO: don't delete eventName when reloading the page -> how to get value from eventName field?
-        if(eventName != null)
+        if(!eventName.isBlank())
             newEvent.setEventName(eventName);
+        else
+            newEvent.setEventName("TestEventName For HTML");        // TODO: just for testing, delete afterwards
 
         if(venueLocation != null && venueDate != null && venueCapacity != null) {
             if(Arrays.asList(100, 500, 1000, 5000, 100000).contains(venueCapacity)){
@@ -63,9 +67,24 @@ public class EventController implements SitePathDistribution {
                 var venueList = eventService.getAllVenuesFromEventLocationManager();
                 model.addAttribute("venues", venueList);
 
-                // TODO: convert eventDate to date
-//                newEvent.setEventDate(eventDate);
+                model.addAttribute("venueLocation", venueLocation);
+                model.addAttribute("venueDate", venueDate);
+                model.addAttribute("venueCapacity", venueCapacity);
+
+                Date eventDate = null;
+                try {
+                    eventDate = new SimpleDateFormat("yyyy-MM-dd")
+                                    .parse(venueDate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                newEvent.setEventDate(eventDate);
             }
+        } else {
+            model.addAttribute("venueLocation", "AUGSBURG");
+            model.addAttribute("venueDate", "2022-01-21");
+            model.addAttribute("venueCapacity", 100);
         }
 
         model.addAttribute("event", newEvent);
