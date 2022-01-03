@@ -9,9 +9,12 @@
 
     <div class="jumbotron">
         <h1>Home</h1>
-        <!--    TODO: Your code here -->
 
         <div th:replace="common/messageHandler :: messageHandler"/>
+
+        <img class="d-block w-100" th:src="@{/img/home/buehne_1.jpg}" alt="home picture"/>
+
+        <!--    TODO: Your code here -->
     </div>
 
     <div th:replace="common/footer :: footerWithBoostrap"/>

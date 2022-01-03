@@ -48,67 +48,74 @@ public class EventController implements SitePathDistribution {
 
     @RequestMapping(value = "/book", method = RequestMethod.GET)
     public String EventBookingSite(Model model,
+                                   Principal principal,
                                    @RequestParam(required = false) String venueLocation,
                                    @RequestParam(required = false) String venueDate,
-                                   @RequestParam(required = false) Integer venueCapacity,
-                                   @ModelAttribute String eventName
+                                   @RequestParam(required = false) Integer venueCapacity
     ) {
-        var newEvent = new Event();
+        if(validateVenueSearchInput(venueLocation, venueDate, venueCapacity)) {
+            // TODO: RPC on EventLocationManager
+            var venueList = eventService.getAllVenuesFromEventLocationManager();
+            model.addAttribute("venues", venueList);
 
-        // TODO: don't delete eventName when reloading the page -> how to get value from eventName field?
-        if(!eventName.isBlank())
-            newEvent.setEventName(eventName);
-        else
-            newEvent.setEventName("TestEventName For HTML");        // TODO: just for testing, delete afterwards
+            model.addAttribute("venueLocation", venueLocation);
+            model.addAttribute("venueDate", venueDate);
+            model.addAttribute("venueCapacity", venueCapacity);
 
-        if(venueLocation != null && venueDate != null && venueCapacity != null) {
-            if(Arrays.asList(100, 500, 1000, 5000, 100000).contains(venueCapacity)){
-                // TODO: RPC on EventLocationManager
-                var venueList = eventService.getAllVenuesFromEventLocationManager();
-                model.addAttribute("venues", venueList);
+            var eventDate = parseDateFromHTMLToDateObject(venueDate);
 
-                model.addAttribute("venueLocation", venueLocation);
-                model.addAttribute("venueDate", venueDate);
-                model.addAttribute("venueCapacity", venueCapacity);
-
-                Date eventDate = null;
-                try {
-                    eventDate = new SimpleDateFormat("yyyy-MM-dd")
-                                    .parse(venueDate);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-                newEvent.setEventDate(eventDate);
-            }
+            var newEvent = new Event();
+            newEvent.setArtistId(getCurrentlyLoggedInUserId(principal));
+            newEvent.setEventDate(eventDate);
+            model.addAttribute("event", newEvent);
         } else {
             model.addAttribute("venueLocation", "AUGSBURG");
             model.addAttribute("venueDate", "2022-01-21");
             model.addAttribute("venueCapacity", 100);
         }
 
-        model.addAttribute("event", newEvent);
-
         return bookNewEventSite;
     }
 
     @RequestMapping(value="/book", method = RequestMethod.POST)
-    public String BookEvent(@ModelAttribute("event") Event event, Model model) {
+    public String BookEvent(
+            @ModelAttribute("event") Event event,
+            @ModelAttribute String eventDate,
+            Model model) {
         if(event.getVenueId() == null) {
             model.addAttribute("event", event);
             return bookNewEventSite;
         } else {
-            try{
+            try {
                 eventService.registerEvent(event);
             } catch (EventServiceException e) {
                 model.addAttribute("errorMessage", e.getMessage());
-                return bookNewEventSite;
+                return errorSite;
             }
-            return eventListSite;
+            return ShowDefaultEventList(model);
         }
     }
 
     private Long getCurrentlyLoggedInUserId(Principal principal) {
         return userService.loadUserByUsername(principal.getName()).getUserId();
+    }
+
+    private Date parseDateFromHTMLToDateObject(String date) {
+        try {
+            return new SimpleDateFormat("yyyy-MM-dd")
+                    .parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    private Boolean validateVenueSearchInput(String venueLocation, String venueDate, Integer venueCapacity) {
+        return venueLocation != null
+                && Arrays.asList("AUGSBURG", "INGOLSTADT", "MUNICH", "NUREMBURG", "REGENSBURG").contains(venueLocation)
+                && venueDate != null
+                && venueCapacity != null
+                && Arrays.asList(100, 500, 1000, 5000, 100000).contains(venueCapacity);
     }
 }

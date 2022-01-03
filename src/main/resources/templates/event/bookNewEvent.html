@@ -41,36 +41,25 @@
             </div>
             <button type="submit" class="btn btn-info col-12">Venues anzeigen</button>
         </form>
-        <form th:action="@{/event/book}" th:method="post" th:object=${event}>
-            <div class="form-floating">
-                <input type="text" class="form-control" id="eventName" name="eventName"
-                       th:field="*{eventName}" placeholder="Eventname" th:value="${event.getEventName()}" required/>
-                <label for="eventName">Eventname</label>
-            </div>
-            <div th:if="${venues != null}">
-                <!--<div class="card-deck">
-                    <div class="card border-dark" th:each="venue : ${venues}">
-                        <div class="card-header" th:text="${venue.getArtType().toString()}"/>
-                        <div class="card-body text-dark">
-                            <h5 class="card-title" th:text="${venue.getVenueName()}"/>
-                            <p class="card-text" th:text="'Kosten: ' + ${venue.getCost()} + '€'"/>
-                        </div>
-                    </div>
-                </div>-->
-<!--                TODO: venue has to be selected for event item-->
-                <div class="list-group">
-                    <a href="#"
-                       class="list-group-item list-group-item-action flex-column align-items-start"
-                       th:each="venue : ${venues}">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1" th:text="${venue.getVenueName()}"/>
-                        </div>
-                        <p class="mb-1" th:text="${venue.getArtType().toString()}"/>
-                        <p class="mb-1" th:text="'Kosten: ' + ${venue.getCost()} + '€'"/>
-                    </a>
+
+        <div th:if="${venues != null}">
+            <form th:action="@{/event/book}" th:method="post" th:object=${event}>
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="eventName" name="eventName"
+                           th:field="*{eventName}" placeholder="Eventname" th:value="${event.getEventName()}" required/>
+                    <label for="eventName">Eventname</label>
                 </div>
-            </div>
-        </form>
+                <label for="venueChoice">Eventhalle</label>
+                <select class="form-control" id="venueChoice" name="venueChoice" th:field="*{venueId}">
+                    <option th:each="venue : ${venues}"
+                            th:value="${venue.getVenueId()}"
+                            th:text="${'Name: ' + venue.getVenueName() + ', Kosten: ' + venue.getCost() + '€, Kapazität: 100'}"/>
+                </select>
+                <input type="hidden" th:value="${event.getArtistId()}" th:field="*{artistId}"/>
+                <input type="hidden" th:value="${event.getEventDate()}" th:field="*{eventDate}"/>
+                <button type="submit" class="btn btn-info col-12">Event buchen</button>
+            </form>
+        </div>
     </div>
 
     <div th:replace="common/footer :: footerWithBoostrap"/>

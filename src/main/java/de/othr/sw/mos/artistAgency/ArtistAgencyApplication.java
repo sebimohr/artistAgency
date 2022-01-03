@@ -129,7 +129,7 @@ public class ArtistAgencyApplication implements ApplicationRunner {
 
             var venue = new Venue(
                     "Venue " + i,
-                    BigDecimal.valueOf((i * 100.0) % 450.0),
+                    BigDecimal.valueOf((i * 100.0) % 450.0 + 50.0),
                     typeOfVenue
             );
 
