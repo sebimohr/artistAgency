@@ -9,6 +9,7 @@ import de.othr.sw.mos.artistAgency.service.interfaces.EventBookingServiceIF;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -24,6 +25,7 @@ public class EventBookingService implements EventBookingServiceIF {
     }
 
     @Override
+    @Transactional
     public Event registerEvent(Event event) throws EventServiceException {
         var foundEventOptional = eventRepo.findByEventId(event.getEventId());
 

@@ -21,7 +21,7 @@ public class UserService implements UserServiceIF {
     private final UserRepository userRepo;
 
     @Autowired
-    public UserService(BCryptPasswordEncoder passwordEncoder, UserRepository userRepo){
+    public UserService(BCryptPasswordEncoder passwordEncoder, UserRepository userRepo) {
         this.passwordEncoder = passwordEncoder;
         this.userRepo = userRepo;
     }
