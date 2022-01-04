@@ -32,7 +32,7 @@ public class EventBookingService implements EventBookingServiceIF {
         if(foundEventOptional.isEmpty()) {
             var newEvent = new Event(
                     event.getVenueId(),
-                    event.getArtistId(),
+                    event.getArtist(),
                     event.getEventDate(),
                     event.getEventName()
             );
@@ -61,7 +61,7 @@ public class EventBookingService implements EventBookingServiceIF {
 
     @Override
     public List<Event> getAllEventsForSpecificArtist(Long artistId) {
-        return eventRepo.findAllByArtistId(artistId);
+        return eventRepo.findAllByArtist_ID(artistId);
     }
 
     @Override

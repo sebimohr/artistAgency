@@ -12,7 +12,7 @@ import java.util.Collection;
 
 @Entity
 @Table(name = "Artist")
-public class User extends SingleLongIdEntity implements UserDetails {
+public class User extends EntitySingleLongId implements UserDetails {
     // login information
     @Setter @Column(unique = true)
     private String username;

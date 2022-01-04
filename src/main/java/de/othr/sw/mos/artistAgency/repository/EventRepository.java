@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface EventRepository extends JpaRepository<Event, Long> {
     Optional<Event> findByID(Long eventId);
 
-    List<Event> findAllByArtistId(Long artistId);
+    List<Event> findAllByArtist_ID(Long artistId);
 }

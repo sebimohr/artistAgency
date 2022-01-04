@@ -10,7 +10,7 @@ import javax.persistence.MappedSuperclass;
 import java.util.Objects;
 
 @MappedSuperclass
-public abstract class SingleLongIdEntity {
+public abstract class EntitySingleLongId {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Setter @Getter
@@ -28,7 +28,7 @@ public abstract class SingleLongIdEntity {
         if (o == null || o.getClass() != this.getClass())
             return false;
 
-        var objectTranslation = (SingleLongIdEntity) o;
+        var objectTranslation = (EntitySingleLongId) o;
 
         return Objects.equals(ID, objectTranslation.ID);
     }

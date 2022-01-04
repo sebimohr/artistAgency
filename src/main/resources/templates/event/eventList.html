@@ -28,7 +28,7 @@
                     <th scope="row"><label th:text="${event.getID()}"/></th>
                     <td><label th:text="${event.getEventName()}"/></td>
                     <td><label th:text="${event.getEventDate()}"/></td>
-                    <td><label th:text="${event.getArtistId()}"/></td>
+                    <td><label th:text="${event.getArtist().getArtistName()}"/></td>
                 </tr>
             </tbody>
         </table>

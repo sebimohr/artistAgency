@@ -53,9 +53,8 @@
                 <select class="form-control" id="venueChoice" name="venueChoice" th:field="*{venueId}">
                     <option th:each="venue : ${venues}"
                             th:value="${venue.getID()}"
-                            th:text="${'Name: ' + venue.getVenueName() + ', Kosten: ' + venue.getCost() + '€, Kapazität: 100'}"/>
+                            th:text="${venue.toString()}"/>
                 </select>
-                <input type="hidden" th:value="${event.getArtistId()}" th:field="*{artistId}"/>
                 <input type="hidden" th:value="${event.getEventDate()}" th:field="*{eventDate}"/>
                 <button type="submit" class="btn btn-info col-12">Event buchen</button>
             </form>

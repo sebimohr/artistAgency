@@ -9,11 +9,16 @@ import java.util.Date;
 
 @Entity
 @Table(name = "Event")
-public class Event extends SingleLongIdEntity {
+public class Event extends EntitySingleLongId {
     @Setter @Getter
     private Long venueId;
+
+    @ManyToOne
+    @JoinColumn(name = "artistId")
     @Setter @Getter
-    private Long artistId;
+    private User artist;
+    // TODO: just changed from Long to User -> test if everything has been migrated
+
     @Setter @Getter
     @Temporal(TemporalType.DATE)
     @DateTimeFormat
@@ -23,9 +28,9 @@ public class Event extends SingleLongIdEntity {
 
     public Event () { }
 
-    public Event (Long venueId, Long artistId, Date eventDate, String eventName) {
+    public Event (Long venueId, User artist, Date eventDate, String eventName) {
         this.venueId = venueId;
-        this.artistId = artistId;
+        this.artist = artist;
         this.eventDate = eventDate;
         this.eventName = eventName;
     }

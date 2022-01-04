@@ -10,7 +10,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "FinanceLog")
-public class FinanceLog extends SingleLongIdEntity {
+public class FinanceLog extends EntitySingleLongId {
     @Setter @Getter
     private Long userId;
     @Setter @Getter

@@ -1,6 +1,7 @@
 package de.othr.sw.mos.artistAgency.controller;
 
 import de.othr.sw.mos.artistAgency.entity.Event;
+import de.othr.sw.mos.artistAgency.entity.User;
 import de.othr.sw.mos.artistAgency.exception.EventServiceException;
 import de.othr.sw.mos.artistAgency.service.interfaces.EventBookingServiceIF;
 import de.othr.sw.mos.artistAgency.service.interfaces.UserServiceIF;
@@ -39,7 +40,7 @@ public class EventController implements SitePathDistribution {
 
     @RequestMapping(value = "/myEvents", method = RequestMethod.GET)
     public String MyEventSite(Model model, Principal principal) {
-        var artistEventList = eventService.getAllEventsForSpecificArtist(getCurrentlyLoggedInUserId(principal));
+        var artistEventList = eventService.getAllEventsForSpecificArtist(getCurrentlyLoggedInUser(principal).getID());
 
         model.addAttribute("events", artistEventList);
 
@@ -48,7 +49,6 @@ public class EventController implements SitePathDistribution {
 
     @RequestMapping(value = "/book", method = RequestMethod.GET)
     public String EventBookingSite(Model model,
-                                   Principal principal,
                                    @RequestParam(required = false) String venueLocation,
                                    @RequestParam(required = false) String venueDate,
                                    @RequestParam(required = false) Integer venueCapacity
@@ -65,7 +65,6 @@ public class EventController implements SitePathDistribution {
             var eventDate = parseDateFromHTMLToDateObject(venueDate);
 
             var newEvent = new Event();
-            newEvent.setArtistId(getCurrentlyLoggedInUserId(principal));
             newEvent.setEventDate(eventDate);
             model.addAttribute("event", newEvent);
         } else {
@@ -80,24 +79,25 @@ public class EventController implements SitePathDistribution {
     @RequestMapping(value="/book", method = RequestMethod.POST)
     public String BookEvent(
             @ModelAttribute("event") Event event,
-            @ModelAttribute String eventDate,
-            Model model) {
+            Model model,
+            Principal principal) {
         if(event.getVenueId() == null) {
             model.addAttribute("event", event);
             return bookNewEventSite;
         } else {
             try {
+                event.setArtist(getCurrentlyLoggedInUser(principal));
                 eventService.registerEvent(event);
+                return MyEventSite(model, principal);
             } catch (EventServiceException e) {
                 model.addAttribute("errorMessage", e.getMessage());
                 return errorSite;
             }
-            return ShowDefaultEventList(model);
         }
     }
 
-    private Long getCurrentlyLoggedInUserId(Principal principal) {
-        return userService.loadUserByUsername(principal.getName()).getID();
+    private User getCurrentlyLoggedInUser(Principal principal) {
+        return userService.loadUserByUsername(principal.getName());
     }
 
     private Date parseDateFromHTMLToDateObject(String date) {

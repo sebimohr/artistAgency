@@ -145,7 +145,7 @@ public class ArtistAgencyApplication implements ApplicationRunner {
             var artist = users.get(i % users.size());
             var event = new Event(
                     venue.getID(),
-                    artist.getID(),
+                    artist,
                     new Date(),
                     "Event " + i
             );

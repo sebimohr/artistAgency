@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-public class Venue extends SingleLongIdEntity {
+public class Venue extends EntitySingleLongId {
 
     @Setter @Getter
     private String venueName;
@@ -22,5 +22,10 @@ public class Venue extends SingleLongIdEntity {
         this.venueName = name;
         this.cost = cost;
         this.artType = artType;
+    }
+
+    @Override
+    public String toString() {
+        return "Name: " + this.getVenueName() + ", Kosten: " + this.getCost() + "€, Kapazität: 100";
     }
 }
