@@ -25,7 +25,7 @@
             </thead>
             <tbody>
                 <tr th:each="event : ${events}">
-                    <th scope="row"><label th:text="${event.getEventId()}"/></th>
+                    <th scope="row"><label th:text="${event.getID()}"/></th>
                     <td><label th:text="${event.getEventName()}"/></td>
                     <td><label th:text="${event.getEventDate()}"/></td>
                     <td><label th:text="${event.getArtistId()}"/></td>

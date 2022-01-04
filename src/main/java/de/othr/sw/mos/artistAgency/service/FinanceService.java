@@ -23,7 +23,7 @@ public class FinanceService implements FinanceServiceIF {
     @Override
     @Transactional
     public FinanceLog registerFinanceLog(FinanceLog financeLog) throws FinanceServiceException {
-        var foundFinanceLogOptional = financeRepo.findByFinanceId(financeLog.getFinanceId());
+        var foundFinanceLogOptional = financeRepo.findByID(financeLog.getID());
 
         if(foundFinanceLogOptional.isEmpty()) {
             var newFinanceLog = new FinanceLog();
@@ -42,7 +42,7 @@ public class FinanceService implements FinanceServiceIF {
 
     @Override
     public FinanceLog getFinanceLogById(Long financeLogId) throws FinanceServiceException {
-        return financeRepo.findByFinanceId(financeLogId).orElseThrow( () ->
+        return financeRepo.findByID(financeLogId).orElseThrow( () ->
                 new FinanceServiceException("FinanceLog with id " + financeLogId + " not found!"));
     }
 

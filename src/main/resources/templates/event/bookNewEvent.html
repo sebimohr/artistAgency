@@ -52,7 +52,7 @@
                 <label for="venueChoice">Eventhalle</label>
                 <select class="form-control" id="venueChoice" name="venueChoice" th:field="*{venueId}">
                     <option th:each="venue : ${venues}"
-                            th:value="${venue.getVenueId()}"
+                            th:value="${venue.getID()}"
                             th:text="${'Name: ' + venue.getVenueName() + ', Kosten: ' + venue.getCost() + '€, Kapazität: 100'}"/>
                 </select>
                 <input type="hidden" th:value="${event.getArtistId()}" th:field="*{artistId}"/>

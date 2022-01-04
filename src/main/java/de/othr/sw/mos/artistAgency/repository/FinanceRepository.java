@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface FinanceRepository extends JpaRepository<FinanceLog, Long> {
-    Optional<FinanceLog> findByFinanceId(Long financeId);
+    Optional<FinanceLog> findByID(Long financeId);
 
     List<FinanceLog> findAllByUserId(Long userId);
 }

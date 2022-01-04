@@ -97,7 +97,7 @@ public class EventController implements SitePathDistribution {
     }
 
     private Long getCurrentlyLoggedInUserId(Principal principal) {
-        return userService.loadUserByUsername(principal.getName()).getUserId();
+        return userService.loadUserByUsername(principal.getName()).getID();
     }
 
     private Date parseDateFromHTMLToDateObject(String date) {

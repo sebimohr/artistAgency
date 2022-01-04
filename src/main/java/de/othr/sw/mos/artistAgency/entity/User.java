@@ -12,13 +12,8 @@ import java.util.Collection;
 
 @Entity
 @Table(name = "Artist")
-public class User implements UserDetails {
+public class User extends SingleLongIdEntity implements UserDetails {
     // login information
-    // TODO: Sequence for ID, change ID as identifier in repository and all occurrences
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Getter
-    private long userId;
     @Setter @Column(unique = true)
     private String username;
     @Setter

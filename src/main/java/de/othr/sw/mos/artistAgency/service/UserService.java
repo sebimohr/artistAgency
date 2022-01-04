@@ -70,7 +70,7 @@ public class UserService implements UserServiceIF {
 
     @Override
     public User getUserByUserId(Long Id) {
-        return userRepo.findByUserId(Id).orElseThrow(() -> {
+        return userRepo.findByID(Id).orElseThrow(() -> {
             throw new UsernameNotFoundException("User with ID " + Id + " not found.");
         });
     }

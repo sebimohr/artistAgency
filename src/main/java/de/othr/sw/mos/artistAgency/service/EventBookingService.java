@@ -27,7 +27,7 @@ public class EventBookingService implements EventBookingServiceIF {
     @Override
     @Transactional
     public Event registerEvent(Event event) throws EventServiceException {
-        var foundEventOptional = eventRepo.findByEventId(event.getEventId());
+        var foundEventOptional = eventRepo.findByID(event.getID());
 
         if(foundEventOptional.isEmpty()) {
             var newEvent = new Event(
@@ -38,7 +38,7 @@ public class EventBookingService implements EventBookingServiceIF {
             );
 
             // TODO: RPC on ELM
-            createBooking(event, financeArtistAgencyId);
+            createBooking(newEvent, financeArtistAgencyId);
 
             return eventRepo.save(newEvent);
         }
@@ -55,7 +55,7 @@ public class EventBookingService implements EventBookingServiceIF {
     @Override
     public Venue getSpecificVenueFromEventLocationManager(Long venueId) throws Exception {
         // TODO: RPC on ELM
-        return venueRepo.findByVenueId(venueId).orElseThrow( () ->
+        return venueRepo.findByID(venueId).orElseThrow( () ->
                 new Exception("Venue with " + venueId + " not found"));
     }
 
@@ -71,7 +71,7 @@ public class EventBookingService implements EventBookingServiceIF {
 
     @Override
     public Event getEventByEventId(Long eventId) throws EventServiceException {
-        return eventRepo.findByEventId(eventId).orElseThrow( () ->
+        return eventRepo.findByID(eventId).orElseThrow( () ->
                 new EventServiceException("Event with Id " + eventId + " not found."));
     }
 

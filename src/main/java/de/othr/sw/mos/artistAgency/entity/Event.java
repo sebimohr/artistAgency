@@ -9,12 +9,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "Event")
-public class Event {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Getter
-    private Long eventId;
-
+public class Event extends SingleLongIdEntity {
     @Setter @Getter
     private Long venueId;
     @Setter @Getter

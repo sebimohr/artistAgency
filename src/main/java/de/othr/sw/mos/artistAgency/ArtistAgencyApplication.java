@@ -108,7 +108,7 @@ public class ArtistAgencyApplication implements ApplicationRunner {
         for (var i = 1; i <= 10; i++) {
             var artist = users.get(i % users.size());
             var financeLog = new FinanceLog(
-                    artist.getUserId(),
+                    artist.getID(),
                     new Date(),
                     BigDecimal.valueOf((i * 100.0) % 450.0)
             );
@@ -144,8 +144,8 @@ public class ArtistAgencyApplication implements ApplicationRunner {
             var venue = venues.get(i % venues.size());
             var artist = users.get(i % users.size());
             var event = new Event(
-                    venue.getVenueId(),
-                    artist.getUserId(),
+                    venue.getID(),
+                    artist.getID(),
                     new Date(),
                     "Event " + i
             );

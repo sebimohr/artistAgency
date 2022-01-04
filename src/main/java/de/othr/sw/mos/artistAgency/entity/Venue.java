@@ -7,11 +7,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-public class Venue {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Getter
-    private Long venueId;
+public class Venue extends SingleLongIdEntity {
 
     @Setter @Getter
     private String venueName;

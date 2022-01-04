@@ -18,7 +18,7 @@
             </thead>
             <tbody>
             <tr th:each="log : ${financeLogs}">
-                <th scope="row"><label th:text="${log.getFinanceId()}"/></th>
+                <th scope="row"><label th:text="${log.getID()}"/></th>
                 <td><label th:text="${log.getUserId()}"/></td>
                 <td><label th:text="${log.getArtistPaidAmount()}"/></td>
                 <td><label th:text="${log.getArtistPaidDate()}"/></td>
