@@ -1,7 +1,7 @@
 package de.othr.sw.mos.artistAgency.controller;
 
+import de.othr.sw.mos.artistAgency.controller.util.SitePathDistribution;
 import de.othr.sw.mos.artistAgency.entity.User;
-import de.othr.sw.mos.artistAgency.exception.UserServiceException;
 import de.othr.sw.mos.artistAgency.service.interfaces.EventBookingServiceIF;
 import de.othr.sw.mos.artistAgency.service.interfaces.UserServiceIF;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,9 @@ public class ArtistController implements SitePathDistribution {
     private EventBookingServiceIF eventService;
 
     @RequestMapping(value = {"/list", "/", ""}, method = RequestMethod.GET)
-    public String ShowArtistsList(Model model) {
+    public String ShowArtistsList(
+            Model model
+    ) {
         var artistList = userService.getAllUsers();
 
         model.addAttribute("artists", artistList);
@@ -32,9 +34,13 @@ public class ArtistController implements SitePathDistribution {
     }
 
     @RequestMapping(value = "/details")
-    public String ShowArtistPage(@RequestParam(value = "id") Long artistId, Model model) throws UserServiceException {
+    public String ShowArtistPage(
+            Model model,
+            @RequestParam(value = "id") Long artistId
+    ) {
         if(artistId == null) {
-            throw new UserServiceException("Empty id detected.");
+            model.addAttribute("errorMessage", "Leere ID angegeben.");
+            return ShowArtistsList(model);
         }
 
         var detailedArtist = userService.getUserByUserId(artistId);
@@ -47,7 +53,10 @@ public class ArtistController implements SitePathDistribution {
     }
 
     @RequestMapping(value = "/myProfile", method = RequestMethod.GET)
-    public String ShowMyProfile(Principal principal, Model model) {
+    public String ShowMyProfile(
+            Model model,
+            Principal principal
+    ) {
         var currentUser = getCurrentlyLoggedInUser(principal);
         model.addAttribute("currentUser", currentUser);
         // show information on my profile page and make it editable on edit page
@@ -55,7 +64,10 @@ public class ArtistController implements SitePathDistribution {
     }
 
     @RequestMapping(value = "/myProfile/edit", method = RequestMethod.GET)
-    public String EditMyProfileSite(Principal principal, Model model) {
+    public String EditMyProfileSite(
+            Model model,
+            Principal principal
+    ) {
         var currentUser = getCurrentlyLoggedInUser(principal);
         model.addAttribute("currentUser", currentUser);
         return editMyProfileSite;

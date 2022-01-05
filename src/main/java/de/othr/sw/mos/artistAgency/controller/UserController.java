@@ -1,5 +1,6 @@
 package de.othr.sw.mos.artistAgency.controller;
 
+import de.othr.sw.mos.artistAgency.controller.util.SitePathDistribution;
 import de.othr.sw.mos.artistAgency.entity.User;
 import de.othr.sw.mos.artistAgency.exception.UserServiceException;
 import de.othr.sw.mos.artistAgency.service.interfaces.UserServiceIF;
@@ -20,7 +21,9 @@ public class UserController implements SitePathDistribution {
     private UserServiceIF userService;
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
-    public String RegisterUserSite(Model model) {
+    public String RegisterUserSite(
+            Model model
+    ) {
 
         var newUser = new User();
 
@@ -30,7 +33,10 @@ public class UserController implements SitePathDistribution {
     }
 
     @RequestMapping(value="/register", method = RequestMethod.POST)
-    public String AddUserToDatabase(@ModelAttribute("user") User user, Model model) {
+    public String AddUserToDatabase(
+            Model model,
+            @ModelAttribute("user") User user
+    ) {
         try {
             userService.registerUser(user);
         }
@@ -43,7 +49,11 @@ public class UserController implements SitePathDistribution {
     }
 
     @RequestMapping(value = {"/login", "/", ""})
-    public String login(@RequestParam(value = "code", required = false) String loginCode, Model model, Principal principal) {
+    public String login(
+            Model model,
+            Principal principal,
+            @RequestParam(value = "code", required = false) String loginCode
+    ) {
         if(loginCode != null) {
             switch (loginCode) {
                 case "success" -> {

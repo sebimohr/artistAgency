@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface FinanceRepository extends JpaRepository<FinanceLog, Long> {
     Optional<FinanceLog> findByID(Long financeId);
 
-    List<FinanceLog> findAllByUserId(Long userId);
+    List<FinanceLog> findAllByUser_ID(Long userId);
 }

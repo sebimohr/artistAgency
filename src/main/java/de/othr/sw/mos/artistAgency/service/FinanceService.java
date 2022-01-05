@@ -28,7 +28,8 @@ public class FinanceService implements FinanceServiceIF {
         if(foundFinanceLogOptional.isEmpty()) {
             var newFinanceLog = new FinanceLog();
 
-            newFinanceLog.setUserId(financeLog.getUserId());
+            newFinanceLog.setUser(financeLog.getUser());
+            newFinanceLog.setEvent(financeLog.getEvent());
             if(financeLog.getArtistPaidDate() != null)
                 newFinanceLog.setArtistPaidDate(financeLog.getArtistPaidDate());
             if(financeLog.getArtistPaidAmount() != null)
@@ -48,7 +49,7 @@ public class FinanceService implements FinanceServiceIF {
 
     @Override
     public List<FinanceLog> getFinanceLogByUserId(Long userId) {
-        return financeRepo.findAllByUserId(userId);
+        return financeRepo.findAllByUser_ID(userId);
     }
 
     @Override

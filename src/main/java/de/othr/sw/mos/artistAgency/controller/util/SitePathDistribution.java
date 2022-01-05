@@ -1,4 +1,4 @@
-package de.othr.sw.mos.artistAgency.controller;
+package de.othr.sw.mos.artistAgency.controller.util;
 
 public interface SitePathDistribution {
     // default

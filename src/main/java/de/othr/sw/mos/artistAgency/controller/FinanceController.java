@@ -1,5 +1,6 @@
 package de.othr.sw.mos.artistAgency.controller;
 
+import de.othr.sw.mos.artistAgency.controller.util.SitePathDistribution;
 import de.othr.sw.mos.artistAgency.service.interfaces.FinanceServiceIF;
 import de.othr.sw.mos.artistAgency.service.interfaces.UserServiceIF;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,10 @@ public class FinanceController implements SitePathDistribution {
     private UserServiceIF userService;
 
     @RequestMapping(value = {"/myFinances", "/", ""}, method = RequestMethod.GET)
-    public String ShowFinancesList(Model model, Principal principal) {
+    public String ShowFinancesList(
+            Model model,
+            Principal principal
+    ) {
         var financeLogList = financeService.getFinanceLogByUserId(getCurrentlyLoggedInUserId(principal));
 
         model.addAttribute("financeLogs", financeLogList);

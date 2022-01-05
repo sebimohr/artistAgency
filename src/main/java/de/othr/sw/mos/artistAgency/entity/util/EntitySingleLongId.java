@@ -1,4 +1,4 @@
-package de.othr.sw.mos.artistAgency.entity;
+package de.othr.sw.mos.artistAgency.entity.util;
 
 import lombok.Getter;
 import lombok.Setter;

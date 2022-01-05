@@ -11,18 +11,22 @@
         <h1>Meine Finanzen</h1>
         <table class="table table-responsive table-dark table-hover">
             <thead>
-            <th scope="col">#</th>
-            <th scope="col">Username</th>
-            <th scope="col">Betrag</th>
-            <th scope="col">Datum</th>
+                <th scope="col">#</th>
+                <th scope="col">Username</th>
+                <th scope="col">Eventname</th>
+                <th scope="col">Betrag</th>
+                <th scope="col">Datum</th>
+                <th scope="col">Done</th>
             </thead>
             <tbody>
-            <tr th:each="log : ${financeLogs}">
-                <th scope="row"><label th:text="${log.getID()}"/></th>
-                <td><label th:text="${log.getUserId()}"/></td>
-                <td><label th:text="${log.getArtistPaidAmount()}"/></td>
-                <td><label th:text="${log.getArtistPaidDate()}"/></td>
-            </tr>
+                <tr th:each="log : ${financeLogs}">
+                    <th scope="row"><label th:text="${log.getID()}"/></th>
+                    <td><label th:text="${log.getUser().getUsername()}"/></td>
+                    <td><label th:text="${log.getEvent().getEventName()}"/></td>
+                    <td><label th:text="${log.getArtistPaidAmount()}"/></td>
+                    <td><label th:text="${log.getArtistPaidDate()}"/></td>
+                    <td><label th:text="${log.getDone()}"/></td>
+                </tr>
             </tbody>
         </table>
     </div>

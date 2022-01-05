@@ -1,5 +1,6 @@
 package de.othr.sw.mos.artistAgency.controller;
 
+import de.othr.sw.mos.artistAgency.controller.util.SitePathDistribution;
 import de.othr.sw.mos.artistAgency.entity.Event;
 import de.othr.sw.mos.artistAgency.entity.User;
 import de.othr.sw.mos.artistAgency.exception.EventServiceException;
@@ -30,7 +31,9 @@ public class EventController implements SitePathDistribution {
     private UserServiceIF userService;
 
     @RequestMapping(value = {"/list", "/", ""}, method = RequestMethod.GET)
-    public String ShowDefaultEventList(Model model) {
+    public String ShowDefaultEventList(
+            Model model
+    ) {
         var eventList = eventService.getAllEvents();
 
         model.addAttribute("events", eventList);
@@ -39,7 +42,10 @@ public class EventController implements SitePathDistribution {
     }
 
     @RequestMapping(value = "/myEvents", method = RequestMethod.GET)
-    public String MyEventSite(Model model, Principal principal) {
+    public String MyEventSite(
+            Model model,
+            Principal principal
+    ) {
         var artistEventList = eventService.getAllEventsForSpecificArtist(getCurrentlyLoggedInUser(principal).getID());
 
         model.addAttribute("events", artistEventList);
@@ -48,10 +54,11 @@ public class EventController implements SitePathDistribution {
     }
 
     @RequestMapping(value = "/book", method = RequestMethod.GET)
-    public String EventBookingSite(Model model,
-                                   @RequestParam(required = false) String venueLocation,
-                                   @RequestParam(required = false) String venueDate,
-                                   @RequestParam(required = false) Integer venueCapacity
+    public String EventBookingSite(
+            Model model,
+            @RequestParam(required = false) String venueLocation,
+            @RequestParam(required = false) String venueDate,
+            @RequestParam(required = false) Integer venueCapacity
     ) {
         if(validateVenueSearchInput(venueLocation, venueDate, venueCapacity)) {
             // TODO: RPC on EventLocationManager
@@ -78,9 +85,11 @@ public class EventController implements SitePathDistribution {
 
     @RequestMapping(value="/book", method = RequestMethod.POST)
     public String BookEvent(
-            @ModelAttribute("event") Event event,
             Model model,
-            Principal principal) {
+            Principal principal,
+            @ModelAttribute("event") Event event
+
+    ) {
         if(event.getVenueId() == null) {
             model.addAttribute("event", event);
             return bookNewEventSite;

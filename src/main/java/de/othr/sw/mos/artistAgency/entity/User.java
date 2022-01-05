@@ -1,5 +1,7 @@
 package de.othr.sw.mos.artistAgency.entity;
 
+import de.othr.sw.mos.artistAgency.entity.util.ArtType;
+import de.othr.sw.mos.artistAgency.entity.util.EntitySingleLongId;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;

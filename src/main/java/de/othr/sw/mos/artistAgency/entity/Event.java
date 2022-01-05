@@ -1,5 +1,6 @@
 package de.othr.sw.mos.artistAgency.entity;
 
+import de.othr.sw.mos.artistAgency.entity.util.EntitySingleLongId;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,10 +15,9 @@ public class Event extends EntitySingleLongId {
     private Long venueId;
 
     @ManyToOne
-    @JoinColumn(name = "artistId")
+    @JoinColumn(name = "artist_id")
     @Setter @Getter
     private User artist;
-    // TODO: just changed from Long to User -> test if everything has been migrated
 
     @Setter @Getter
     @Temporal(TemporalType.DATE)

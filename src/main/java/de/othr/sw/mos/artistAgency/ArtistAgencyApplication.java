@@ -1,6 +1,7 @@
 package de.othr.sw.mos.artistAgency;
 
 import de.othr.sw.mos.artistAgency.entity.*;
+import de.othr.sw.mos.artistAgency.entity.util.ArtType;
 import de.othr.sw.mos.artistAgency.service.interfaces.EventBookingServiceIF;
 import de.othr.sw.mos.artistAgency.service.interfaces.FinanceServiceIF;
 import de.othr.sw.mos.artistAgency.service.interfaces.UserServiceIF;
@@ -37,9 +38,9 @@ public class ArtistAgencyApplication implements ApplicationRunner {
     public void run(ApplicationArguments args) {
         try {
             var users = addUsersToH2DatabaseForTesting();
-            var financeLogs = addFinanceLogToH2DatabaseForTesting(users);
             var venues = addVenueToH2DatabaseForTesting();
             var events = addEventToH2DatabaseForTesting(venues, users);
+            var financeLogs = addFinanceLogToH2DatabaseForTesting(users, events);
 
             System.out.println(
                     "\nSize of Lists\n-------------------\n" +
@@ -104,21 +105,6 @@ public class ArtistAgencyApplication implements ApplicationRunner {
         return userService.getAllUsers();
     }
 
-    private List<FinanceLog> addFinanceLogToH2DatabaseForTesting(List<User> users) throws Exception {
-        for (var i = 1; i <= 10; i++) {
-            var artist = users.get(i % users.size());
-            var financeLog = new FinanceLog(
-                    artist.getID(),
-                    new Date(),
-                    BigDecimal.valueOf((i * 100.0) % 450.0)
-            );
-
-            financeService.registerFinanceLog(financeLog);
-        }
-
-        return financeService.getAllFinanceLogs();
-    }
-
     private List<Venue> addVenueToH2DatabaseForTesting() {
         for (var i = 1; i <= 10; i++) {
             var typeOfVenue = switch (i % 3) {
@@ -154,5 +140,22 @@ public class ArtistAgencyApplication implements ApplicationRunner {
         }
 
         return eventBookingService.getAllEvents();
+    }
+
+    private List<FinanceLog> addFinanceLogToH2DatabaseForTesting(List<User> users, List<Event> events) throws Exception {
+        for (var i = 1; i <= 10; i++) {
+            var artist = users.get(i % users.size());
+            var event = events.get(i % events.size());
+            var financeLog = new FinanceLog(
+                    artist,
+                    event,
+                    new Date(),
+                    BigDecimal.valueOf((i * 100.0) % 450.0)
+            );
+
+            financeService.registerFinanceLog(financeLog);
+        }
+
+        return financeService.getAllFinanceLogs();
     }
 }

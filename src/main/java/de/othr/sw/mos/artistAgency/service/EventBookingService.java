@@ -1,11 +1,13 @@
 package de.othr.sw.mos.artistAgency.service;
 
 import de.othr.sw.mos.artistAgency.entity.Event;
+import de.othr.sw.mos.artistAgency.entity.FinanceLog;
 import de.othr.sw.mos.artistAgency.entity.Venue;
 import de.othr.sw.mos.artistAgency.exception.EventServiceException;
 import de.othr.sw.mos.artistAgency.repository.EventRepository;
 import de.othr.sw.mos.artistAgency.repository.VenueRepository;
 import de.othr.sw.mos.artistAgency.service.interfaces.EventBookingServiceIF;
+import de.othr.sw.mos.artistAgency.service.interfaces.FinanceServiceIF;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +20,13 @@ public class EventBookingService implements EventBookingServiceIF {
     private final EventRepository eventRepo;
     private final VenueRepository venueRepo;
 
+    private final FinanceServiceIF financeService;
+
     @Autowired
-    public EventBookingService(EventRepository eventRepo, VenueRepository venueRepo) {
+    public EventBookingService(EventRepository eventRepo, VenueRepository venueRepo, FinanceServiceIF financeService) {
         this.eventRepo = eventRepo;
         this.venueRepo = venueRepo;
+        this.financeService = financeService;
     }
 
     @Override
@@ -39,6 +44,9 @@ public class EventBookingService implements EventBookingServiceIF {
 
             // TODO: RPC on ELM
             createBooking(newEvent, financeArtistAgencyId);
+
+            // TODO: register new financeLog for every Event created
+            var financeLog = new FinanceLog();
 
             return eventRepo.save(newEvent);
         }
