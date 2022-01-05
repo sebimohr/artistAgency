@@ -9,7 +9,7 @@ import java.util.List;
 public interface EventBookingServiceIF {
     Long financeArtistAgencyId = 1L;
 
-    Event registerEvent(Event event) throws EventServiceException;
+    Event registerEvent(Event event) throws Exception;
 
     List<Venue> getAllVenuesFromEventLocationManager();
 

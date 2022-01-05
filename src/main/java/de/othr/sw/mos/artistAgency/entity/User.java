@@ -1,7 +1,7 @@
 package de.othr.sw.mos.artistAgency.entity;
 
 import de.othr.sw.mos.artistAgency.entity.util.ArtType;
-import de.othr.sw.mos.artistAgency.entity.util.EntitySingleLongId;
+import de.othr.sw.mos.artistAgency.entity.util.EntityLongId;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,7 +14,7 @@ import java.util.Collection;
 
 @Entity
 @Table(name = "Artist")
-public class User extends EntitySingleLongId implements UserDetails {
+public class User extends EntityLongId implements UserDetails {
     // login information
     @Setter @Column(unique = true)
     private String username;

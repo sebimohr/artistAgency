@@ -98,7 +98,7 @@ public class EventController implements SitePathDistribution {
                 event.setArtist(getCurrentlyLoggedInUser(principal));
                 eventService.registerEvent(event);
                 return MyEventSite(model, principal);
-            } catch (EventServiceException e) {
+            } catch (Exception e) {
                 model.addAttribute("errorMessage", e.getMessage());
                 return errorSite;
             }

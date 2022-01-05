@@ -1,6 +1,6 @@
 package de.othr.sw.mos.artistAgency.entity;
 
-import de.othr.sw.mos.artistAgency.entity.util.EntitySingleLongId;
+import de.othr.sw.mos.artistAgency.entity.util.EntityLongId;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -10,7 +10,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "Event")
-public class Event extends EntitySingleLongId {
+public class Event extends EntityLongId {
     @Setter @Getter
     private Long venueId;
 

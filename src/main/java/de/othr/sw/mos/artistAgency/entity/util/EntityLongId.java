@@ -3,14 +3,11 @@ package de.othr.sw.mos.artistAgency.entity.util;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import java.util.Objects;
 
 @MappedSuperclass
-public abstract class EntitySingleLongId {
+public abstract class EntityLongId {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Setter @Getter
@@ -28,7 +25,7 @@ public abstract class EntitySingleLongId {
         if (o == null || o.getClass() != this.getClass())
             return false;
 
-        var objectTranslation = (EntitySingleLongId) o;
+        var objectTranslation = (EntityLongId) o;
 
         return Objects.equals(ID, objectTranslation.ID);
     }

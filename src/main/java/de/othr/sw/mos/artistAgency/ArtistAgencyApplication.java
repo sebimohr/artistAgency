@@ -40,10 +40,10 @@ public class ArtistAgencyApplication implements ApplicationRunner {
             var users = addUsersToH2DatabaseForTesting();
             var venues = addVenueToH2DatabaseForTesting();
             var events = addEventToH2DatabaseForTesting(venues, users);
-            var financeLogs = addFinanceLogToH2DatabaseForTesting(users, events);
+            var financeLogs = addFinanceLogToH2DatabaseForTesting();
 
             System.out.println(
-                    "\nSize of Lists\n-------------------\n" +
+                    "\nSize of Lists\n--------------------\n" +
                             "Users: \t\t\t " + users.size() + "\n" +
                             "FinanceLogs: \t" + financeLogs.size() + "\n" +
                             "Venues: \t\t" + venues.size() + "\n" +
@@ -142,18 +142,16 @@ public class ArtistAgencyApplication implements ApplicationRunner {
         return eventBookingService.getAllEvents();
     }
 
-    private List<FinanceLog> addFinanceLogToH2DatabaseForTesting(List<User> users, List<Event> events) throws Exception {
-        for (var i = 1; i <= 10; i++) {
-            var artist = users.get(i % users.size());
-            var event = events.get(i % events.size());
-            var financeLog = new FinanceLog(
-                    artist,
-                    event,
-                    new Date(),
-                    BigDecimal.valueOf((i * 100.0) % 450.0)
-            );
+    private List<FinanceLog> addFinanceLogToH2DatabaseForTesting() throws Exception {
+        var financeLogs = financeService.getAllFinanceLogs();
 
-            financeService.registerFinanceLog(financeLog);
+        for (var i = 1; i <= 10; i++) {
+            var financeLog = financeLogs.get(i % financeLogs.size());
+
+            financeLog.setArtistPaidDate(new Date());
+            financeLog.setArtistPaidAmount(BigDecimal.valueOf((i * 100.0) % 450.0));
+
+            financeService.updateFinanceLog(financeLog);
         }
 
         return financeService.getAllFinanceLogs();

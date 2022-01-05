@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -39,6 +41,17 @@ public class FinanceService implements FinanceServiceIF {
         }
 
         throw new FinanceServiceException("FinanceLog with ID already exists.");
+    }
+
+    @Override
+    @Transactional
+    public FinanceLog updateFinanceLog(FinanceLog financeLogUpdated) throws FinanceServiceException {
+        var financeLog = getFinanceLogById(financeLogUpdated.getID());
+
+        financeLog.setArtistPaidDate(financeLogUpdated.getArtistPaidDate());
+        financeLog.setArtistPaidAmount(financeLogUpdated.getArtistPaidAmount());
+
+        return financeLog;
     }
 
     @Override

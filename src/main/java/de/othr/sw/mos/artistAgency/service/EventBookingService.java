@@ -31,7 +31,7 @@ public class EventBookingService implements EventBookingServiceIF {
 
     @Override
     @Transactional
-    public Event registerEvent(Event event) throws EventServiceException {
+    public Event registerEvent(Event event) throws Exception {
         var foundEventOptional = eventRepo.findByID(event.getID());
 
         if(foundEventOptional.isEmpty()) {
@@ -42,13 +42,20 @@ public class EventBookingService implements EventBookingServiceIF {
                     event.getEventName()
             );
 
+            newEvent = eventRepo.save(newEvent);
+
             // TODO: RPC on ELM
             createBooking(newEvent, financeArtistAgencyId);
 
             // TODO: register new financeLog for every Event created
             var financeLog = new FinanceLog();
 
-            return eventRepo.save(newEvent);
+            financeLog.setUser(event.getArtist());
+            financeLog.setEvent(newEvent);
+
+            financeService.registerFinanceLog(financeLog);
+
+            return newEvent;
         }
 
         throw new EventServiceException("Event with ID already exists.");
