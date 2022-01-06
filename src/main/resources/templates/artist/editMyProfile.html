@@ -8,8 +8,85 @@
     <div th:replace="common/navigationBar :: navigationBar"/>
 
     <div class="jumbotron">
-        <h1>Profil bearbeiten</h1>
-        <!--    TODO: Your code here -->
+        <div th:replace="common/messageHandler :: messageHandler"/>
+
+        <form th:action="@{/artist/myProfile/edit}" th:method="post" th:object=${currentUser}>
+            <div class="row">
+                <div class="col-10">
+                    <h1>Profil bearbeiten</h1>
+                </div>
+                <div class="col-2 align-items-end">
+                    <button type="submit" class="btn btn-dark">Daten speichern</button>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-text" id="id_addon">ID</span>
+                <input type="text" class="form-control"
+                       aria-label="id" aria-describedby="id_addon"
+                       th:value="${currentUser.getID()}" readonly disabled/>
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-text" id="username_addon">Email</span>
+                <input type="text" class="form-control"
+                       aria-label="Username" aria-describedby="username_addon"
+                       th:value="${currentUser.getUsername()}" readonly disabled/>
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-text" id="password_addon">Passwort</span>
+                <input type="password" class="form-control"
+                       aria-label="Username" aria-describedby="password_addon"
+                       th:value="${currentUser.getPassword()}" readonly disabled>
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-text" id="artistName_addon">Künstlername</span>
+                <input type="text" class="form-control"
+                       aria-label="artistName" aria-describedby="artistName_addon"
+                       th:value="${currentUser.getArtistName()}" th:field="*{artistName}" required/>
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-text" id="phoneNumber_addon">Telefonnummer</span>
+                <input type="text" class="form-control"
+                       aria-label="phoneNumber" aria-describedby="phoneNumber_addon"
+                       th:value="${currentUser.getPhoneNumber()}" th:field="*{phoneNumber}" required/>
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-text" id="salaryPerEvent_addon">Gehalt / Auftritt</span>
+                <input type="number" class="form-control"
+                       aria-label="salaryPerEvent" aria-describedby="salaryPerEvent_addon"
+                       th:value="${currentUser.getSalaryPerEvent()}" th:field="*{salaryPerEvent}"
+                       max="300" min="0" required/>
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-text">Beschreibung</span>
+                <textarea class="form-control" aria-label="description" maxlength="1000"
+                          th:text="${currentUser.getDescription()}" th:field="*{description}"
+                          required/>
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-text" id="artType_addon">Kunsttyp</span>
+                <select class="form-select" aria-label="artType" aria-describedby="artType_addon"
+                        th:field="*{artType}" required>
+                    <option th:value="MUSIC"  th:selected="${currentUser.getArtType()=='MUSIC'}">Musik</option>
+                    <option th:value="COMEDY" th:selected="${currentUser.getArtType()=='COMEDY'}">Comedy</option>
+                    <option th:value="PARTY" th:selected="${currentUser.getArtType()=='PARTY'}">Party</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-text" id="webLink_addon">Webseite</span>
+                <input type="url" class="form-control"
+                       aria-label="webLink" aria-describedby="webLink_addon"
+                       th:value="${currentUser.getWebLink()}" th:field="*{webLink}" required/>
+            </div>
+        </form>
     </div>
     
     <div th:replace="common/footer :: footerWithBoostrap"/>

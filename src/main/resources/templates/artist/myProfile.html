@@ -18,8 +18,68 @@
             </div>
         </div>
 
-        <div th:if="${!#strings.isEmpty(currentUser.getUsername())}">
-            <div class="alert alert-success" role="alert" th:text="${currentUser.getUsername()}"/>
+        <div class="input-group">
+            <span class="input-group-text" id="id_addon">ID</span>
+            <input type="text" class="form-control"
+                   aria-label="id" aria-describedby="id_addon"
+                   th:value="${currentUser.getID()}" disabled readonly/>
+        </div>
+
+        <div class="input-group">
+            <span class="input-group-text" id="username_addon">Email</span>
+            <input type="email" class="form-control"
+                   aria-label="Username" aria-describedby="username_addon"
+                   th:value="${currentUser.getUsername()}" disabled readonly/>
+        </div>
+
+        <!--<div class="input-group">
+            <span class="input-group-text" id="password_addon">Passwort</span>
+            <input type="password" class="form-control"
+                   aria-label="Username" aria-describedby="password_addon"
+                   th:value="${currentUser.getPassword()}" disabled readonly>
+        </div>-->
+
+        <div class="input-group">
+            <span class="input-group-text" id="artistName_addon">Künstlername</span>
+            <input type="text" class="form-control"
+                   aria-label="artistName" aria-describedby="artistName_addon"
+                   th:value="${currentUser.getArtistName()}" disabled readonly/>
+        </div>
+
+        <div class="input-group">
+            <span class="input-group-text" id="phoneNumber_addon">Telefonnummer</span>
+            <input type="text" class="form-control"
+                   aria-label="phoneNumber" aria-describedby="phoneNumber_addon"
+                   th:value="${currentUser.getPhoneNumber()}" disabled readonly/>
+        </div>
+
+        <div class="input-group">
+            <span class="input-group-text" id="salaryPerEvent_addon">Gehalt / Auftritt</span>
+            <input type="number" class="form-control"
+                   aria-label="salaryPerEvent" aria-describedby="salaryPerEvent_addon"
+                   th:value="${currentUser.getSalaryPerEvent()}" disabled readonly/>
+        </div>
+
+        <div class="input-group">
+            <span class="input-group-text">Beschreibung</span>
+            <textarea class="form-control" aria-label="description"
+                   th:text="${currentUser.getDescription()}" disabled readonly/>
+        </div>
+
+        <div class="input-group">
+            <span class="input-group-text" id="artType_addon">Kunsttyp</span>
+            <select class="form-select" aria-label="artType" aria-describedby="artType_addon" disabled readonly>
+                <option th:selected="${currentUser.getArtType()=='MUSIC'}">Musik</option>
+                <option th:selected="${currentUser.getArtType()=='COMEDY'}">Comedy</option>
+                <option th:selected="${currentUser.getArtType()=='PARTY'}">Party</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <span class="input-group-text" id="webLink_addon">Webseite</span>
+            <input type="url" class="form-control"
+                   aria-label="webLink" aria-describedby="webLink_addon"
+                   th:value="${currentUser.getWebLink()}" disabled readonly/>
         </div>
     </div>
 

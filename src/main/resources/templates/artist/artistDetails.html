@@ -10,8 +10,21 @@
 
     <div class="jumbotron">
         <h1>ArtistDetails</h1>
-        <!--    TODO: Your code here -->
-        <div class="alert alert-success" role="alert" th:text="${artist.getUsername()}"/>
+
+        <img th:src="@{/img/artist_default_photo.png}" class="img-fluid" alt="...">
+        <div class="row">
+            <label class="col-4" for="artistName">Künstlername:</label>
+            <p class="text-break col-8" id="artistName" th:text="${artist.getArtistName()}"/>
+
+            <label class="col-4" for="artType">Kunsttyp:</label>
+            <p class="text-break col-8" id="artType" th:text="${artist.getArtType()}"/>
+
+            <label class="col-4" for="description">Beschreibung:</label>
+            <p class="text-break col-8" id="description" th:text="${artist.getDescription()}"/>
+
+            <label class="col-4" for="webLink">Beschreibung:</label>
+            <a class="text-break col-8" id="webLink" th:href="${artist.getWebLink()}" th:text="${artist.getWebLink()}"/>
+        </div>
     </div>
 
     <div th:replace="common/footer :: footerWithBoostrap"/>

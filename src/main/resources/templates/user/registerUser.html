@@ -8,20 +8,19 @@
     <div th:replace="common/navigationBar :: navigationBar"/>
 
     <div class="jumbotron">
-        <h1>Registration</h1>
+        <h1>Registrierung</h1>
 
         <form th:action="@{/user/register}" th:method="post" th:object=${user}>
             <div class="form-floating">
-<!--                TODO: email als type einstellen -->
-                <input type="text" class="form-control" id="username" name="username"
+                <input type="email" class="form-control" id="username" name="username"
                        th:field="*{username}" placeholder="email" required/>
                 <label for="username">Email</label>
             </div>
             <div class="form-floating">
-<!--                TODO: minLength einstellen -->
                 <input type="password" class="form-control" id="password" name="password"
-                       th:field="*{password}" minlength="1" placeholder="password" required/>
+                       th:field="*{password}" minlength="4" placeholder="password" required/>
                 <label for="password">Passwort</label>
+                <small>Das Passwort muss mindestens 4 Zeichen lang sein.</small>
             </div>
             <div class="form-floating">
                 <input type="text" class="form-control" id="artistName" name="artistName"
@@ -36,25 +35,22 @@
             <div class="form-floating">
                 <input type="number" class="form-control" id="salaryPerEvent" name="salaryPerEvent"
                        th:field="*{salaryPerEvent}" placeholder="0" max="300" min="0" required/>
-                <label for="salaryPerEvent">Gehalt pro Auftritt in EURO</label>
+                <label for="salaryPerEvent">Gehalt pro Auftritt in €</label>
+                <small>Gehalt pro Auftritt muss zwischen 0 und 300€ betragen.</small>
             </div>
             <div class="form-floating">
                 <textarea type="text" class="form-control" id="description" name="description"
-                       th:field="*{description}" placeholder="Beschreibung" required/>
+                       th:field="*{description}" placeholder="Beschreibung" style="height: 100px" maxlength="1000" required/>
                 <label for="description">Beschreibung</label>
             </div>
-            <div class="form-group row">
-                <div class="col-4">
-                    <label for="artType">Kunsttyp</label>
-                </div>
-                <div class="col-8">
-                    <select class="form-control" id="artType" name="artType"
-                            th:field="*{artType}">
-                        <option th:value="MUSIC" selected>Musik</option>
-                        <option th:value="COMEDY">Comedy</option>
-                        <option th:value="PARTY">Party</option>
-                    </select>
-                </div>
+            <div class="form-floating">
+                <select class="form-select" id="artType" name="artType" aria-label="Floating label"
+                        th:field="*{artType}">
+                    <option th:value="MUSIC" selected>Musik</option>
+                    <option th:value="COMEDY">Comedy</option>
+                    <option th:value="PARTY">Party</option>
+                </select>
+                <label for="artType">Kunsttyp</label>
             </div>
             <div class="form-floating">
                 <input type="url" class="form-control" id="webLink" name="webLink"

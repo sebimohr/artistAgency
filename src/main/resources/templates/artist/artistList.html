@@ -20,11 +20,7 @@
         <table class="table table-responsive table-dark table-hover">
             <thead>
                 <th scope="col">#</th>
-                <th scope="col">Username</th>
                 <th scope="col">Künstlername</th>
-                <th scope="col">Telefonnummer</th>
-                <th scope="col">Gehalt</th>
-                <th scope="col">Beschreibung</th>
                 <th scope="col">Künstlertyp</th>
                 <th scope="col">Weblink</th>
                 <th scope="col"> </th>
@@ -32,12 +28,8 @@
             <tbody>
                 <tr th:each="artist : ${artists}">
                     <th scope="row"><a th:text="${artist.getID()}"/></th>
-                    <td><label th:text="${artist.getUsername()}"/></td>
                     <td><label th:text="${artist.getArtistName()}"/></td>
-                    <td><label th:text="${artist.getPhoneNumber()}"/></td>
-                    <td><label th:text="${artist.getSalaryPerEvent()}"/></td>
-                    <td><label th:text="${artist.getDescription()}"/></td>
-                    <td><label th:text="${#strings.capitalize(artist.getArtType())}"/></td>
+                    <td><label th:text="${artist.getArtType()}"/></td>
                     <td><a th:href="${artist.getWebLink()}" th:text="${artist.getWebLink()}"/></td>
                     <td><form th:action="@{/artist/details}" th:type="get">
                         <input type="hidden" th:value="${artist.getID()}" name="id">

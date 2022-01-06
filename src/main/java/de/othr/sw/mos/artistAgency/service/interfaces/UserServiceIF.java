@@ -10,6 +10,8 @@ import java.util.List;
 public interface UserServiceIF extends UserDetailsService {
     User registerUser(User user) throws UserServiceException;
 
+    User updateUser(User user);
+
     List<User> getAllUsers();
 
     @Override

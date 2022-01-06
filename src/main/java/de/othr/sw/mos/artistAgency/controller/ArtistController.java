@@ -7,6 +7,7 @@ import de.othr.sw.mos.artistAgency.service.interfaces.UserServiceIF;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -52,7 +53,7 @@ public class ArtistController implements SitePathDistribution {
         return artistDetailsSite;
     }
 
-    @RequestMapping(value = "/myProfile", method = RequestMethod.GET)
+    @RequestMapping(value = "/myProfile")
     public String ShowMyProfile(
             Model model,
             Principal principal
@@ -71,6 +72,17 @@ public class ArtistController implements SitePathDistribution {
         var currentUser = getCurrentlyLoggedInUser(principal);
         model.addAttribute("currentUser", currentUser);
         return editMyProfileSite;
+    }
+
+    @RequestMapping(value = "/myProfile/edit", method = RequestMethod.POST)
+    public String updateMyProfile(
+            Model model,
+            Principal principal,
+            @ModelAttribute("currentUser") User userUpdated
+    ){
+        userUpdated.setID(getCurrentlyLoggedInUser(principal).getID());
+        userService.updateUser(userUpdated);
+        return ShowMyProfile(model, principal);
     }
 
     private User getCurrentlyLoggedInUser(Principal principal) {

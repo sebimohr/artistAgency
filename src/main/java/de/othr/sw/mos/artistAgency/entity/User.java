@@ -30,6 +30,7 @@ public class User extends EntityLongId implements UserDetails {
     @Setter @Getter
     private BigDecimal salaryPerEvent;
     @Setter @Getter
+    @Column(length = 1000)
     private String description;
 
     // optional

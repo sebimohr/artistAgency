@@ -56,6 +56,34 @@ public class UserService implements UserServiceIF {
     }
 
     @Override
+    @Transactional
+    public User updateUser(User userUpdated) {
+        var userFromDb = getUserByUserId(userUpdated.getID());
+        if(!userFromDb.getArtistName().equals(userUpdated.getArtistName())) {
+            userFromDb.setArtistName(userUpdated.getArtistName());
+        }
+        if(!userFromDb.getPhoneNumber().equals(userUpdated.getPhoneNumber())) {
+            userFromDb.setPhoneNumber(userUpdated.getPhoneNumber());
+        }
+        if(!userFromDb.getSalaryPerEvent().equals(userUpdated.getSalaryPerEvent())) {
+            userFromDb.setSalaryPerEvent(userUpdated.getSalaryPerEvent());
+        }
+        if(!userFromDb.getDescription().equals(userUpdated.getDescription())) {
+            userFromDb.setDescription(userUpdated.getDescription());
+        }
+        if(!userFromDb.getArtType().equals(userUpdated.getArtType())) {
+            userFromDb.setArtType(userUpdated.getArtType());
+        }
+        if(!userFromDb.getWebLink().equals(userUpdated.getWebLink())) {
+            userFromDb.setWebLink(userUpdated.getWebLink());
+        }
+
+        userRepo.flush();
+
+        return userFromDb;
+    }
+
+    @Override
     public List<User> getAllUsers() {
         return userRepo.findAll();
     }
