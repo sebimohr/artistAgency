@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:include="common/head :: defaultHead">
-
+<head>
     <title>Mein Profil</title>
 </head>
+<head th:include="common/head :: defaultHead">
 <body>
     <div th:replace="common/navigationBar :: navigationBar"/>
 
@@ -13,7 +13,7 @@
             <div class="col-10">
                 <h1>Mein Profil</h1>
             </div>
-            <div class="col-2 align-items-end">
+            <div class="col align-items-end">
                 <a th:href="@{/artist/myProfile/edit}" type="submit" class="btn btn-dark">Daten bearbeiten</a>
             </div>
         </div>
@@ -31,13 +31,6 @@
                    aria-label="Username" aria-describedby="username_addon"
                    th:value="${currentUser.getUsername()}" disabled readonly/>
         </div>
-
-        <!--<div class="input-group">
-            <span class="input-group-text" id="password_addon">Passwort</span>
-            <input type="password" class="form-control"
-                   aria-label="Username" aria-describedby="password_addon"
-                   th:value="${currentUser.getPassword()}" disabled readonly>
-        </div>-->
 
         <div class="input-group">
             <span class="input-group-text" id="artistName_addon">Künstlername</span>

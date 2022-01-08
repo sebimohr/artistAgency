@@ -89,7 +89,6 @@ public class UserService implements UserServiceIF {
     }
 
     @Override
-    @Transactional
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepo.findByUsername(username).orElseThrow(() -> {
             throw new UsernameNotFoundException("User with username " + username + " not found.");

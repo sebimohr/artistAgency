@@ -35,6 +35,7 @@ public class User extends EntityLongId implements UserDetails {
 
     // optional
     @Setter @Getter
+    @Enumerated(EnumType.ORDINAL)
     private ArtType artType;
     @Setter @Getter
     private URL webLink;

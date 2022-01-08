@@ -12,26 +12,11 @@
             <div class="col-10">
                 <h1>Events</h1>
             </div>
-            <div class="col-2 align-items-end" sec:authorize="isAuthenticated()">
+            <div class="col align-items-end" sec:authorize="isAuthenticated()">
                 <a th:href="@{/event/book}" type="submit" class="btn btn-dark">Event buchen</a>
             </div>
         </div>
-        <table class="table table-responsive table-dark table-hover">
-            <thead>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Datum</th>
-                <th scope="col">Künstler</th>
-            </thead>
-            <tbody>
-                <tr th:each="event : ${events}">
-                    <th scope="row"><label th:text="${event.getID()}"/></th>
-                    <td><label th:text="${event.getEventName()}"/></td>
-                    <td><label th:text="${event.getEventDate()}"/></td>
-                    <td><label th:text="${event.getArtist().getArtistName()}"/></td>
-                </tr>
-            </tbody>
-        </table>
+        <div th:replace="common/eventList :: eventList"/>
     </div>
 
     <div th:replace="common/footer :: footerWithBoostrap"/>

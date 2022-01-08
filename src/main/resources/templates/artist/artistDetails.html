@@ -12,6 +12,9 @@
         <h1>ArtistDetails</h1>
 
         <img th:src="@{/img/artist_default_photo.png}" class="img-fluid" alt="...">
+
+        <h5 class="mt-3">Details:</h5>
+
         <div class="row">
             <label class="col-4" for="artistName">Künstlername:</label>
             <p class="text-break col-8" id="artistName" th:text="${artist.getArtistName()}"/>
@@ -25,6 +28,10 @@
             <label class="col-4" for="webLink">Beschreibung:</label>
             <a class="text-break col-8" id="webLink" th:href="${artist.getWebLink()}" th:text="${artist.getWebLink()}"/>
         </div>
+
+        <h5 class="mt-3">Kommende Events:</h5>
+
+        <div th:replace="common/eventList :: eventList"/>
     </div>
 
     <div th:replace="common/footer :: footerWithBoostrap"/>

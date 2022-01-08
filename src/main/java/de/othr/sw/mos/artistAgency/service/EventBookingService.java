@@ -96,6 +96,7 @@ public class EventBookingService implements EventBookingServiceIF {
     }
 
     @Override
+    @Transactional
     public Venue registerVenueForTesting(Venue venue) {
         return venueRepo.save(venue);
     }

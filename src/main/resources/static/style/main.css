@@ -6,7 +6,7 @@ body {
     background-color: rgb(189, 189, 189);
     margin-inline: 15%;
     padding-inline: 20px;
-    padding-top: 20px;
+    padding-top: 70px;
     padding-bottom: 20px;
 }
 
@@ -17,4 +17,8 @@ body {
 input, textarea, select, span {
     margin-top: 15px;
     margin-bottom: 5px;
+}
+
+span {
+    width: 150px;
 }
