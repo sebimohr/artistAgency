@@ -1,28 +1,18 @@
 package de.othr.sw.mos.artistAgency.controller;
 
-import de.othr.sw.mos.artistAgency.controller.util.SitePathDistribution;
+import de.othr.sw.mos.artistAgency.controller.util.ControllerTemplate;
 import de.othr.sw.mos.artistAgency.entity.User;
-import de.othr.sw.mos.artistAgency.service.interfaces.EventBookingServiceIF;
-import de.othr.sw.mos.artistAgency.service.interfaces.UserServiceIF;
-import org.springframework.beans.factory.annotation.Autowired;
+import de.othr.sw.mos.artistAgency.exception.UserServiceException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
 @Controller
 @RequestMapping(value = "/artist")
-public class ArtistController implements SitePathDistribution {
-
-    @Autowired
-    private UserServiceIF userService;
-
-    @Autowired
-    private EventBookingServiceIF eventService;
+public class ArtistController extends ControllerTemplate {
 
     @RequestMapping(value = {"/list", "/", ""}, method = RequestMethod.GET)
     public String ShowArtistsList(
@@ -37,17 +27,31 @@ public class ArtistController implements SitePathDistribution {
     @RequestMapping(value = "/details")
     public String ShowArtistPage(
             Model model,
-            @RequestParam(value = "id") Long artistId
+            @RequestParam(value = "id") String artistId
     ) {
         if(artistId == null) {
             model.addAttribute("errorMessage", "Leere ID angegeben.");
             return ShowArtistsList(model);
         }
 
-        var detailedArtist = userService.getUserByUserId(artistId);
-        var artistEvents = eventService.getAllEventsForSpecificArtist(artistId);
+        Long artistIdLong;
+        try {
+            artistIdLong = Long.parseLong(artistId);
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "ID " + artistId + " ist keine Zahl.");
+            return ShowArtistsList(model);
+        }
 
-        model.addAttribute("artist", detailedArtist);
+        User detailedArtist;
+        try {
+            detailedArtist = userService.getUserByUserId(artistIdLong);
+            model.addAttribute("artist", detailedArtist);
+        } catch (UserServiceException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return ShowArtistsList(model);
+        }
+
+        var artistEvents = eventService.getAllEventsForSpecificArtist(artistIdLong);
         model.addAttribute("events", artistEvents);
 
         return artistDetailsSite;
@@ -58,9 +62,14 @@ public class ArtistController implements SitePathDistribution {
             Model model,
             Principal principal
     ) {
-        var currentUser = getCurrentlyLoggedInUser(principal);
+        User currentUser;
+        try {
+            currentUser = getCurrentlyLoggedInUser(principal);
+        } catch (UserServiceException e) {
+            return renderErrorPageOnException(model, e.getMessage());
+        }
+
         model.addAttribute("currentUser", currentUser);
-        // show information on my profile page and make it editable on edit page
         return myProfileSite;
     }
 
@@ -69,8 +78,15 @@ public class ArtistController implements SitePathDistribution {
             Model model,
             Principal principal
     ) {
-        var currentUser = getCurrentlyLoggedInUser(principal);
+        User currentUser;
+        try {
+            currentUser = getCurrentlyLoggedInUser(principal);
+        } catch (UserServiceException e) {
+            return renderErrorPageOnException(model, e.getMessage());
+        }
+
         model.addAttribute("currentUser", currentUser);
+
         return editMyProfileSite;
     }
 
@@ -80,12 +96,12 @@ public class ArtistController implements SitePathDistribution {
             Principal principal,
             @ModelAttribute("currentUser") User userUpdated
     ){
-        userUpdated.setID(getCurrentlyLoggedInUser(principal).getID());
-        userService.updateUser(userUpdated);
+        try {
+            userUpdated.setID(getCurrentlyLoggedInUser(principal).getID());
+            userService.updateUser(userUpdated);
+        } catch (UserServiceException e) {
+            return renderErrorPageOnException(model, e.getMessage());
+        }
         return ShowMyProfile(model, principal);
-    }
-
-    private User getCurrentlyLoggedInUser(Principal principal) {
-        return userService.loadUserByUsername(principal.getName());
     }
 }

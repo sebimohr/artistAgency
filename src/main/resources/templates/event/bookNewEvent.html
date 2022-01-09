@@ -9,6 +9,7 @@
     <div th:replace="common/navigationBar :: navigationBar"/>
 
     <div class="jumbotron">
+        <div th:replace="common/messageHandler :: messageHandler"/>
         <h1>Neues Event buchen</h1>
         <form th:action="@{/event/book}" th:method="get">
             <h3>Venue suchen</h3>
@@ -26,16 +27,16 @@
                 <div class="col-4">
                     <label for="venueDate">Datum</label>
                     <input type="date" class="form-control" id="venueDate" name="venueDate"
-                           th:value="${venueDate}" min="2022-01-21" max="2025-12-31">
+                           th:value="${venueDate}" th:min="${#dates.format(#dates.createToday(), 'YYYY-MM-dd')}" max="2025-12-31">
                 </div>
                 <div class="col-4">
                     <label for="venueCapacity">Kapazität</label>
                     <select class="form-control" id="venueCapacity" name="venueCapacity">
-                        <option th:value=100 th:selected="${venueCapacity==100}">bis 100</option>
-                        <option th:value=500 th:selected="${venueCapacity==500}">100 - 500</option>
-                        <option th:value=1000 th:selected="${venueCapacity==1000}">500 - 1000</option>
-                        <option th:value=5000 th:selected="${venueCapacity==5000}">1000 - 5000</option>
-                        <option th:value=100000 th:selected="${venueCapacity==100000}">über 5000</option>
+                        <option th:value="100" th:selected="${venueCapacity=='100'}">bis 100</option>
+                        <option th:value="500" th:selected="${venueCapacity=='500'}">100 - 500</option>
+                        <option th:value="1000" th:selected="${venueCapacity=='1000'}">500 - 1000</option>
+                        <option th:value="5000" th:selected="${venueCapacity=='5000'}">1000 - 5000</option>
+                        <option th:value="100000" th:selected="${venueCapacity=='100000'}">über 5000</option>
                     </select>
                 </div>
             </div>

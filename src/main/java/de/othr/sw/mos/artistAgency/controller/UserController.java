@@ -1,24 +1,17 @@
 package de.othr.sw.mos.artistAgency.controller;
 
-import de.othr.sw.mos.artistAgency.controller.util.SitePathDistribution;
+import de.othr.sw.mos.artistAgency.controller.util.ControllerTemplate;
 import de.othr.sw.mos.artistAgency.entity.User;
 import de.othr.sw.mos.artistAgency.exception.UserServiceException;
-import de.othr.sw.mos.artistAgency.service.interfaces.UserServiceIF;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
 @Controller
 @RequestMapping(value = "/user")
-public class UserController implements SitePathDistribution {
-    @Autowired
-    private UserServiceIF userService;
+public class UserController extends ControllerTemplate {
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public String RegisterUserSite(
@@ -58,7 +51,12 @@ public class UserController implements SitePathDistribution {
             switch (loginCode) {
                 case "success" -> {
                     if(principal != null) {
-                        var currentUser = getCurrentlyLoggedInUser(principal);
+                        User currentUser;
+                        try {
+                            currentUser = getCurrentlyLoggedInUser(principal);
+                        } catch (UserServiceException e) {
+                            return renderErrorPageOnException(model, e.getMessage());
+                        }
                         model.addAttribute("loginSuccess", "Erfolgreich angemeldet, willkommen zurück " + currentUser.getArtistName() + "!");
                         model.addAttribute("currentUser", currentUser);
                         return myProfileSite;
@@ -92,9 +90,5 @@ public class UserController implements SitePathDistribution {
             model.addAttribute("errorMessage", "Keine Berechtigung zum aufrufen dieser Seite, bitte melden Sie sich zuerst an!");
         }
         return loginSite;
-    }
-
-    private User getCurrentlyLoggedInUser(Principal principal) {
-        return userService.loadUserByUsername(principal.getName());
     }
 }

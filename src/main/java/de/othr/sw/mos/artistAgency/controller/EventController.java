@@ -1,34 +1,26 @@
 package de.othr.sw.mos.artistAgency.controller;
 
-import de.othr.sw.mos.artistAgency.controller.util.SitePathDistribution;
+import de.othr.sw.mos.artistAgency.controller.util.ControllerTemplate;
 import de.othr.sw.mos.artistAgency.entity.Event;
 import de.othr.sw.mos.artistAgency.entity.User;
-import de.othr.sw.mos.artistAgency.exception.EventServiceException;
-import de.othr.sw.mos.artistAgency.service.interfaces.EventBookingServiceIF;
-import de.othr.sw.mos.artistAgency.service.interfaces.UserServiceIF;
-import org.springframework.beans.factory.annotation.Autowired;
+import de.othr.sw.mos.artistAgency.exception.UserServiceException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.Year;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Locale;
 
 @Controller
 @RequestMapping(value = "/event")
-public class EventController implements SitePathDistribution {
-
-    @Autowired
-    private EventBookingServiceIF eventService;
-
-    @Autowired
-    private UserServiceIF userService;
+public class EventController extends ControllerTemplate {
 
     @RequestMapping(value = {"/list", "/", ""}, method = RequestMethod.GET)
     public String ShowDefaultEventList(
@@ -46,7 +38,14 @@ public class EventController implements SitePathDistribution {
             Model model,
             Principal principal
     ) {
-        var artistEventList = eventService.getAllEventsForSpecificArtist(getCurrentlyLoggedInUser(principal).getID());
+        User currentUser;
+        try {
+            currentUser = getCurrentlyLoggedInUser(principal);
+        } catch (UserServiceException e) {
+            return renderErrorPageOnException(model, e.getMessage());
+        }
+
+        var artistEventList = eventService.getAllEventsForSpecificArtist(currentUser.getID());
 
         model.addAttribute("events", artistEventList);
 
@@ -58,27 +57,36 @@ public class EventController implements SitePathDistribution {
             Model model,
             @RequestParam(required = false) String venueLocation,
             @RequestParam(required = false) String venueDate,
-            @RequestParam(required = false) Integer venueCapacity
+            @RequestParam(required = false) String venueCapacity
     ) {
-        if(validateVenueSearchInput(venueLocation, venueDate, venueCapacity)) {
-            // TODO: RPC on EventLocationManager
-            var venueList = eventService.getAllVenuesFromEventLocationManager();
-            model.addAttribute("venues", venueList);
+        if(venueLocation != null && venueDate != null && venueCapacity != null) {
+            venueLocation = venueLocation.toUpperCase();
+            var errorMessage = validateVenueSearchInput(venueLocation, venueDate, venueCapacity);
 
-            model.addAttribute("venueLocation", venueLocation);
-            model.addAttribute("venueDate", venueDate);
-            model.addAttribute("venueCapacity", venueCapacity);
+            if(errorMessage == null) {
+                // TODO: RPC on EventLocationManager
+                var venueList = eventService.getAllVenuesFromEventLocationManager();
+                model.addAttribute("venues", venueList);
 
-            var eventDate = parseDateFromHTMLToDateObject(venueDate);
+                model.addAttribute("venueLocation", venueLocation);
+                model.addAttribute("venueDate", venueDate);
+                model.addAttribute("venueCapacity", venueCapacity);
 
-            var newEvent = new Event();
-            newEvent.setEventDate(eventDate);
-            model.addAttribute("event", newEvent);
-        } else {
-            model.addAttribute("venueLocation", "AUGSBURG");
-            model.addAttribute("venueDate", "2022-01-21");
-            model.addAttribute("venueCapacity", 100);
+                var eventDate = parseDateFromHTMLToDateObject(venueDate);
+
+                var newEvent = new Event();
+                newEvent.setEventDate(eventDate);
+                model.addAttribute("event", newEvent);
+                return bookNewEventSite;
+            } else {
+                model.addAttribute("errorMessage", errorMessage + ", bitte Suche erneut ausführen.");
+            }
         }
+
+        model.addAttribute("venueLocation", "AUGSBURG");
+        model.addAttribute("venueDate", "2022-01-21");
+        model.addAttribute("venueCapacity", "100");
+
 
         return bookNewEventSite;
     }
@@ -99,14 +107,9 @@ public class EventController implements SitePathDistribution {
                 eventService.registerEvent(event);
                 return MyEventSite(model, principal);
             } catch (Exception e) {
-                model.addAttribute("errorMessage", e.getMessage());
-                return errorSite;
+                return renderErrorPageOnException(model, e.getMessage());
             }
         }
-    }
-
-    private User getCurrentlyLoggedInUser(Principal principal) {
-        return userService.loadUserByUsername(principal.getName());
     }
 
     private Date parseDateFromHTMLToDateObject(String date) {
@@ -114,17 +117,26 @@ public class EventController implements SitePathDistribution {
             return new SimpleDateFormat("yyyy-MM-dd")
                     .parse(date);
         } catch (ParseException e) {
-            e.printStackTrace();
+            return null;
         }
-
-        return null;
     }
 
-    private Boolean validateVenueSearchInput(String venueLocation, String venueDate, Integer venueCapacity) {
-        return venueLocation != null
-                && Arrays.asList("AUGSBURG", "INGOLSTADT", "MUNICH", "NUREMBURG", "REGENSBURG").contains(venueLocation)
-                && venueDate != null
-                && venueCapacity != null
-                && Arrays.asList(100, 500, 1000, 5000, 100000).contains(venueCapacity);
+    private String validateVenueSearchInput(String venueLocation, String venueDate, String venueCapacity) {
+        if(venueLocation.isEmpty() || venueDate.isEmpty() || venueCapacity.isEmpty())
+            return "Es wurden nicht alle Parameter übergeben";
+
+        if(!Arrays.asList("AUGSBURG", "INGOLSTADT", "MUNICH", "NUREMBURG", "REGENSBURG").contains(venueLocation))
+            return "Ort wurde nicht richtig gewählt";
+
+        var dateFormat = parseDateFromHTMLToDateObject(venueDate);
+        if(dateFormat == null)
+            return "Datum hat falsches Format";
+        else if (!dateFormat.after(new Date()) || !dateFormat.before(parseDateFromHTMLToDateObject("2026-01-01")))
+            return "Datum außerhalb des erlaubten Zeitraums (morgen - 31.12.2025)";
+
+        if(!Arrays.asList("100", "500", "1000", "5000", "100000").contains(venueCapacity))
+            return "Kapazität wurde nicht richtig gewählt";
+
+        return null;
     }
 }

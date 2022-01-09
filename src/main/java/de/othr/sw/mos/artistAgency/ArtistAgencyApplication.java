@@ -146,12 +146,12 @@ public class ArtistAgencyApplication implements ApplicationRunner {
         var financeLogs = financeService.getAllFinanceLogs();
 
         for (var i = 1; i <= 10; i++) {
-            var financeLog = financeLogs.get(i % financeLogs.size());
+            var financeLogUpdate = new FinanceLog();
 
-            financeLog.setArtistPaidDate(new Date());
-            financeLog.setArtistPaidAmount(BigDecimal.valueOf((i * 100.0) % 450.0));
+            financeLogUpdate.setArtistPaidDate(new Date());
+            financeLogUpdate.setArtistPaidAmount(BigDecimal.valueOf((i * 100.0) % 450.0));
 
-            financeService.updateFinanceLog(financeLog);
+            financeService.updateFinanceLog(financeLogs.get(i % financeLogs.size()).getID(), financeLogUpdate);
         }
 
         return financeService.getAllFinanceLogs();

@@ -1,6 +1,7 @@
 package de.othr.sw.mos.artistAgency.service;
 
 import de.othr.sw.mos.artistAgency.entity.*;
+import de.othr.sw.mos.artistAgency.exception.ArtistNotFoundException;
 import de.othr.sw.mos.artistAgency.exception.UserServiceException;
 import de.othr.sw.mos.artistAgency.repository.UserRepository;
 import de.othr.sw.mos.artistAgency.service.interfaces.UserServiceIF;
@@ -57,7 +58,7 @@ public class UserService implements UserServiceIF {
 
     @Override
     @Transactional
-    public User updateUser(User userUpdated) {
+    public User updateUser(User userUpdated) throws UserServiceException {
         var userFromDb = getUserByUserId(userUpdated.getID());
         if(!userFromDb.getArtistName().equals(userUpdated.getArtistName())) {
             userFromDb.setArtistName(userUpdated.getArtistName());
@@ -90,28 +91,31 @@ public class UserService implements UserServiceIF {
 
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepo.findByUsername(username).orElseThrow(() -> {
-            throw new UsernameNotFoundException("User with username " + username + " not found.");
-        });
+        return userRepo.findByUsername(username).orElseThrow(() ->
+            new UsernameNotFoundException("User mit Username " + username + " existiert nicht.")
+        );
     }
 
     @Override
-    public User getUserByUserId(Long Id) {
-        return userRepo.findByID(Id).orElseThrow(() -> {
-            throw new UsernameNotFoundException("User with ID " + Id + " not found.");
-        });
+    public User getUserByUserId(Long Id) throws UserServiceException {
+        return userRepo.findByID(Id).orElseThrow( () ->
+            new UserServiceException("User mit ID " + Id + " existiert nicht.")
+        );
     }
 
     // method for external partners, returns artistDto with only relevant information
     @Override
-    public ArtistDto getArtistInformation(Long artistId) {
-        var artist = getUserByUserId(artistId);
-
-        return new ArtistDto(
-                artist.getArtistName(),
-                artist.getDescription(),
-                artist.getWebLink(),
-                artist.getArtType().toString()
-        );
+    public ArtistDto getArtistInformation(Long artistId) throws ArtistNotFoundException {
+        try {
+            var artist = getUserByUserId(artistId);
+            return new ArtistDto(
+                    artist.getArtistName(),
+                    artist.getDescription(),
+                    artist.getWebLink(),
+                    artist.getArtType().toString()
+            );
+        } catch (UserServiceException e) {
+            throw new ArtistNotFoundException(e.getMessage());
+        }
     }
 }

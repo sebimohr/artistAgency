@@ -17,6 +17,9 @@
                 <a th:href="@{/artist/myProfile}" type="submit" class="btn btn-dark">Mein Profil</a>
             </div>
         </div>
+
+        <div th:replace="common/messageHandler :: messageHandler"/>
+
         <table class="table table-responsive table-dark table-hover">
             <thead>
                 <th scope="col">#</th>

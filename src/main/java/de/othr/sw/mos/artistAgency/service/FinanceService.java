@@ -45,8 +45,8 @@ public class FinanceService implements FinanceServiceIF {
 
     @Override
     @Transactional
-    public FinanceLog updateFinanceLog(FinanceLog financeLogUpdated) throws FinanceServiceException {
-        var financeLog = getFinanceLogById(financeLogUpdated.getID());
+    public FinanceLog updateFinanceLog(Long financeId, FinanceLog financeLogUpdated) throws FinanceServiceException {
+        var financeLog = getFinanceLogById(financeId);
 
         financeLog.setArtistPaidDate(financeLogUpdated.getArtistPaidDate());
         financeLog.setArtistPaidAmount(financeLogUpdated.getArtistPaidAmount());

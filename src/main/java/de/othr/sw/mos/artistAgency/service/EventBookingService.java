@@ -4,6 +4,7 @@ import de.othr.sw.mos.artistAgency.entity.Event;
 import de.othr.sw.mos.artistAgency.entity.FinanceLog;
 import de.othr.sw.mos.artistAgency.entity.Venue;
 import de.othr.sw.mos.artistAgency.exception.EventServiceException;
+import de.othr.sw.mos.artistAgency.exception.FinanceServiceException;
 import de.othr.sw.mos.artistAgency.repository.EventRepository;
 import de.othr.sw.mos.artistAgency.repository.VenueRepository;
 import de.othr.sw.mos.artistAgency.service.interfaces.EventBookingServiceIF;
@@ -31,7 +32,7 @@ public class EventBookingService implements EventBookingServiceIF {
 
     @Override
     @Transactional
-    public Event registerEvent(Event event) throws Exception {
+    public Event registerEvent(Event event) throws EventServiceException {
         var foundEventOptional = eventRepo.findByID(event.getID());
 
         if(foundEventOptional.isEmpty()) {
@@ -53,12 +54,16 @@ public class EventBookingService implements EventBookingServiceIF {
             financeLog.setUser(event.getArtist());
             financeLog.setEvent(newEvent);
 
-            financeService.registerFinanceLog(financeLog);
+            try {
+                financeService.registerFinanceLog(financeLog);
+            } catch (FinanceServiceException e) {
+                throw new EventServiceException(e.getMessage());
+            }
 
             return newEvent;
         }
 
-        throw new EventServiceException("Event with ID already exists.");
+        throw new EventServiceException("Event mit ID " + event.getID() + " existiert schon.");
     }
 
     @Override
@@ -71,7 +76,7 @@ public class EventBookingService implements EventBookingServiceIF {
     public Venue getSpecificVenueFromEventLocationManager(Long venueId) throws Exception {
         // TODO: RPC on ELM
         return venueRepo.findByID(venueId).orElseThrow( () ->
-                new Exception("Venue with " + venueId + " not found"));
+                new Exception("Venue mit ID " + venueId + " nicht gefunden!"));
     }
 
     @Override
