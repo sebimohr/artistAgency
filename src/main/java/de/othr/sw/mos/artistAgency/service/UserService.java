@@ -33,33 +33,30 @@ public class UserService implements UserServiceIF {
         var foundUserOptional = userRepo.findByUsername(user.getUsername());
 
         if(foundUserOptional.isEmpty()) {
-            var newUser = new User();
-
-            newUser.setUsername(user.getUsername());
-            newUser.setPassword(passwordEncoder.encode(user.getPassword()));
-            newUser.setArtistName(user.getArtistName());
-
-            if(user.getPhoneNumber() != null)
-                newUser.setPhoneNumber(user.getPhoneNumber());
-            if(user.getSalaryPerEvent() != null)
-                newUser.setSalaryPerEvent(user.getSalaryPerEvent());
-            if(user.getDescription() != null)
-                newUser.setDescription(user.getDescription());
-            if(user.getArtType() != null)
-                newUser.setArtType(user.getArtType());
-            if(user.getWebLink() != null)
-                newUser.setWebLink(user.getWebLink());
+            // new object for password encoding
+            var newUser = new User(
+                    user.getUsername(),
+                    passwordEncoder.encode(user.getPassword()),
+                    user.getArtistName(),
+                    user.getPhoneNumber(),
+                    user.getSalaryPerEvent(),
+                    user.getDescription(),
+                    user.getArtType(),
+                    user.getWebLink()
+            );
 
             return userRepo.save(newUser);
         }
 
-        throw new UserServiceException("User mit Email" + user.getUsername() + " schon vorhanden");
+        throw new UserServiceException("User mit Email" + user.getUsername() + " schon vorhanden.");
     }
 
     @Override
     @Transactional
     public User updateUser(User userUpdated) throws UserServiceException {
         var userFromDb = getUserByUserId(userUpdated.getID());
+
+        // test which attributes have changed and have to be updated in database
         if(!userFromDb.getArtistName().equals(userUpdated.getArtistName())) {
             userFromDb.setArtistName(userUpdated.getArtistName());
         }
@@ -78,8 +75,6 @@ public class UserService implements UserServiceIF {
         if(!userFromDb.getWebLink().equals(userUpdated.getWebLink())) {
             userFromDb.setWebLink(userUpdated.getWebLink());
         }
-
-        userRepo.flush();
 
         return userFromDb;
     }

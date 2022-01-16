@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.List;
 
+// controllers have a RequestMapping over the whole controller, so there's a mapping between different areas
+// finance-area includes the finance-site for logged-in users
 @Controller
 @RequestMapping(value = "finance")
 public class FinanceController extends ControllerTemplate {

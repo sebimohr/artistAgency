@@ -1,9 +1,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:include="common/head :: defaultHead">
-
-    <title>Registration</title>
+<head>
+    <title>ArtistAgency - Registrierung</title>
 </head>
-
+<head th:include="common/head :: defaultHead"/>
 <body>
     <div th:replace="common/navigationBar :: navigationBar"/>
 
@@ -29,7 +28,7 @@
             </div>
             <div class="form-floating">
                 <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
-                       th:field="*{phoneNumber}" placeholder="phoneNumber"/>
+                       th:field="*{phoneNumber}" placeholder="phoneNumber" required/>
                 <label for="phoneNumber">Telefonnummer</label>
             </div>
             <div class="form-floating">
@@ -54,7 +53,7 @@
             </div>
             <div class="form-floating">
                 <input type="url" class="form-control" id="webLink" name="webLink"
-                       th:field="*{webLink}" placeholder="webLink.de"/>
+                       th:field="*{webLink}" placeholder="webLink.de" required/>
                 <label for="webLink">Link zur Webseite</label>
             </div>
             <button type="submit" class="btn btn-info">Registrieren</button>

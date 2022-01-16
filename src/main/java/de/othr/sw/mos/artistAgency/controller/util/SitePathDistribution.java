@@ -1,5 +1,6 @@
 package de.othr.sw.mos.artistAgency.controller.util;
 
+// this interface distributes the site-Strings to all Controllers / the ControllerTemplate
 public interface SitePathDistribution {
     // default
     String indexSite = "default/index";

@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
+// controllers have a RequestMapping over the whole controller, so there's a mapping between different areas
+// user-area includes everything account-related like registering, logging in (and delete a user)
 @Controller
 @RequestMapping(value = "/user")
 public class UserController extends ControllerTemplate {
@@ -17,11 +19,8 @@ public class UserController extends ControllerTemplate {
     public String RegisterUserSite(
             Model model
     ) {
-
         var newUser = new User();
-
         model.addAttribute("user", newUser);
-
         return registerUserSite;
     }
 
@@ -42,14 +41,16 @@ public class UserController extends ControllerTemplate {
     }
 
     @RequestMapping(value = {"/login", "/", ""})
-    public String login(
+    public String LoginSite(
             Model model,
             Principal principal,
             @RequestParam(value = "code", required = false) String loginCode
     ) {
         if(loginCode != null) {
+            // handle different login codes
             switch (loginCode) {
                 case "success" -> {
+                    // login successful
                     if(principal != null) {
                         User currentUser;
                         try {
@@ -63,10 +64,12 @@ public class UserController extends ControllerTemplate {
                     }
                 }
                 case "error" -> {
+                    // login with false credentials
                     model.addAttribute("errorMessage", "Benutzername oder Passwort sind falsch!");
                     return loginSite;
                 }
                 case "logout" -> {
+                    // logout successful
                     if(principal != null) {
                         model.addAttribute("errorMessage", "Nutzen Sie zum Logout bitte den zugehörigen Button!");
                     } else {
@@ -75,6 +78,7 @@ public class UserController extends ControllerTemplate {
                     return indexSite;
                 }
                 default -> {
+                    // shouldn't ever get called, only if user changes the code manually
                     model.addAttribute("errorMessage", "Falscher loginCode. Falls dieses Problem länger besteht, wenden Sie sich bitte an den Administrator.");
                     return loginSite;
                 }

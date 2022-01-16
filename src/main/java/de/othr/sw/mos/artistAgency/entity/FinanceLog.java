@@ -35,16 +35,9 @@ public class FinanceLog extends EntityLongId {
         setDone();
     }
 
-    public FinanceLog(
-            User user,
-            Event event,
-            Date artistPaidDate,
-            BigDecimal artistPaidAmount
-    ) {
+    public FinanceLog(User user, Event event) {
         this.user = user;
         this.event = event;
-        this.artistPaidDate = artistPaidDate;
-        this.artistPaidAmount = artistPaidAmount;
         setDone();
     }
 

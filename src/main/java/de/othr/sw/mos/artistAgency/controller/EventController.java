@@ -3,6 +3,7 @@ package de.othr.sw.mos.artistAgency.controller;
 import de.othr.sw.mos.artistAgency.controller.util.ControllerTemplate;
 import de.othr.sw.mos.artistAgency.entity.Event;
 import de.othr.sw.mos.artistAgency.entity.User;
+import de.othr.sw.mos.artistAgency.exception.InputValidationException;
 import de.othr.sw.mos.artistAgency.exception.UserServiceException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,13 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.Month;
-import java.time.Year;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Locale;
 
+// controllers have a RequestMapping over the whole controller, so there's a mapping between different areas
+// event-area includes everything event-related showing events and booking them
 @Controller
 @RequestMapping(value = "/event")
 public class EventController extends ControllerTemplate {
@@ -27,9 +26,7 @@ public class EventController extends ControllerTemplate {
             Model model
     ) {
         var eventList = eventService.getAllEvents();
-
         model.addAttribute("events", eventList);
-
         return eventListSite;
     }
 
@@ -45,10 +42,8 @@ public class EventController extends ControllerTemplate {
             return renderErrorPageOnException(model, e.getMessage());
         }
 
-        var artistEventList = eventService.getAllEventsForSpecificArtist(currentUser.getID());
-
+        var artistEventList = eventService.getAllEventsForSpecificArtist(currentUser);
         model.addAttribute("events", artistEventList);
-
         return eventListSite;
     }
 
@@ -59,34 +54,40 @@ public class EventController extends ControllerTemplate {
             @RequestParam(required = false) String venueDate,
             @RequestParam(required = false) String venueCapacity
     ) {
+        // venueLocation, -Date and -Capacity are set when the search for venues is submitted
         if(venueLocation != null && venueDate != null && venueCapacity != null) {
-            venueLocation = venueLocation.toUpperCase();
-            var errorMessage = validateVenueSearchInput(venueLocation, venueDate, venueCapacity);
+            try {
+                // validating the input from URL
+                venueLocation = venueLocation.toUpperCase();
+                validateVenueSearchInput(venueLocation, venueDate, venueCapacity); // exception gets
 
-            if(errorMessage == null) {
                 // TODO: RPC on EventLocationManager
                 var venueList = eventService.getAllVenuesFromEventLocationManager();
+
                 model.addAttribute("venues", venueList);
 
+                // add attributes back to model, so that they stay selected on reload -> thymeleaf selects options based on modelAttributes
                 model.addAttribute("venueLocation", venueLocation);
                 model.addAttribute("venueDate", venueDate);
                 model.addAttribute("venueCapacity", venueCapacity);
 
-                var eventDate = parseDateFromHTMLToDateObject(venueDate);
-
                 var newEvent = new Event();
+
+                // parse eventDate to right format and add it to event-object
+                var eventDate = parseDateFromHTMLToDateObject(venueDate);
                 newEvent.setEventDate(eventDate);
+
                 model.addAttribute("event", newEvent);
                 return bookNewEventSite;
-            } else {
-                model.addAttribute("errorMessage", errorMessage + ", bitte Suche erneut ausführen.");
+            } catch (InputValidationException e) {
+                model.addAttribute("errorMessage", e.getMessage() + ", bitte Suche erneut ausführen.");
             }
         }
 
+        // standard attributes -> thymeleaf selects options based on modelAttributes
         model.addAttribute("venueLocation", "AUGSBURG");
         model.addAttribute("venueDate", "2022-01-21");
         model.addAttribute("venueCapacity", "100");
-
 
         return bookNewEventSite;
     }
@@ -96,8 +97,8 @@ public class EventController extends ControllerTemplate {
             Model model,
             Principal principal,
             @ModelAttribute("event") Event event
-
     ) {
+        // venueId should always be set, only isn't set when HTML gets manipulated
         if(event.getVenueId() == null) {
             model.addAttribute("event", event);
             return bookNewEventSite;
@@ -107,11 +108,13 @@ public class EventController extends ControllerTemplate {
                 eventService.registerEvent(event);
                 return MyEventSite(model, principal);
             } catch (Exception e) {
+                // both exceptions shouldn't ever occur, so errorPage gets rendered when they still get thrown
                 return renderErrorPageOnException(model, e.getMessage());
             }
         }
     }
 
+    // parses Date from String
     private Date parseDateFromHTMLToDateObject(String date) {
         try {
             return new SimpleDateFormat("yyyy-MM-dd")
@@ -121,22 +124,24 @@ public class EventController extends ControllerTemplate {
         }
     }
 
-    private String validateVenueSearchInput(String venueLocation, String venueDate, String venueCapacity) {
-        if(venueLocation.isEmpty() || venueDate.isEmpty() || venueCapacity.isEmpty())
-            return "Es wurden nicht alle Parameter übergeben";
+    // validation of search input
+    private void validateVenueSearchInput(String venueLocation, String venueDate, String venueCapacity) throws InputValidationException {
+        if(venueLocation.isEmpty()
+                || venueDate.isEmpty()
+                || venueCapacity.isEmpty())
+            throw new InputValidationException("Es wurden nicht alle Parameter übergeben");
 
         if(!Arrays.asList("AUGSBURG", "INGOLSTADT", "MUNICH", "NUREMBURG", "REGENSBURG").contains(venueLocation))
-            return "Ort wurde nicht richtig gewählt";
+            throw new InputValidationException("Ort wurde nicht richtig gewählt");
 
         var dateFormat = parseDateFromHTMLToDateObject(venueDate);
         if(dateFormat == null)
-            return "Datum hat falsches Format";
-        else if (!dateFormat.after(new Date()) || !dateFormat.before(parseDateFromHTMLToDateObject("2026-01-01")))
-            return "Datum außerhalb des erlaubten Zeitraums (morgen - 31.12.2025)";
+            throw new InputValidationException("Datum hat falsches Format");
+        else if (!dateFormat.after(new Date())
+                || !dateFormat.before(parseDateFromHTMLToDateObject("2026-01-01")))
+            throw new InputValidationException("Datum außerhalb des erlaubten Zeitraums (morgen - 31.12.2025)");
 
         if(!Arrays.asList("100", "500", "1000", "5000", "100000").contains(venueCapacity))
-            return "Kapazität wurde nicht richtig gewählt";
-
-        return null;
+            throw new InputValidationException("Kapazität wurde nicht richtig gewählt");
     }
 }

@@ -2,6 +2,7 @@ package de.othr.sw.mos.artistAgency.service;
 
 import de.othr.sw.mos.artistAgency.entity.Event;
 import de.othr.sw.mos.artistAgency.entity.FinanceLog;
+import de.othr.sw.mos.artistAgency.entity.User;
 import de.othr.sw.mos.artistAgency.entity.Venue;
 import de.othr.sw.mos.artistAgency.exception.EventServiceException;
 import de.othr.sw.mos.artistAgency.exception.FinanceServiceException;
@@ -11,12 +12,16 @@ import de.othr.sw.mos.artistAgency.service.interfaces.EventBookingServiceIF;
 import de.othr.sw.mos.artistAgency.service.interfaces.FinanceServiceIF;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
 public class EventBookingService implements EventBookingServiceIF {
+
+    @Autowired
+    private RestTemplate restServiceClient;
 
     private final EventRepository eventRepo;
     private final VenueRepository venueRepo;
@@ -31,7 +36,7 @@ public class EventBookingService implements EventBookingServiceIF {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackOn = EventServiceException.class)
     public Event registerEvent(Event event) throws EventServiceException {
         var foundEventOptional = eventRepo.findByID(event.getID());
 
@@ -48,11 +53,11 @@ public class EventBookingService implements EventBookingServiceIF {
             // TODO: RPC on ELM
             createBooking(newEvent, financeArtistAgencyId);
 
-            // TODO: register new financeLog for every Event created
-            var financeLog = new FinanceLog();
-
-            financeLog.setUser(event.getArtist());
-            financeLog.setEvent(newEvent);
+            // register new financeLog for every Event created
+            var financeLog = new FinanceLog(
+                    event.getArtist(),
+                    newEvent
+            );
 
             try {
                 financeService.registerFinanceLog(financeLog);
@@ -69,6 +74,10 @@ public class EventBookingService implements EventBookingServiceIF {
     @Override
     public List<Venue> getAllVenuesFromEventLocationManager() {
         // TODO: RPC on ELM
+        /*List<Venue> venue = restServiceClient
+                .getForObject("http://im-lamport:" + ELMPort + "/api/...",
+                        Venue.class,
+                        "");*/
         return venueRepo.findAll();
     }
 
@@ -80,8 +89,8 @@ public class EventBookingService implements EventBookingServiceIF {
     }
 
     @Override
-    public List<Event> getAllEventsForSpecificArtist(Long artistId) {
-        return eventRepo.findAllByArtist_ID(artistId);
+    public List<Event> getAllEventsForSpecificArtist(User artist) {
+        return eventRepo.findAllByArtist(artist);
     }
 
     @Override

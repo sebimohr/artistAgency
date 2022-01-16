@@ -1,6 +1,7 @@
 package de.othr.sw.mos.artistAgency.repository;
 
 import de.othr.sw.mos.artistAgency.entity.Event;
+import de.othr.sw.mos.artistAgency.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,5 +12,5 @@ import java.util.Optional;
 public interface EventRepository extends JpaRepository<Event, Long> {
     Optional<Event> findByID(Long eventId);
 
-    List<Event> findAllByArtist_ID(Long artistId);
+    List<Event> findAllByArtist(User artistId);
 }

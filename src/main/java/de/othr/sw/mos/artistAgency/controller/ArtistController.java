@@ -3,13 +3,14 @@ package de.othr.sw.mos.artistAgency.controller;
 import de.othr.sw.mos.artistAgency.controller.util.ControllerTemplate;
 import de.othr.sw.mos.artistAgency.entity.User;
 import de.othr.sw.mos.artistAgency.exception.UserServiceException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
+// controllers have a RequestMapping over the whole controller, so there's a mapping between different areas
+// artist-area includes everything where you can show a profile, like the artistList, myProfile site etc.
 @Controller
 @RequestMapping(value = "/artist")
 public class ArtistController extends ControllerTemplate {
@@ -18,6 +19,7 @@ public class ArtistController extends ControllerTemplate {
     public String ShowArtistsList(
             Model model
     ) {
+        // add list of all registered users to site
         var artistList = userService.getAllUsers();
 
         model.addAttribute("artists", artistList);
@@ -29,11 +31,13 @@ public class ArtistController extends ControllerTemplate {
             Model model,
             @RequestParam(value = "id") String artistId
     ) {
+        // validate input before accessing database
         if(artistId == null) {
             model.addAttribute("errorMessage", "Leere ID angegeben.");
             return ShowArtistsList(model);
         }
 
+        // parse String from URL parameter
         Long artistIdLong;
         try {
             artistIdLong = Long.parseLong(artistId);
@@ -42,6 +46,7 @@ public class ArtistController extends ControllerTemplate {
             return ShowArtistsList(model);
         }
 
+        // try to get user from database with ID
         User detailedArtist;
         try {
             detailedArtist = userService.getUserByUserId(artistIdLong);
@@ -51,7 +56,8 @@ public class ArtistController extends ControllerTemplate {
             return ShowArtistsList(model);
         }
 
-        var artistEvents = eventService.getAllEventsForSpecificArtist(artistIdLong);
+        // add events from artist to his detailsSite
+        var artistEvents = eventService.getAllEventsForSpecificArtist(detailedArtist);
         model.addAttribute("events", artistEvents);
 
         return artistDetailsSite;
@@ -91,7 +97,7 @@ public class ArtistController extends ControllerTemplate {
     }
 
     @RequestMapping(value = "/myProfile/edit", method = RequestMethod.POST)
-    public String updateMyProfile(
+    public String UpdateMyProfile(
             Model model,
             Principal principal,
             @ModelAttribute("currentUser") User userUpdated

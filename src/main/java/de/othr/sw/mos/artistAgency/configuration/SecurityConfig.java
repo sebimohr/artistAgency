@@ -44,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/event/list",
             "/user/login",
             "/user/register",
-            // img folder
+            // img & css folder
             "/img/**",
             "/style/**"
     };
@@ -57,7 +57,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .anyRequest()
             .authenticated();
 
-        // TODO: successUrls...
         http.formLogin()
             .loginPage("/user/login")
             .permitAll()

@@ -39,9 +39,6 @@ public class User extends EntityLongId implements UserDetails {
     private ArtType artType;
     @Setter @Getter
     private URL webLink;
-//    @Embedded
-//    private Address address;
-//    private List<URL> socialLink;
 
     public User() { }
 
