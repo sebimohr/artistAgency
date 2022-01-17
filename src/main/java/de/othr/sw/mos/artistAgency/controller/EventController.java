@@ -3,17 +3,19 @@ package de.othr.sw.mos.artistAgency.controller;
 import de.othr.sw.mos.artistAgency.controller.util.ControllerTemplate;
 import de.othr.sw.mos.artistAgency.entity.Event;
 import de.othr.sw.mos.artistAgency.entity.User;
+import de.othr.sw.mos.artistAgency.entity.Venue;
+import de.othr.sw.mos.artistAgency.exception.EventServiceException;
 import de.othr.sw.mos.artistAgency.exception.InputValidationException;
 import de.othr.sw.mos.artistAgency.exception.UserServiceException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import sw.oth.EventlocationManagment.entity.DTO.VenueDTO;
 
 import java.security.Principal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Date;
+import java.util.List;
 
 // controllers have a RequestMapping over the whole controller, so there's a mapping between different areas
 // event-area includes everything event-related showing events and booking them
@@ -62,7 +64,12 @@ public class EventController extends ControllerTemplate {
                 validateVenueSearchInput(venueLocation, venueDate, venueCapacity); // exception gets
 
                 // TODO: RPC on EventLocationManager
-                var venueList = eventService.getAllVenuesFromEventLocationManager();
+                List<Venue> venueList = null;
+                try {
+                    venueList = eventService.getFilteredVenuesFromEventLocationManager();
+                } catch (EventServiceException e) {
+                    model.addAttribute("errorMessage", e.getMessage());
+                }
 
                 model.addAttribute("venues", venueList);
 
@@ -115,13 +122,8 @@ public class EventController extends ControllerTemplate {
     }
 
     // parses Date from String
-    private Date parseDateFromHTMLToDateObject(String date) {
-        try {
-            return new SimpleDateFormat("yyyy-MM-dd")
-                    .parse(date);
-        } catch (ParseException e) {
-            return null;
-        }
+    private LocalDate parseDateFromHTMLToDateObject(String date) {
+        return LocalDate.parse(date);
     }
 
     // validation of search input
@@ -137,8 +139,8 @@ public class EventController extends ControllerTemplate {
         var dateFormat = parseDateFromHTMLToDateObject(venueDate);
         if(dateFormat == null)
             throw new InputValidationException("Datum hat falsches Format");
-        else if (!dateFormat.after(new Date())
-                || !dateFormat.before(parseDateFromHTMLToDateObject("2026-01-01")))
+
+        else if (!dateFormat.isAfter(LocalDate.now()) || !dateFormat.isBefore(LocalDate.parse(("2026-01-01"))))
             throw new InputValidationException("Datum außerhalb des erlaubten Zeitraums (morgen - 31.12.2025)");
 
         if(!Arrays.asList("100", "500", "1000", "5000", "100000").contains(venueCapacity))

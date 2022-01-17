@@ -6,7 +6,7 @@ public interface SitePathDistribution {
     String indexSite = "default/index";
 
     // error
-    String errorSite = "default/error";
+    String errorSite = "error";
 
     // artist
     String artistDetailsSite = "artist/artistDetails";

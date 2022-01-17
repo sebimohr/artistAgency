@@ -8,11 +8,9 @@ import de.othr.sw.mos.artistAgency.exception.EventServiceException;
 import java.util.List;
 
 public interface EventBookingServiceIF {
-    Long financeArtistAgencyId = 1L;
-
     Event registerEvent(Event event) throws EventServiceException;
 
-    List<Venue> getAllVenuesFromEventLocationManager();
+    List<Venue> getFilteredVenuesFromEventLocationManager() throws EventServiceException;
 
     Venue getSpecificVenueFromEventLocationManager(Long venueId) throws Exception;
 

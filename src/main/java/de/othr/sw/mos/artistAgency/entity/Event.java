@@ -6,7 +6,7 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "Event")
@@ -20,15 +20,14 @@ public class Event extends EntityLongId {
     private User artist;
 
     @Setter @Getter
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat
-    private Date eventDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate eventDate;
     @Setter @Getter
     private String eventName;
 
     public Event () { }
 
-    public Event (Long venueId, User artist, Date eventDate, String eventName) {
+    public Event (Long venueId, User artist, LocalDate eventDate, String eventName) {
         this.venueId = venueId;
         this.artist = artist;
         this.eventDate = eventDate;

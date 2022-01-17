@@ -7,7 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "FinanceLog")
@@ -22,9 +22,8 @@ public class FinanceLog extends EntityLongId {
     private Event event;
 
     @Setter @Getter
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat
-    private Date artistPaidDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate artistPaidDate;
     @Getter
     private BigDecimal artistPaidAmount;
 

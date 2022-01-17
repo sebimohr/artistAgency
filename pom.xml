@@ -14,7 +14,7 @@
 	<name>artistAgency</name>
 	<description>ArtistAgency for SW 2021/22.</description>
 	<properties>
-		<java.version>16</java.version>
+		<java.version>14</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -72,6 +72,12 @@
 			<artifactId>lombok</artifactId>
 			<version>1.18.22</version>
 			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>sw.oth</groupId>
+			<artifactId>EventlocationManagment</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<build>

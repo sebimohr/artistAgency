@@ -39,11 +39,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/",
             "/home",
             "/error",
+            "/errorPage",
             "/artist/list",
             "/artist/details",
             "/event/list",
             "/user/login",
             "/user/register",
+            // interface
+            "/api/**",
             // img & css folder
             "/img/**",
             "/style/**"

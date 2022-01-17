@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.net.URL;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @SpringBootApplication
@@ -122,7 +122,14 @@ public class ArtistAgencyApplication implements ApplicationRunner {
             eventBookingService.registerVenueForTesting(venue);
         }
 
-        return eventBookingService.getAllVenuesFromEventLocationManager();
+        List<Venue> venues = null;
+        try {
+            venues = eventBookingService.getFilteredVenuesFromEventLocationManager();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return venues;
     }
 
     private List<Event> addEventToH2DatabaseForTesting(List<Venue> venues, List<User> users) throws Exception {
@@ -132,7 +139,7 @@ public class ArtistAgencyApplication implements ApplicationRunner {
             var event = new Event(
                     venue.getID(),
                     artist,
-                    new Date(),
+                    LocalDate.now(),
                     "Event " + i
             );
 
@@ -148,7 +155,7 @@ public class ArtistAgencyApplication implements ApplicationRunner {
         for (var i = 1; i <= 10; i++) {
             var financeLogUpdate = new FinanceLog();
 
-            financeLogUpdate.setArtistPaidDate(new Date());
+            financeLogUpdate.setArtistPaidDate(LocalDate.now());
             financeLogUpdate.setArtistPaidAmount(BigDecimal.valueOf((i * 100.0) % 450.0));
 
             financeService.updateFinanceLog(financeLogs.get(i % financeLogs.size()).getID(), financeLogUpdate);

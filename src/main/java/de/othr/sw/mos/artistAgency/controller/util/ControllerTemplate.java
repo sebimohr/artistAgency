@@ -33,7 +33,7 @@ public abstract class ControllerTemplate implements SitePathDistribution {
 
     // render errorPage with errorMessage -> only on fatal errors
     protected String renderErrorPageOnException(Model model, String message) {
-        model.addAttribute("errorMessage", message);
+        model.addAttribute("message", message);
         return errorSite;
     }
 }

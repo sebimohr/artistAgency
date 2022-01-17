@@ -12,22 +12,22 @@ import java.math.BigDecimal;
 public class Venue extends EntityLongId {
 
     @Setter @Getter
-    private String venueName;
+    private String name;
     @Setter @Getter
     private BigDecimal cost;
     @Setter @Getter
-    private ArtType artType;
+    private ArtType eventType;
 
     public Venue() { }
 
-    public Venue(String name, BigDecimal cost, ArtType artType) {
-        this.venueName = name;
+    public Venue(String name, BigDecimal cost, ArtType eventType) {
+        this.name = name;
         this.cost = cost;
-        this.artType = artType;
+        this.eventType = eventType;
     }
 
     @Override
     public String toString() {
-        return "Name: " + this.getVenueName() + ", Kosten: " + this.getCost() + "€, Kapazität: 100";
+        return "Name: " + this.getName() + ", Kosten: " + this.getCost() + "€, Kapazität: 100";
     }
 }

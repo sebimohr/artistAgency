@@ -17,7 +17,7 @@
             <tr th:each="event : ${events}">
                 <th scope="row"><label th:text="${event.getID()}"/></th>
                 <td><label th:text="${event.getEventName()}"/></td>
-                <td><label th:text="${#dates.format(event.getEventDate(),'dd.MM.yyyy')}"/></td>
+                <td><label th:text="${#temporals.format(event.getEventDate(), 'dd.MM.yyyy')}"/></td>
                 <td><label th:text="${event.getArtist().getArtistName()}"/></td>
             </tr>
             </tbody>

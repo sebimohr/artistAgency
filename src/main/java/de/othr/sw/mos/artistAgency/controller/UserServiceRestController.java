@@ -12,7 +12,7 @@ public class UserServiceRestController {
     @Autowired
     private UserServiceIF userService;
 
-    @RequestMapping(value = "/artist/{artistId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/artists/{artistId}", method = RequestMethod.GET)
     public ArtistDto getArtistFromService(@PathVariable("artistId") Long artistId) throws ArtistNotFoundException {
         return userService.getArtistInformation(artistId);
     }
