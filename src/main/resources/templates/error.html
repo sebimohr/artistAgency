@@ -13,7 +13,8 @@
         </div>
         <div class="card text-white bg-dark mb-3">
             <div class="card-body">
-                <h5>Fehler "404 - Page not found" ist aufgetreten. Entschuldigung dafür :)</h5>
+<!-- TODO:                <h5 th:text="'Fehler ' + ${status} + ' ist aufgetreten. Entschuldigung dafür :)'"/>-->
+                <h5>Fehler "404 - Site not found" ist aufgetreten. Entschuldigung dafür :)</h5>
 
                 <a th:if="${!#strings.isEmpty(message)}" class="btn btn-dark" role="button" data-bs-toggle="collapse" href="#messageContainer" aria-expanded="false" aria-controls="errorMessageContainer">
                     Fehlermeldung anzeigen

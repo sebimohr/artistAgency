@@ -3,7 +3,6 @@ package de.othr.sw.mos.artistAgency.controller;
 import de.othr.sw.mos.artistAgency.controller.util.ControllerTemplate;
 import de.othr.sw.mos.artistAgency.entity.Event;
 import de.othr.sw.mos.artistAgency.entity.User;
-import de.othr.sw.mos.artistAgency.entity.Venue;
 import de.othr.sw.mos.artistAgency.exception.EventServiceException;
 import de.othr.sw.mos.artistAgency.exception.InputValidationException;
 import de.othr.sw.mos.artistAgency.exception.UserServiceException;
@@ -15,6 +14,7 @@ import sw.oth.EventlocationManagment.entity.DTO.VenueDTO;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 // controllers have a RequestMapping over the whole controller, so there's a mapping between different areas
@@ -57,18 +57,34 @@ public class EventController extends ControllerTemplate {
             @RequestParam(required = false) String venueCapacity
     ) {
         // venueLocation, -Date and -Capacity are set when the search for venues is submitted
+        List<VenueDTO> venueList = Collections.emptyList();
+
         if(venueLocation != null && venueDate != null && venueCapacity != null) {
             try {
                 // validating the input from URL
                 venueLocation = venueLocation.toUpperCase();
-                validateVenueSearchInput(venueLocation, venueDate, venueCapacity); // exception gets
+                validateVenueSearchInput(venueLocation, venueDate, venueCapacity);
 
-                // TODO: RPC on EventLocationManager
-                List<Venue> venueList = null;
-                try {
-                    venueList = eventService.getFilteredVenuesFromEventLocationManager();
-                } catch (EventServiceException e) {
-                    model.addAttribute("errorMessage", e.getMessage());
+                // parse eventDate to right format and add it to event-object
+                var eventDate = parseDateFromHTMLToDateObject(venueDate);
+
+                // parse eventCapacity to int
+                // default value can't be reached because of validation (only included for compiler)
+                var eventCapacity = switch (venueCapacity) {
+                    case "100" -> 100;
+                    case "500" -> 500;
+                    case "1000" -> 1000;
+                    case "5000" -> 5000;
+                    case "100000" -> 100000;
+                    default -> null;
+                };
+
+                if(eventCapacity != null){
+                    try {
+                        venueList = eventService.getFilteredVenuesFromEventLocationManager(venueLocation, eventDate, eventCapacity);
+                    } catch (EventServiceException e) {
+                        model.addAttribute("errorMessage", e.getMessage());
+                    }
                 }
 
                 model.addAttribute("venues", venueList);
@@ -80,8 +96,6 @@ public class EventController extends ControllerTemplate {
 
                 var newEvent = new Event();
 
-                // parse eventDate to right format and add it to event-object
-                var eventDate = parseDateFromHTMLToDateObject(venueDate);
                 newEvent.setEventDate(eventDate);
 
                 model.addAttribute("event", newEvent);
@@ -92,6 +106,7 @@ public class EventController extends ControllerTemplate {
         }
 
         // standard attributes -> thymeleaf selects options based on modelAttributes
+        model.addAttribute("venues", venueList);
         model.addAttribute("venueLocation", "AUGSBURG");
         model.addAttribute("venueDate", "2022-01-21");
         model.addAttribute("venueCapacity", "100");

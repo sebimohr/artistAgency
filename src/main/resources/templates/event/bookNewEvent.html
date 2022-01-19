@@ -42,7 +42,7 @@
             <button type="submit" class="btn btn-info col-12">Venues anzeigen</button>
         </form>
 
-        <div th:if="${venues != null}">
+        <div th:if="${venues.size() > 0}">
             <form th:action="@{/event/book}" th:method="post" th:object=${event}>
                 <div class="form-floating">
                     <input type="text" class="form-control" id="eventName" name="eventName"
@@ -52,8 +52,8 @@
                 <label for="venueChoice">Eventhalle</label>
                 <select class="form-control" id="venueChoice" name="venueChoice" th:field="*{venueId}">
                     <option th:each="venue : ${venues}"
-                            th:value="${venue.getID()}"
-                            th:text="${venue.toString()}"/>
+                            th:value="${venue.getId()}"
+                            th:text="${'Name: ' + venue.getName() + ', Kosten: ' + venue.getCost() + '€, Zielgruppe: ' + venue.getTargetGroup() + ', Typ:' + venue.getEventtype()}"/>
                 </select>
                 <input type="hidden" th:value="${event.getEventDate()}" th:field="*{eventDate}"/>
                 <button type="submit" class="btn btn-info col-12">Event buchen</button>

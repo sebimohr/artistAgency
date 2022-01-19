@@ -11,6 +11,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.RestController;
+import sw.oth.EventlocationManagment.entity.DTO.BookingDTO;
 
 import java.math.BigDecimal;
 import java.net.URL;
@@ -38,15 +39,13 @@ public class ArtistAgencyApplication implements ApplicationRunner {
     public void run(ApplicationArguments args) {
         try {
             var users = addUsersToH2DatabaseForTesting();
-            var venues = addVenueToH2DatabaseForTesting();
-            var events = addEventToH2DatabaseForTesting(venues, users);
+            var events = addEventToH2DatabaseForTesting(users);
             var financeLogs = addFinanceLogToH2DatabaseForTesting();
 
             System.out.println(
                     "\nSize of Lists\n--------------------\n" +
                             "Users: \t\t\t " + users.size() + "\n" +
                             "FinanceLogs: \t" + financeLogs.size() + "\n" +
-                            "Venues: \t\t" + venues.size() + "\n" +
                             "Events: \t\t" + events.size()
             );
         } catch (Exception ex) {
@@ -105,39 +104,11 @@ public class ArtistAgencyApplication implements ApplicationRunner {
         return userService.getAllUsers();
     }
 
-    private List<Venue> addVenueToH2DatabaseForTesting() {
+    private List<Event> addEventToH2DatabaseForTesting(List<User> users) throws Exception {
         for (var i = 1; i <= 10; i++) {
-            var typeOfVenue = switch (i % 3) {
-                case 0 -> ArtType.COMEDY;
-                case 1 -> ArtType.MUSIC;
-                default -> ArtType.PARTY;
-            };
-
-            var venue = new Venue(
-                    "Venue " + i,
-                    BigDecimal.valueOf((i * 100.0) % 450.0 + 50.0),
-                    typeOfVenue
-            );
-
-            eventBookingService.registerVenueForTesting(venue);
-        }
-
-        List<Venue> venues = null;
-        try {
-            venues = eventBookingService.getFilteredVenuesFromEventLocationManager();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return venues;
-    }
-
-    private List<Event> addEventToH2DatabaseForTesting(List<Venue> venues, List<User> users) throws Exception {
-        for (var i = 1; i <= 10; i++) {
-            var venue = venues.get(i % venues.size());
             var artist = users.get(i % users.size());
             var event = new Event(
-                    venue.getID(),
+                    (long) i,
                     artist,
                     LocalDate.now(),
                     "Event " + i

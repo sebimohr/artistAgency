@@ -3,14 +3,11 @@ package de.othr.sw.mos.artistAgency.service;
 import de.othr.sw.mos.artistAgency.entity.Event;
 import de.othr.sw.mos.artistAgency.entity.FinanceLog;
 import de.othr.sw.mos.artistAgency.entity.User;
-import de.othr.sw.mos.artistAgency.entity.Venue;
 import de.othr.sw.mos.artistAgency.exception.EventServiceException;
 import de.othr.sw.mos.artistAgency.exception.FinanceServiceException;
 import de.othr.sw.mos.artistAgency.repository.EventRepository;
-import de.othr.sw.mos.artistAgency.repository.VenueRepository;
 import de.othr.sw.mos.artistAgency.service.interfaces.EventBookingServiceIF;
 import de.othr.sw.mos.artistAgency.service.interfaces.FinanceServiceIF;
-import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,30 +17,28 @@ import sw.oth.EventlocationManagment.entity.DTO.BookingDTO;
 import sw.oth.EventlocationManagment.entity.DTO.VenueDTO;
 
 import javax.transaction.Transactional;
-import java.awt.print.Book;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Service
 public class EventBookingService implements EventBookingServiceIF {
 
-    @Autowired
-    private RestTemplate restServiceClient;
-
     @Value("${EventLocationManagerPort}")
     private String EventLocationManagerPort;
 
     private final EventRepository eventRepo;
-    private final VenueRepository venueRepo;
 
     private final FinanceServiceIF financeService;
 
+    private final RestTemplate restServiceClient;
+
     @Autowired
-    public EventBookingService(EventRepository eventRepo, VenueRepository venueRepo, FinanceServiceIF financeService) {
+    public EventBookingService(EventRepository eventRepo, FinanceServiceIF financeService, RestTemplate restServiceClient) {
         this.eventRepo = eventRepo;
-        this.venueRepo = venueRepo;
         this.financeService = financeService;
+        this.restServiceClient = restServiceClient;
     }
 
     @Override
@@ -61,7 +56,7 @@ public class EventBookingService implements EventBookingServiceIF {
 
             newEvent = eventRepo.save(newEvent);
 
-// TODO:            createBookingOnEventLocationManager(newEvent);
+// TODO:           createBookingOnEventLocationManager(newEvent);
 
             // register new financeLog for every Event created
             var financeLog = new FinanceLog(
@@ -82,36 +77,43 @@ public class EventBookingService implements EventBookingServiceIF {
     }
 
     @Override
-    public List<Venue> getFilteredVenuesFromEventLocationManager() throws EventServiceException {
-        var city = "AUGSBURG";
-        var date = LocalDate.now();
-        var numberOfGuests = 100;
+    public List<VenueDTO> getFilteredVenuesFromEventLocationManager(
+            String city,
+            LocalDate date,
+            int numberOfGuests
+    ) throws EventServiceException {
 
-        var urlForELM = "http://im-codd:" + EventLocationManagerPort +
+        var urlForELM = EventLocationManagerPort +
                 "/restapi/venues?date=" + date +
                 "&city=" + city +
                 "&maxNumberOfGuests" + numberOfGuests;
 
-        return venueRepo.findAll();
-
-        // TODO: RPC!
-        /*try {
-            var venue = restServiceClient
+        try {
+            var venues = restServiceClient
                     .getForObject(urlForELM,
                             VenueDTO[].class);
 
-            return Arrays.asList(venue);
+            if(venues == null)
+                return Collections.emptyList();
+            else
+                return Arrays.asList(venues);
         } catch (RestClientException e) {
             throw new EventServiceException(e.getMessage());
-        }*/
+        }
 
     }
 
     @Override
-    public Venue getSpecificVenueFromEventLocationManager(Long venueId) throws Exception {
-        // TODO: RPC on ELM
-        return venueRepo.findByID(venueId).orElseThrow( () ->
-                new Exception("Venue mit ID " + venueId + " nicht gefunden!"));
+    public VenueDTO getSpecificVenueFromEventLocationManager(Long venueId) throws EventServiceException {
+        var urlForELM = EventLocationManagerPort +
+                "/restapi/venues/" + venueId;
+        try {
+            return restServiceClient
+                    .getForObject(urlForELM,
+                            VenueDTO.class);
+        } catch (RestClientException e) {
+            throw new EventServiceException(e.getMessage());
+        }
     }
 
     @Override
@@ -130,7 +132,6 @@ public class EventBookingService implements EventBookingServiceIF {
                 new EventServiceException("Event with Id " + eventId + " not found."));
     }
 
-    // TODO: only for testing
     private Event createBookingOnEventLocationManager(Event event) throws EventServiceException {
         var bookingDto = new BookingDTO();
         bookingDto.setDate(event.getEventDate());
@@ -139,11 +140,11 @@ public class EventBookingService implements EventBookingServiceIF {
         bookingDto.setArtistAgencyName("ArtistAgency");
         bookingDto.setVenue(event.getVenueId());
 
-        var UrlForElm = "http://im-codd:" + EventLocationManagerPort + "/restapi/bookings";
+        var UrlForELM = EventLocationManagerPort + "/restapi/bookings";
 
         try {
             restServiceClient.postForObject(
-                    UrlForElm,
+                    UrlForELM,
                     bookingDto,
                     BookingDTO.class);
 
@@ -151,11 +152,5 @@ public class EventBookingService implements EventBookingServiceIF {
         } catch (RestClientException e) {
             throw new EventServiceException(e.getMessage());
         }
-    }
-
-    @Override
-    @Transactional
-    public Venue registerVenueForTesting(Venue venue) {
-        return venueRepo.save(venue);
     }
 }
