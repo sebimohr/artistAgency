@@ -43,7 +43,7 @@ public class EventBookingService implements EventBookingServiceIF {
 
     @Override
     @Transactional(rollbackOn = EventServiceException.class)
-    public Event registerEvent(Event event) throws EventServiceException {
+    public void registerEvent(Event event) throws EventServiceException {
         var foundEventOptional = eventRepo.findByID(event.getID());
 
         if(foundEventOptional.isEmpty()) {
@@ -54,9 +54,9 @@ public class EventBookingService implements EventBookingServiceIF {
                     event.getEventName()
             );
 
-            newEvent = eventRepo.save(newEvent);
+            createBookingOnEventLocationManager(newEvent);
 
-// TODO:           createBookingOnEventLocationManager(newEvent);
+            newEvent = eventRepo.save(newEvent);
 
             // register new financeLog for every Event created
             var financeLog = new FinanceLog(
@@ -69,8 +69,6 @@ public class EventBookingService implements EventBookingServiceIF {
             } catch (FinanceServiceException e) {
                 throw new EventServiceException(e.getMessage());
             }
-
-            return newEvent;
         }
 
         throw new EventServiceException("Event mit ID " + event.getID() + " existiert schon.");
@@ -132,13 +130,15 @@ public class EventBookingService implements EventBookingServiceIF {
                 new EventServiceException("Event with Id " + eventId + " not found."));
     }
 
-    private Event createBookingOnEventLocationManager(Event event) throws EventServiceException {
+    private void createBookingOnEventLocationManager(Event event) throws EventServiceException {
         var bookingDto = new BookingDTO();
         bookingDto.setDate(event.getEventDate());
         bookingDto.setArtistID(event.getArtist().getID());
         bookingDto.setEventName(event.getEventName());
-        bookingDto.setArtistAgencyName("ArtistAgency");
-        bookingDto.setVenue(event.getVenueId());
+        bookingDto.setArtistAgencyName("ArtistAgencyMOS");
+        bookingDto.setVenueID(event.getVenueId());
+        bookingDto.setArtistName(event.getArtist().getArtistName());
+        bookingDto.setArtistCost(event.getArtist().getSalaryPerEvent());
 
         var UrlForELM = EventLocationManagerPort + "/restapi/bookings";
 
@@ -147,8 +147,6 @@ public class EventBookingService implements EventBookingServiceIF {
                     UrlForELM,
                     bookingDto,
                     BookingDTO.class);
-
-            return event;
         } catch (RestClientException e) {
             throw new EventServiceException(e.getMessage());
         }

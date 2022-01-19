@@ -58,7 +58,8 @@ public class UserController extends ControllerTemplate {
                         } catch (UserServiceException e) {
                             return renderErrorPageOnException(model, e.getMessage());
                         }
-                        model.addAttribute("loginSuccess", "Erfolgreich angemeldet, willkommen zurück " + currentUser.getArtistName() + "!");
+                        model.addAttribute("loginSuccess", "Erfolgreich angemeldet, willkommen zurück " +
+                                currentUser.getArtistName() + "!");
                         model.addAttribute("currentUser", currentUser);
                         return myProfileSite;
                     }
@@ -79,7 +80,8 @@ public class UserController extends ControllerTemplate {
                 }
                 default -> {
                     // shouldn't ever get called, only if user changes the code manually
-                    model.addAttribute("errorMessage", "Falscher loginCode. Falls dieses Problem länger besteht, wenden Sie sich bitte an den Administrator.");
+                    model.addAttribute("errorMessage", "LoginCode \"" + loginCode + "\" existiert nicht. " +
+                            "Falls Sie automatisch auf diese Seite geleitet wurden, wenden Sie sich bitte an den Administrator!");
                     return loginSite;
                 }
                 // TODO: ONLY FOR DEVELOPMENT, REMOVE BEFORE DEPLOYING

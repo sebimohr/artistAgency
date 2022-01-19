@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.ui.Model;
 
+import javax.xml.bind.ValidationException;
 import java.security.Principal;
 
 // standard template for controllers, includes services and methods for every controller
@@ -35,5 +36,19 @@ public abstract class ControllerTemplate implements SitePathDistribution {
     protected String renderErrorPageOnException(Model model, String message) {
         model.addAttribute("message", message);
         return errorSite;
+    }
+
+    protected Long ParseAndValidateIdFromUrlParameter(String id) throws ValidationException {
+        // validate input before accessing database
+        if(id == null) {
+            throw new ValidationException("Leere ID angegeben.");
+        }
+
+        // parse String from URL parameter
+        try {
+            return Long.parseLong(id);
+        } catch (Exception e) {
+            throw new ValidationException("ID " + id + " ist keine Zahl.");
+        }
     }
 }

@@ -8,17 +8,20 @@
     <div th:fragment="eventList">
         <table class="table table-responsive table-dark table-hover">
             <thead>
-            <th scope="col">#</th>
             <th scope="col">Name</th>
             <th scope="col">Datum</th>
             <th scope="col">Künstler</th>
+            <th scope="col"> </th>
             </thead>
             <tbody>
             <tr th:each="event : ${events}">
-                <th scope="row"><label th:text="${event.getID()}"/></th>
                 <td><label th:text="${event.getEventName()}"/></td>
                 <td><label th:text="${#temporals.format(event.getEventDate(), 'dd.MM.yyyy')}"/></td>
                 <td><label th:text="${event.getArtist().getArtistName()}"/></td>
+                <td><form th:action="@{/event/details}" th:type="get">
+                    <input type="hidden" th:value="${event.getID()}" name="id">
+                    <button type="submit" class="btn btn-info">Details</button>
+                </form></td>
             </tr>
             </tbody>
         </table>

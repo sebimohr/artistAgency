@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sw.oth.EventlocationManagment.entity.DTO.VenueDTO;
 
+import javax.xml.bind.ValidationException;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -33,7 +34,7 @@ public class EventController extends ControllerTemplate {
     }
 
     @RequestMapping(value = "/myEvents", method = RequestMethod.GET)
-    public String MyEventSite(
+    public String MyEventsSite(
             Model model,
             Principal principal
     ) {
@@ -47,6 +48,42 @@ public class EventController extends ControllerTemplate {
         var artistEventList = eventService.getAllEventsForSpecificArtist(currentUser);
         model.addAttribute("events", artistEventList);
         return eventListSite;
+    }
+
+    @RequestMapping(value = "/details", method = RequestMethod.GET)
+    public String EventDetailsSite(
+            Model model,
+            @RequestParam(value = "id") String eventId
+    ) {
+        long eventIdLong;
+        try {
+            eventIdLong = ParseAndValidateIdFromUrlParameter(eventId);
+        } catch (ValidationException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return ShowDefaultEventList(model);
+        }
+
+        // try to get event from database & venue from EventLocationManager
+        Event detailedEvent;
+        try {
+            detailedEvent = eventService.getEventByEventId(eventIdLong);
+            model.addAttribute("event", detailedEvent);
+        } catch (EventServiceException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return ShowDefaultEventList(model);
+        }
+
+        // try to get venue from EventLocationManager
+        VenueDTO detailedVenue;
+        try {
+            detailedVenue = eventService.getSpecificVenueFromEventLocationManager(detailedEvent.getVenueId());
+            model.addAttribute("venue", detailedVenue);
+        } catch (EventServiceException e) {
+            model.addAttribute("errorMessage", "Leider konnten wir die Location nicht abrufen. Fehlermeldung: "
+                    + e.getMessage());
+        }
+
+        return eventDetailsSite;
     }
 
     @RequestMapping(value = "/book", method = RequestMethod.GET)
@@ -83,7 +120,7 @@ public class EventController extends ControllerTemplate {
                     try {
                         venueList = eventService.getFilteredVenuesFromEventLocationManager(venueLocation, eventDate, eventCapacity);
                     } catch (EventServiceException e) {
-                        model.addAttribute("errorMessage", e.getMessage());
+                        model.addAttribute("errorMessage", "Leider konnten wir die Locations nicht abrufen. Fehlermeldung: " + e.getMessage());
                     }
                 }
 
@@ -128,9 +165,10 @@ public class EventController extends ControllerTemplate {
             try {
                 event.setArtist(getCurrentlyLoggedInUser(principal));
                 eventService.registerEvent(event);
-                return MyEventSite(model, principal);
-            } catch (Exception e) {
-                // both exceptions shouldn't ever occur, so errorPage gets rendered when they still get thrown
+                return MyEventsSite(model, principal);
+            } catch (EventServiceException e) {
+                return renderErrorPageOnException(model, "Event konnte nicht angelegt werden! Fehlermeldung: " + e.getMessage());
+            } catch (UserServiceException e) {
                 return renderErrorPageOnException(model, e.getMessage());
             }
         }

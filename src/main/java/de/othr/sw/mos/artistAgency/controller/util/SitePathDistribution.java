@@ -16,6 +16,8 @@ public interface SitePathDistribution {
 
     // event
     String eventListSite = "event/eventList";
+    String myEventListSite = "event/myEventList";
+    String eventDetailsSite = "event/eventDetails";
     String bookNewEventSite = "event/bookNewEvent";
 
     // finance

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.bind.ValidationException;
 import java.security.Principal;
 
 // controllers have a RequestMapping over the whole controller, so there's a mapping between different areas
@@ -31,18 +32,11 @@ public class ArtistController extends ControllerTemplate {
             Model model,
             @RequestParam(value = "id") String artistId
     ) {
-        // validate input before accessing database
-        if(artistId == null) {
-            model.addAttribute("errorMessage", "Leere ID angegeben.");
-            return ShowArtistsList(model);
-        }
-
-        // parse String from URL parameter
-        Long artistIdLong;
+        long artistIdLong;
         try {
-            artistIdLong = Long.parseLong(artistId);
-        } catch (Exception e) {
-            model.addAttribute("errorMessage", "ID " + artistId + " ist keine Zahl.");
+            artistIdLong = ParseAndValidateIdFromUrlParameter(artistId);
+        } catch (ValidationException e) {
+            model.addAttribute("errorMessage", e.getMessage());
             return ShowArtistsList(model);
         }
 
