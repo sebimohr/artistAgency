@@ -22,7 +22,7 @@ public class FinanceService implements FinanceServiceIF {
 
     @Override
     @Transactional
-    public void registerFinanceLog(FinanceLog financeLog) throws FinanceServiceException {
+    public FinanceLog registerFinanceLog(FinanceLog financeLog) throws FinanceServiceException {
         var foundFinanceLogOptional = financeRepo.findByID(financeLog.getID());
 
         if(foundFinanceLogOptional.isEmpty()) {
@@ -35,7 +35,7 @@ public class FinanceService implements FinanceServiceIF {
             if(financeLog.getArtistPaidAmount() != null)
                 newFinanceLog.setArtistPaidAmount(financeLog.getArtistPaidAmount());
 
-            financeRepo.save(newFinanceLog);
+            return financeRepo.save(newFinanceLog);
         }
 
         throw new FinanceServiceException("FinanceLog with ID " + financeLog.getID() + " already exists.");
@@ -43,11 +43,13 @@ public class FinanceService implements FinanceServiceIF {
 
     @Override
     @Transactional
-    public void updateFinanceLog(Long financeId, FinanceLog financeLogUpdated) throws FinanceServiceException {
+    public FinanceLog updateFinanceLog(Long financeId, FinanceLog financeLogUpdated) throws FinanceServiceException {
         var financeLog = getFinanceLogById(financeId);
 
         financeLog.setArtistPaidDate(financeLogUpdated.getArtistPaidDate());
         financeLog.setArtistPaidAmount(financeLogUpdated.getArtistPaidAmount());
+
+        return financeLog;
     }
 
     @Override

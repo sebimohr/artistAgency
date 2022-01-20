@@ -29,7 +29,7 @@ public class UserService implements UserServiceIF {
 
     @Override
     @Transactional
-    public void registerUser(User user) throws UserServiceException {
+    public User registerUser(User user) throws UserServiceException {
         var foundUserOptional = userRepo.findByUsername(user.getUsername());
 
         if(foundUserOptional.isEmpty()) {
@@ -45,7 +45,7 @@ public class UserService implements UserServiceIF {
                     user.getWebLink()
             );
 
-            userRepo.save(newUser);
+            return userRepo.save(newUser);
         }
 
         throw new UserServiceException("User mit Email" + user.getUsername() + " schon vorhanden.");
@@ -53,7 +53,7 @@ public class UserService implements UserServiceIF {
 
     @Override
     @Transactional
-    public void updateUser(User userUpdated) throws UserServiceException {
+    public User updateUser(User userUpdated) throws UserServiceException {
         var userFromDb = getUserByUserId(userUpdated.getID());
 
         // test which attributes have changed and have to be updated in database
@@ -75,6 +75,8 @@ public class UserService implements UserServiceIF {
         if(!userFromDb.getWebLink().equals(userUpdated.getWebLink())) {
             userFromDb.setWebLink(userUpdated.getWebLink());
         }
+
+        return userFromDb;
     }
 
     @Override

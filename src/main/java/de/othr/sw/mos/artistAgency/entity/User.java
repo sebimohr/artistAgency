@@ -30,7 +30,8 @@ public class User extends EntityLongId implements UserDetails {
     @Setter @Getter
     private BigDecimal salaryPerEvent;
     @Setter @Getter
-    @Column(length = 1000)
+    @Column(length = 1050) 
+    // made Varchar a little longer than 1000 letters, because HTML doesn't count exactly like JPA
     private String description;
 
     // optional

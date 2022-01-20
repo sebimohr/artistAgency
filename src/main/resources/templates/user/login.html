@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
@@ -6,6 +7,7 @@
 <head th:include="common/head :: defaultHead"/>
 <body>
     <div th:replace="common/navigationBar :: navigationBar"/>
+
     <div class="jumbotron">
 
         <h1>Login</h1>
@@ -24,5 +26,7 @@
 
         <div th:replace="common/messageHandler :: messageHandler"/>
     </div>
+
     <div th:replace="common/footer :: footerWithBoostrap"/>
 </body>
+</html>

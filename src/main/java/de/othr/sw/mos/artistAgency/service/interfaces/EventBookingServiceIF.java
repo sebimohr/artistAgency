@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface EventBookingServiceIF {
-    void registerEvent(Event event) throws EventServiceException;
+    Event registerEvent(Event event) throws EventServiceException;
 
     List<VenueDTO> getFilteredVenuesFromEventLocationManager(
             String city,

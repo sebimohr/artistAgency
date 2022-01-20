@@ -8,9 +8,9 @@ import java.util.List;
 
 @Service
 public interface FinanceServiceIF {
-    void registerFinanceLog(FinanceLog financeLog) throws FinanceServiceException;
+    FinanceLog registerFinanceLog(FinanceLog financeLog) throws FinanceServiceException;
 
-    void updateFinanceLog(Long financeId, FinanceLog financeLogUpdated) throws FinanceServiceException;
+    FinanceLog updateFinanceLog(Long financeId, FinanceLog financeLogUpdated) throws FinanceServiceException;
 
     FinanceLog getFinanceLogById(Long financeLogId) throws FinanceServiceException;
 

@@ -43,7 +43,7 @@ public class EventBookingService implements EventBookingServiceIF {
 
     @Override
     @Transactional(rollbackOn = EventServiceException.class)
-    public void registerEvent(Event event) throws EventServiceException {
+    public Event registerEvent(Event event) throws EventServiceException {
         var foundEventOptional = eventRepo.findByID(event.getID());
 
         if(foundEventOptional.isEmpty()) {
@@ -69,6 +69,8 @@ public class EventBookingService implements EventBookingServiceIF {
             } catch (FinanceServiceException e) {
                 throw new EventServiceException(e.getMessage());
             }
+
+            return newEvent;
         }
 
         throw new EventServiceException("Event mit ID " + event.getID() + " existiert schon.");

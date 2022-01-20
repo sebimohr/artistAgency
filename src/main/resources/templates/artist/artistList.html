@@ -8,6 +8,9 @@
     <div th:replace="common/navigationBar :: navigationBar"/>
 
     <div class="jumbotron">
+
+        <div th:replace="common/messageHandler :: messageHandler"/>
+
         <div class="row">
             <div class="col-10">
                 <h1>Artists</h1>
@@ -16,8 +19,6 @@
                 <a th:href="@{/artist/myProfile}" type="submit" class="btn btn-dark">Mein Profil</a>
             </div>
         </div>
-
-        <div th:replace="common/messageHandler :: messageHandler"/>
 
         <table class="table table-responsive table-dark table-hover">
             <thead>
