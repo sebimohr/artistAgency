@@ -16,7 +16,7 @@
                 <h1>Artists</h1>
             </div>
             <div class="col align-items-end" sec:authorize="isAuthenticated()">
-                <a th:href="@{/artist/myProfile}" type="submit" class="btn btn-dark">Mein Profil</a>
+                <a th:href="@{/artist/myProfile}" type="submit" class="btn btn-outline-dark">Mein Profil</a>
             </div>
         </div>
 
@@ -34,7 +34,7 @@
                     <td><a th:href="${artist.getWebLink()}" th:text="${artist.getWebLink()}"/></td>
                     <td><form th:action="@{/artist/details}" th:type="get">
                         <input type="hidden" th:value="${artist.getID()}" name="id">
-                        <button type="submit" class="btn btn-info">Details</button>
+                        <button type="submit" class="btn btn-outline-info">Details</button>
                     </form></td>
                 </tr>
             </tbody>

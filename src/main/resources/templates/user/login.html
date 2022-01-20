@@ -21,8 +21,13 @@
                 <input type="password" class="form-control" id="password" name="password" placeholder="Password">
                 <label for="password">Passwort</label>
             </div>
-            <button type="submit" class="btn btn-info">Anmelden</button>
+            <button type="submit" class="btn btn-outline-primary col">Anmelden</button>
         </form>
+
+        <div class="mt-3 row">
+            <small>Noch kein Account?</small>
+            <a class="btn btn-outline-dark" role="button" href="/user/register">Hier Registrieren</a>
+        </div>
 
         <div th:replace="common/messageHandler :: messageHandler"/>
     </div>

@@ -71,10 +71,10 @@ public class UserController extends ControllerTemplate {
                 }
                 case "logout" -> {
                     // logout successful
-                    if(principal != null) {
-                        model.addAttribute("errorMessage", "Nutzen Sie zum Logout bitte den zugehörigen Button!");
-                    } else {
+                    if (principal == null) {
                         model.addAttribute("logoutSuccess", "Erfolgreich abgemeldet, auf Wiedersehen!");
+                    } else {
+                        model.addAttribute("errorMessage", "Nutzen Sie zum Logout bitte den zugehörigen Button!");
                     }
                     return indexSite;
                 }
@@ -83,14 +83,6 @@ public class UserController extends ControllerTemplate {
                     model.addAttribute("errorMessage", "LoginCode \"" + loginCode + "\" existiert nicht. " +
                             "Falls Sie automatisch auf diese Seite geleitet wurden, wenden Sie sich bitte an den Administrator!");
                     return loginSite;
-                }
-                // TODO: ONLY FOR DEVELOPMENT, REMOVE BEFORE DEPLOYING
-                case "defaultLogin" -> {
-                    if(principal == null){
-                        return loginDefaultUserSite;
-                    }
-                    model.addAttribute("errorMessage", "Du bist schon angemeldet Dumbo.");
-                    return indexSite;
                 }
             }
             model.addAttribute("errorMessage", "Keine Berechtigung zum aufrufen dieser Seite, bitte melden Sie sich zuerst an!");

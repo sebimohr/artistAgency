@@ -15,7 +15,7 @@
             <div class="card-body">
                 <h5>Fehler "404 - Site not found" ist aufgetreten. Entschuldigung dafür :)</h5>
 
-                <a th:if="${!#strings.isEmpty(message)}" class="btn btn-dark" role="button" data-bs-toggle="collapse" href="#messageContainer" aria-expanded="false" aria-controls="errorMessageContainer">
+                <a th:if="${!#strings.isEmpty(message)}" class="btn btn-outline-info" role="button" data-bs-toggle="collapse" href="#messageContainer" aria-expanded="false" aria-controls="errorMessageContainer">
                     Fehlermeldung anzeigen
                 </a>
 
@@ -24,7 +24,7 @@
         </div>
 
         <form th:action="@{/home}">
-            <button type="submit" class="btn btn-dark">Zurück zur Homepage</button>
+            <button type="submit" class="btn btn-outline-dark">Zurück zur Homepage</button>
         </form>
     </div>
 

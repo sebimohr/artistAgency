@@ -39,7 +39,7 @@
                     </select>
                 </div>
             </div>
-            <button type="submit" class="btn btn-info col-12">Venues anzeigen</button>
+            <button type="submit" class="btn btn-outline-success col-12">Venues anzeigen</button>
         </form>
 
         <div th:if="${venues.size() > 0}">
@@ -56,7 +56,7 @@
                             th:text="${'Name: ' + venue.getName() + ', Kosten: ' + venue.getCost() + '€, Zielgruppe: ' + venue.getTargetGroup() + ', Typ:' + venue.getEventtype()}"/>
                 </select>
                 <input type="hidden" th:value="${event.getEventDate()}" th:field="*{eventDate}"/>
-                <button type="submit" class="btn btn-info col-12">Event buchen</button>
+                <button type="submit" class="btn btn-outline-primary col-12">Event buchen</button>
             </form>
         </div>
     </div>

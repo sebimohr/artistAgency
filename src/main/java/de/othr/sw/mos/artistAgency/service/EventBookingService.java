@@ -54,8 +54,6 @@ public class EventBookingService implements EventBookingServiceIF {
                     event.getEventName()
             );
 
-            createBookingOnEventLocationManager(newEvent);
-
             newEvent = eventRepo.save(newEvent);
 
             // register new financeLog for every Event created
@@ -69,6 +67,9 @@ public class EventBookingService implements EventBookingServiceIF {
             } catch (FinanceServiceException e) {
                 throw new EventServiceException(e.getMessage());
             }
+
+            // after my application saves all necessary information, RPC on eventLocationManager
+            createBookingOnEventLocationManager(newEvent);
 
             return newEvent;
         }
