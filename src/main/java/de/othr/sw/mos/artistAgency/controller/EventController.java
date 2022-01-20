@@ -160,12 +160,13 @@ public class EventController extends ControllerTemplate {
         // venueId should always be set, only isn't set when HTML gets manipulated
         if(event.getVenueId() == null) {
             model.addAttribute("event", event);
+            model.addAttribute("errorMessage", "Die Location wurde nicht richtig gesetzt, bitte versuchen Sie es noch einmal!");
             return bookNewEventSite;
         } else {
             try {
                 event.setArtist(getCurrentlyLoggedInUser(principal));
                 eventService.registerEvent(event);
-                return MyEventsSite(model, principal);
+                return "redirect:/event/myEvents";
             } catch (EventServiceException e) {
                 return renderErrorPageOnException(model, "Event konnte nicht angelegt werden! Fehlermeldung: " + e.getMessage());
             } catch (UserServiceException e) {

@@ -27,7 +27,7 @@ public class ArtistController extends ControllerTemplate {
         return artistListSite;
     }
 
-    @RequestMapping(value = "/details")
+    @RequestMapping(value = "/details", method = RequestMethod.GET)
     public String ShowArtistPage(
             Model model,
             @RequestParam(value = "id") String artistId
@@ -57,7 +57,7 @@ public class ArtistController extends ControllerTemplate {
         return artistDetailsSite;
     }
 
-    @RequestMapping(value = "/myProfile")
+    @RequestMapping(value = "/myProfile", method = RequestMethod.GET)
     public String ShowMyProfile(
             Model model,
             Principal principal
@@ -102,6 +102,8 @@ public class ArtistController extends ControllerTemplate {
         } catch (UserServiceException e) {
             return renderErrorPageOnException(model, e.getMessage());
         }
-        return ShowMyProfile(model, principal);
+
+        // redirects back to myProfile
+        return "redirect:/artist/myProfile";
     }
 }
