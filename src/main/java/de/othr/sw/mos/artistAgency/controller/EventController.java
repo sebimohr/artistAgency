@@ -14,6 +14,7 @@ import sw.oth.EventlocationManagment.entity.DTO.VenueDTO;
 import javax.xml.bind.ValidationException;
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -94,7 +95,7 @@ public class EventController extends ControllerTemplate {
             @RequestParam(required = false) String venueCapacity
     ) {
         // venueLocation, -Date and -Capacity are set when the search for venues is submitted
-        List<VenueDTO> venueList = Collections.emptyList();
+        List<VenueDTO> venueList = new ArrayList<>();
 
         if(venueLocation != null && venueDate != null && venueCapacity != null) {
             try {
@@ -105,24 +106,21 @@ public class EventController extends ControllerTemplate {
                 // parse eventDate to right format and add it to event-object
                 var eventDate = parseDateFromHTMLToDateObject(venueDate);
 
-                // parse eventCapacity to int
-                // default value can't be reached because of validation (only included for compiler)
-                var eventCapacity = switch (venueCapacity) {
-                    case "100" -> 100;
-                    case "500" -> 500;
-                    case "1000" -> 1000;
-                    case "5000" -> 5000;
-                    case "100000" -> 100000;
-                    default -> null;
-                };
+                var eventCapacity = parseIntFromHTML(venueCapacity);
 
                 if(eventCapacity != null){
                     try {
+                        // RPC on eventLocationManager -> when list is empty show errorMessage to user
                         venueList = eventService.getFilteredVenuesFromEventLocationManager(venueLocation, eventDate, eventCapacity);
+                        if(venueList.isEmpty()) {
+                            model.addAttribute("errorMessage",
+                                    "Keine Location trifft auf den Filter zu, bitte mit anderen Parametern noch einmal versuchen!");
+                        }
                     } catch (EventServiceException e) {
                         model.addAttribute("errorMessage", "Leider konnten wir die Locations nicht abrufen. Fehlermeldung: " + e.getMessage());
                     }
                 }
+
 
                 model.addAttribute("venues", venueList);
 
@@ -180,6 +178,20 @@ public class EventController extends ControllerTemplate {
         return LocalDate.parse(date);
     }
 
+    // parse eventCapacity to int
+    private Integer parseIntFromHTML(String integer) {
+        return switch (integer) {
+            case "100" -> 100;
+            case "500" -> 500;
+            case "1000" -> 1000;
+            case "5000" -> 5000;
+            case "100000" -> 100000;
+
+            // default value can't be reached because of validation (only included for compiler)
+            default -> null;
+        };
+    }
+
     // validation of search input
     private void validateVenueSearchInput(String venueLocation, String venueDate, String venueCapacity) throws InputValidationException {
         if(venueLocation.isEmpty()
@@ -197,7 +209,7 @@ public class EventController extends ControllerTemplate {
         else if (!dateFormat.isAfter(LocalDate.now()) || !dateFormat.isBefore(LocalDate.parse(("2026-01-01"))))
             throw new InputValidationException("Datum außerhalb des erlaubten Zeitraums (morgen - 31.12.2025)");
 
-        if(!Arrays.asList("100", "500", "1000", "5000", "100000").contains(venueCapacity))
+        if(parseIntFromHTML(venueCapacity) == null)
             throw new InputValidationException("Kapazität wurde nicht richtig gewählt");
     }
 }

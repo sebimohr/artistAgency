@@ -20,15 +20,15 @@ html, body {
     border-inline-width: 1px;
 }
 
-.btn {
-    margin: 5px;
+.btn_stretched {
+    display: block;
+}
+
+p {
+    text-align: center;
 }
 
 input, textarea, select, span {
     margin-top: 15px;
     margin-bottom: 5px;
-}
-
-span {
-    width: 150px;
 }

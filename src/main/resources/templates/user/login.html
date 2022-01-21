@@ -21,12 +21,16 @@
                 <input type="password" class="form-control" id="password" name="password" placeholder="Password">
                 <label for="password">Passwort</label>
             </div>
-            <button type="submit" class="btn btn-outline-primary col">Anmelden</button>
+            <div class="row mt-3">
+                <button type="submit" class="btn btn-outline-primary btn_stretched">Anmelden</button>
+            </div>
         </form>
 
         <div class="mt-3 row">
-            <small>Noch kein Account?</small>
-            <a class="btn btn-outline-dark" role="button" href="/user/register">Hier Registrieren</a>
+            <div>
+                <p>Du hast noch keinen Account?</p>
+                <a class="btn btn-outline-dark btn_stretched" role="button" href="/user/register">Hier Registrieren</a>
+            </div>
         </div>
 
         <div th:replace="common/messageHandler :: messageHandler"/>
