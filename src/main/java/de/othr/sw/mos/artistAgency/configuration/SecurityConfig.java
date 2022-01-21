@@ -43,6 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/artist/list",
             "/artist/details",
             "/event/list",
+            "/event/details",
             "/user/login",
             "/user/register",
             // interface

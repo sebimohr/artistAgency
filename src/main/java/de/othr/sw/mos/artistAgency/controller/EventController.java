@@ -48,6 +48,8 @@ public class EventController extends ControllerTemplate {
 
         var artistEventList = eventService.getAllEventsForSpecificArtist(currentUser);
         model.addAttribute("events", artistEventList);
+        // add modelAttribute to determine if it's user-Events or just the default events-List
+        model.addAttribute("myEvent", true);
         return eventListSite;
     }
 
@@ -143,7 +145,7 @@ public class EventController extends ControllerTemplate {
         // standard attributes -> thymeleaf selects options based on modelAttributes
         model.addAttribute("venues", venueList);
         model.addAttribute("venueLocation", "AUGSBURG");
-        model.addAttribute("venueDate", "2022-01-21");
+        model.addAttribute("venueDate", LocalDate.now().plusDays(1).toString());
         model.addAttribute("venueCapacity", "100");
 
         return bookNewEventSite;
@@ -164,7 +166,8 @@ public class EventController extends ControllerTemplate {
             try {
                 event.setArtist(getCurrentlyLoggedInUser(principal));
                 eventService.registerEvent(event);
-                return "redirect:/event/myEvents";
+                model.addAttribute("success", "Event erfolgreich gebucht!");
+                return MyEventsSite(model, principal);
             } catch (EventServiceException e) {
                 return renderErrorPageOnException(model, "Event konnte nicht angelegt werden! Fehlermeldung: " + e.getMessage());
             } catch (UserServiceException e) {

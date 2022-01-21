@@ -87,7 +87,7 @@ public class EventBookingService implements EventBookingServiceIF {
         var urlForELM = EventLocationManagerPort +
                 "/restapi/venues?date=" + date +
                 "&city=" + city +
-                "&maxNumberOfGuests" + numberOfGuests;
+                "&maxNumberOfGuests=" + numberOfGuests;
 
         try {
             var venues = restServiceClient

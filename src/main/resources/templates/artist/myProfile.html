@@ -50,7 +50,7 @@
             <span class="input-group-text" id="salaryPerEvent_addon">Gehalt / Auftritt</span>
             <input type="number" class="form-control"
                    aria-label="salaryPerEvent" aria-describedby="salaryPerEvent_addon"
-                   th:value="${currentUser.getSalaryPerEvent()}" disabled readonly/>
+                   th:value="${currentUser.getSalaryPerEvent()} + ' €'" disabled readonly/>
         </div>
 
         <div class="input-group">

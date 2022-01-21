@@ -10,12 +10,17 @@
     <div class="jumbotron">
         <div class="row">
             <div class="col-10">
-                <h1>Events</h1>
+                <h1 th:if="${myEvent != null}">Meine Events</h1>
+                <h1 th:if="${myEvent == null}">Events</h1>
             </div>
+
             <div class="col align-items-end" sec:authorize="isAuthenticated()">
                 <a th:href="@{/event/book}" type="submit" class="btn btn-outline-dark">Event buchen</a>
             </div>
         </div>
+
+        <div th:replace="common/messageHandler :: messageHandler"/>
+
         <div th:replace="common/eventList :: eventList"/>
     </div>
 

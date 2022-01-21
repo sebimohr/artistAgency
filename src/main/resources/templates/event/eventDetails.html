@@ -20,7 +20,12 @@
             <p class="text-break col-8" id="artistName" th:text="${event.getArtist().getArtistName()}"/>
 
             <label class="col-4" for="eventDate">Datum:</label>
-            <p class="text-break col-8" id="eventDate" th:text="${#temporals.format(event.getEventDate(), 'dd.MM.yyyy')}"/>
+            <p class="text-break col-8" id="eventDate" th:text="${#temporals.format(event.getEventDate(), 'dd.MM.yyyy')} + ' um 19:00 Uhr'"/>
+
+            <form th:action="@{/artist/details}" th:type="get">
+                <input type="hidden" th:value="${event.getArtist().getID()}" name="id">
+                <button type="submit" class="btn btn-outline-dark">Details zum Künstler</button>
+            </form>
         </div>
 
         <div th:if="${venue != null}">

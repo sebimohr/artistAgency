@@ -24,11 +24,11 @@ html, body {
     display: block;
 }
 
-p {
-    text-align: center;
-}
-
 input, textarea, select, span {
     margin-top: 15px;
     margin-bottom: 5px;
+}
+
+span {
+    width: 150px;
 }
